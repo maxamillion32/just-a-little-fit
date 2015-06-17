@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Prime App Colors-->
+    <color name="app_gray">#9E9E9E</color>
+    <color name="fallback_gray">#E0E0E0</color>
+    <color name="dark_app_gray">#616161</color>
+    <color name="darkest_gray">#212121</color>
+
+    <!-- Accent App Colors-->
+    <color name="app_blue_gray">#607D8B</color>
+    <color name="fallback_blue_gray">#CFD8DC</color>
+    <color name="dark_app_blue_gray">#455A64</color>
+    <color name="darkest_blue_gray">#263238</color>
+
+</resources>
