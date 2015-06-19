@@ -1,0 +1,202 @@
+#
+# generated on 2015/06/18 08:25:14
+#
+# --table-start--
+dataClass=ecap.studio.group.justalittlefit.model.Workout
+tableName=workout
+# --table-fields-start--
+# --field-start--
+fieldName=name
+columnName=name
+canBeNull=false
+unique=true
+indexName=workout_name_idx
+# --field-end--
+# --field-start--
+fieldName=workoutId
+columnName=workout_id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=orderNumber
+columnName=order_num
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=workoutDate
+columnName=workout_dt
+dataPersister=DATE_TIME
+# --field-end--
+# --field-start--
+fieldName=exercises
+columnName=exercises
+foreignCollection=true
+foreignCollectionColumnName=exercises
+# --field-end--
+# --field-start--
+fieldName=isSelected
+columnName=isSelected
+canBeNull=false
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=ecap.studio.group.justalittlefit.model.Exercise
+tableName=exercise
+# --table-fields-start--
+# --field-start--
+fieldName=workout
+columnName=workout_id
+foreign=true
+foreignAutoRefresh=true
+# --field-end--
+# --field-start--
+fieldName=name
+columnName=name
+canBeNull=false
+indexName=exercise_name_idx
+# --field-end--
+# --field-start--
+fieldName=exerciseId
+columnName=exercise_id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=orderNumber
+columnName=order_num
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=superSetSwitch
+columnName=superset_sw
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=isComplete
+columnName=isComplete
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=isSelected
+columnName=isSelected
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=sets
+columnName=sets
+foreignCollection=true
+foreignCollectionColumnName=sets
+# --field-end--
+# --field-start--
+fieldName=superSets
+columnName=superSets
+foreignCollection=true
+foreignCollectionColumnName=superSets
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=ecap.studio.group.justalittlefit.model.Set
+tableName=set
+# --table-fields-start--
+# --field-start--
+fieldName=name
+columnName=name
+canBeNull=false
+indexName=set_name_idx
+# --field-end--
+# --field-start--
+fieldName=setId
+columnName=set_id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=isComplete
+columnName=isComplete
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=exercise
+columnName=exercise_id
+foreign=true
+foreignAutoRefresh=true
+# --field-end--
+# --field-start--
+fieldName=superSet
+columnName=superset_id
+foreign=true
+foreignAutoRefresh=true
+# --field-end--
+# --field-start--
+fieldName=reps
+columnName=rep_count
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=value
+columnName=set_val
+# --field-end--
+# --field-start--
+fieldName=weightTypeCode
+columnName=wt_code
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=exerciseTypeCode
+columnName=type_code
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=orderNumber
+columnName=order_num
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=isSelected
+columnName=isSelected
+canBeNull=false
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=ecap.studio.group.justalittlefit.model.SuperSet
+tableName=superset
+# --table-fields-start--
+# --field-start--
+fieldName=superSetId
+columnName=superset_id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=orderNumber
+columnName=order_num
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=isComplete
+columnName=isComplete
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=sets
+columnName=sets
+foreignCollection=true
+foreignCollectionColumnName=sets
+# --field-end--
+# --field-start--
+fieldName=exercise
+columnName=exercise_id
+foreign=true
+foreignAutoRefresh=true
+# --field-end--
+# --field-start--
+fieldName=isSelected
+columnName=isSelected
+canBeNull=false
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
