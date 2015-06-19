@@ -2,7 +2,91 @@
 <resources>
 
     <string name="app_name">Just A Little Fit</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="workoutNavigation">Workout Navigation</string>
+    <string name="title_activity_create_workout">CreateWorkout</string>
     <string name="action_settings">Settings</string>
+    <string name="home_title_string">Home</string>
+    <string name="help_title_string">Help</string>
+    <string name="today_title_string">Today\'s Workout(s)</string>
+    <string name="assign_title_string">Assign Workout(s)</string>
+    <string name="view_title_string">View Workout(s)</string>
+    <string name="create_edit_title_string">Create/Edit Workout(s)</string>
+    <string name="title_activity_base_navi_drawer">BaseNaviDrawerActivity</string>
+    <string name="title_activity_assign">Assign</string>
+    <string name="createEdit">CreateEdit</string>
+
+    <!-- General Strings -->
+    <string name="today_string">Today</string>
+    <string name="assign_string">Assign</string>
+    <string name="view_string">View</string>
+    <string name="create_edit_string">Create/Edit</string>
+    <string name="delete_item">Delete</string>
+    <string name="discard_item">Discard</string>
+    <string name="back_option">Back</string>
+    <string name="discard_all_option">Discard All</string>
+    <string name="tap_to_discard">Tap row(s) to select for deletion</string>
+    <string name="add_item">Add</string>
+    <string name="reposition_item">Reposition</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- CreateWorkoutDialog Strings -->
+    <string name="createWorkoutDialog_nameMsg">Workout Name:</string>
+    <string name="createWorkoutDialog_add">Add</string>
+    <string name="createWorkoutDialog_cancel">Cancel</string>
+    <string name="createWorkout_requireName">You must enter a name for your workout</string>
+    <string name="createWorkoutDialogTag">Create Workout Dialog Tag</string>
+    <string name="createWorkout_success_prefix">Workout:</string>
+    <string name="createWorkout_success_suffix">added successfully </string>
+    <string name="noImplementsCreateWorkoutDialogListener">doesn\'t implement CreateWorkoutDialogListener.</string>
+
+    <!-- RepositionWorkoutDialog Strings -->
+    <string name="repositionWorkoutDialog_title">Select a position for the Workout:</string>
+    <string name="repositionWorkoutDialog_reposition">Reposition</string>
+    <string name="repositionWorkoutDialog_cancel">Cancel</string>
+    <string name="repositionWorkoutDialogTag">Create Workout Dialog Tag</string>
+    <string name="repositionWorkoutDialog_minMax_prefix">Select from within the range:</string>
+    <string name="repositionWorkoutDialog_workouts">Workout List to Reposition</string>
+    <string name="repositionWorkoutDialog_error">An error occurred while trying to reposition workout. Please try again.</string>
+    <string name="noImplementsRepositionWorkoutDialogListener">doesn\'t implement RepositionWorkoutDialogListener.</string>
+    <string name="repositionHelper">Reposition Helper Object</string>
+    <string name="repositionedWorkout_success">Workout repositioned successfully</string>
+
+    <!-- ConfirmDeleteWorkoutDialog Strings -->
+    <string name="confirmDeleteWorkoutDialogTag">Confirm Delete Workout Dialog Tag</string>
+    <string name="confirmDeleteWorkoutDialog_delete">Delete</string>
+    <string name="confirmDeleteWorkoutDialog_error">An error occurred while trying to delete the workout(s). Please try again.</string>
+    <string name="confirmDeleteWorkoutDialog_success">Workout(s) deleted successfully</string>
+    <string name="confirmDeleteWorkoutDialog_selectAll_bool">Title Boolean</string>
+    <string name="noImplementsConfirmDeletionListener">doesn\'t implement ConfirmDeletionListener.</string>
+
+    <!-- AssignWorkoutDialog Strings -->
+    <string name="assignWorkoutDialogHeaderMsg">Choose Workout(s) To Assign:</string>
+    <string name="assignWorkoutDialog_assign">Assign</string>
+    <string name="assignWorkoutDialog_cancel">Cancel</string>
+    <string name="assignWorkoutDialogTag">Assign Workout Dialog Tag</string>
+    <string name="enforceDatesForAssignment">You must select at least one date to assign to your workout(s)</string>
+    <string name="enforceWorkoutsForAssignment">You must select at least one Workout</string>
+    <string name="noImplementsAssignWorkoutDialogListener">doesn\'t implement AssignWorkoutDialogListener.</string>
+
+    <!-- Error Messages -->
+    <string name="db_error">An error occurred. Please try again.</string>
+    <string name="workout_list_error">An error occurred in retrieving your Workout list. Please try again.</string>
+    <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>
+    <string name="reposition_workout_error">An error occurred in repositioning your workout to the Workout list. Please try again.</string>
+    <string name="updating_workout_error">An error occurred in updating your workout(s) in the Workout list. Please try again.</string>
+    <string name="deletion_workout_error">An error occurred in deleting your workout(s) from the Workout list. Please try again.</string>
+    <string name="assign_workout_error">An error occurred in assigning date/dates to your workout(s). Please try again.</string>
+
+    <!-- General Messages -->
+    <string name="workout_list_empty_for_create_edit">Your Workout list is empty. Click the \'+\' sign to add a Workout.</string>
+    <string name="workout_list_empty_for_assign">Your Workout list is empty. Please create one to continue.</string>
+    <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
+    <string name="assignHeaderText">Select date(s) to assign to your workout(s)</string>
+
 
 </resources>

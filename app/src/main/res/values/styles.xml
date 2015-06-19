@@ -13,4 +13,12 @@
         <item name="android:windowBackground">@color/fallback_gray</item>
     </style>
 
+    <style name="HomeScreenText" parent="android:Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
 </resources>
