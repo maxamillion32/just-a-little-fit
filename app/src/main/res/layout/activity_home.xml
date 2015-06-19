@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:background="@android:color/darker_gray"
+            android:background="@color/app_gray"
             android:text="@string/workoutNavigation" />
 
         <View
@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
