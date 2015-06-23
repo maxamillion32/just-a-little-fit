@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -226,14 +227,14 @@ public class Home extends Activity {
 
     @OnClick(R.id.todayHomeOption)
     void startTodayActivity() {
-        Toast.makeText(getApplicationContext(),
+        Toast.makeText(this,
                 getString(R.string.today_string), Toast.LENGTH_SHORT)
                 .show();
     }
 
     @OnClick(R.id.createEditHomeOption)
     void startCreateEditActivity() {
-        Toast.makeText(getApplicationContext(),
+        Toast.makeText(this,
                 getString(R.string.create_edit_string), Toast.LENGTH_SHORT)
                 .show();
       /*  Intent intent = new Intent(this, CreateEdit.class);
@@ -242,16 +243,14 @@ public class Home extends Activity {
 
     @OnClick(R.id.assignHomeOption)
     void startAssignActivity() {
-        Toast.makeText(getApplicationContext(),
-                getString(R.string.assign_string), Toast.LENGTH_SHORT)
-                .show();
-        /*Intent intent = new Intent(this, Assign.class);
-        this.startActivity(intent);*/
+        Intent intent = new Intent(this, Assign.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        this.startActivity(intent);
     }
 
     @OnClick(R.id.viewHomeOption)
     void startViewWorkoutActivity() {
-        Toast.makeText(getApplicationContext(),
+        Toast.makeText(this,
                 getString(R.string.view_string), Toast.LENGTH_SHORT)
                 .show();
     }

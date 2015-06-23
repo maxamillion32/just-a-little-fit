@@ -9,13 +9,17 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.Home"
-            android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@style/HomeScreenTheme">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.Assign"
+            android:label="@string/title_activity_assign"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -15,7 +15,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 public class Workout implements Comparable<Workout> {
 
     /** The display name of the Workout object */
-    @DatabaseField(index = true, columnName = DbConstants.NAME_COLUMN_NAME, canBeNull = false, unique = true)
+    @DatabaseField(index = true, columnName = DbConstants.NAME_COLUMN_NAME, canBeNull = false)
     private String name;
 
     /** The id of the Workout object */

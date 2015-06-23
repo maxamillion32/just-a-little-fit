@@ -1,5 +1,5 @@
 #
-# generated on 2015/06/18 08:25:14
+# generated on 2015/06/22 07:04:30
 #
 # --table-start--
 dataClass=ecap.studio.group.justalittlefit.model.Workout
@@ -9,7 +9,6 @@ tableName=workout
 fieldName=name
 columnName=name
 canBeNull=false
-unique=true
 indexName=workout_name_idx
 # --field-end--
 # --field-start--
