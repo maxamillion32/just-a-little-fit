@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.listener.AssignWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 /**
  * Dialog to display when assigning a workout.
@@ -79,7 +79,9 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                     @Override
                     public void onClick(View view) {
                         if (selectedWorkoutNames.isEmpty()) {
-                            Utils.displayLongToast(getActivity(), getString(R.string.enforceWorkoutsForAssignment));
+                            Snackbar.make(getActivity().findViewById(R.id.fab),
+                                    getString(R.string.enforceWorkoutsForAssignment), Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
                         } else {
                             listener.onAssignWorkoutClick(AssignWorkoutDialog.this);
                             assignWorkoutDialog.dismiss();
@@ -95,13 +97,19 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         if (event == null || event.getResult() == null) {
-            Utils.displayLongToast(getActivity(), getString(R.string.workout_list_error));
+            Snackbar.make(getActivity().findViewById(R.id.fab),
+                    getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         } else {
             List<Workout> workouts = (List<Workout>) event.getResult();
             if (workouts == null) {
-                Utils.displayLongToast(getActivity(), getString(R.string.workout_list_error));
+                Snackbar.make(getActivity().findViewById(R.id.fab),
+                        getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             } else if (workouts.isEmpty()) {
-                Utils.displayLongToast(getActivity(), getString(R.string.workout_list_empty_for_assign));
+                Snackbar.make(getActivity().findViewById(R.id.fab),
+                        getString(R.string.workout_list_empty_for_assign), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             } else {
                 createWorkoutCheckBoxes(workouts);
             }

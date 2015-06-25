@@ -10,7 +10,7 @@
         android:id="@+id/assignWorkoutDialogHeaderText"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/app_blue_gray"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
-        android:background="@android:color/darker_gray" />
+        android:background="@color/dark_app_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"

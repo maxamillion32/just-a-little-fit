@@ -143,9 +143,13 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         }
 
         if (eventResult != null && eventResult instanceof List) {
-            Utils.displayShortToast(this, getString(R.string.workouts_assigned_successfully));
+            Snackbar.make(this.findViewById(R.id.fab), DATE_ERROR_PREFIX
+                    + getString(R.string.workouts_assigned_successfully), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         } else {
-            Utils.displayLongToast(this, getString(R.string.assign_workout_error));
+            Snackbar.make(this.findViewById(R.id.fab), DATE_ERROR_PREFIX
+                    + getString(R.string.assign_workout_error), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     }
 }
