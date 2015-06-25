@@ -1,6 +1,6 @@
 package ecap.studio.group.justalittlefit.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class BaseNaviDrawerActivity extends AppCompatActivity {
-
     DrawerLayout mDrawerLayout;
     FrameLayout frameLayout;
 
@@ -41,18 +41,32 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
     }
 
     void setupDrawerContent(NavigationView navigationView) {
-        final Activity activity = this;
+        final BaseNaviDrawerActivity activity = this;
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                     /*   if (menuItem.getTitle().equals("Home")) {
-                            Intent i = new Intent(activity, TestActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(i);
-                        }*/
+                        String activityTitle = activity.getTitle().toString().trim();
+                        String selectedTitle = menuItem.getTitle().toString().trim();
+                        Intent selectedIntent;
+
+                        if (selectedTitle.equals(activityTitle)) {
+                             /* do nothing, menu item will be checked and close out drawer after
+                             the completion of this if-else logic */
+                        } else if (selectedTitle.equals(activity.getString(R.string.today_string).trim())) {
+                            Utils.displayLongToast(activity, (activity.getString(R.string.today_string).trim()));
+                        } else if (selectedTitle.equals(activity.getString(R.string.create_edit_string).trim())) {
+                            Utils.displayLongToast(activity, (activity.getString(R.string.create_edit_string).trim()));
+                        } else if (selectedTitle.equals(activity.getString(R.string.assign_string).trim())) {
+                            Utils.displayLongToast(activity, (activity.getString(R.string.assign_string).trim()));
+                        } else if (selectedTitle.equals(activity.getString(R.string.view_string).trim())) {
+                            Utils.displayLongToast(activity, (activity.getString(R.string.view_string).trim()));
+                        } else {
+                            /* Shouldn't reach this but if so, doing nothing here
+                            is harmless as the drawer will close */
+                        }
+                        activity.mDrawerLayout.closeDrawers();
                         return true;
                     }
                 });
