@@ -81,7 +81,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                         if (selectedWorkoutNames.isEmpty()) {
                             Snackbar.make(getActivity().findViewById(R.id.fab),
                                     getString(R.string.enforceWorkoutsForAssignment), Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
+                                    .show();
                         } else {
                             listener.onAssignWorkoutClick(AssignWorkoutDialog.this);
                             assignWorkoutDialog.dismiss();
@@ -99,17 +99,17 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
         if (event == null || event.getResult() == null) {
             Snackbar.make(getActivity().findViewById(R.id.fab),
                     getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                    .show();
         } else {
             List<Workout> workouts = (List<Workout>) event.getResult();
             if (workouts == null) {
                 Snackbar.make(getActivity().findViewById(R.id.fab),
                         getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .show();
             } else if (workouts.isEmpty()) {
                 Snackbar.make(getActivity().findViewById(R.id.fab),
                         getString(R.string.workout_list_empty_for_assign), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .show();
             } else {
                 createWorkoutCheckBoxes(workouts);
             }

@@ -82,7 +82,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
                 Snackbar.make(activity.findViewById(R.id.fab), DATE_ERROR_PREFIX
                         + dateTimeFormatter.print(minDate) + AND + dateTimeFormatter.print(maxDate), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .show();
             }
         });
     }
@@ -95,7 +95,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
             public void onClick(View view) {
                 if (assignCalendar.getSelectedDates().isEmpty()) {
                     Snackbar.make(view, getString(R.string.enforceDatesForAssignment), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                            .setAction(Constants.UNDO, null).show();
                 } else {
                     setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
                     FragmentManager fm = activity.getSupportFragmentManager();
@@ -139,11 +139,10 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         if (eventResult != null && eventResult instanceof List) {
             Snackbar.make(this.findViewById(R.id.fab), DATE_ERROR_PREFIX
                     + getString(R.string.workouts_assigned_successfully), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                    .show();
         } else {
             Snackbar.make(this.findViewById(R.id.fab), DATE_ERROR_PREFIX
-                    + getString(R.string.assign_workout_error), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                    + getString(R.string.assign_workout_error), Snackbar.LENGTH_LONG).show();
         }
     }
 }
