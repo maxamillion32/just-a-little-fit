@@ -86,6 +86,7 @@
     <string name="workout_list_empty_for_create_edit">Your Workout list is empty. Click the \'+\' sign to add a Workout.</string>
     <string name="workout_list_empty_for_assign">Your Workout list is empty. Please create one to continue.</string>
     <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
+    <string name="removed_assigned_workouts_successfully">Workout(s) assignment succesfully undone</string>
     <string name="assignHeaderText">Select date(s) to assign to your workout(s)</string>
     <string name="hello_world">Hello world!</string>
 
