@@ -83,6 +83,11 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                                 if (dfo.getDbObject() instanceof LinkedList) {
                                     return WorkoutDbHelper.assignDatesToWorkouts((LinkedList<Object>) dfo.getDbObject());
                                 }
+                                break;
+                            case DbConstants.DELETE_WORKOUTS:
+                                if (dfo.getDbObject() instanceof List) {
+                                    return WorkoutDbHelper.deleteWorkouts((List<Workout>) dfo.getDbObject());
+                                }
                         }
                     } catch (SQLException e) {
                         return null;
