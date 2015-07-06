@@ -76,6 +76,8 @@ public class Constants {
 
     public static final String BG_GRAY = "#eeeeee";
 
+    public static final String UNDO = "Undo";
+
     public static final int ANDROID_SDK_INT = Build.VERSION.SDK_INT;
 }
 

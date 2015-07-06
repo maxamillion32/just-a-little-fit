@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,6 +33,7 @@ import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.AssignWorkoutDialog;
 import ecap.studio.group.justalittlefit.listener.AssignWorkoutDialogListener;
+import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
@@ -137,12 +139,25 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         }
 
         if (eventResult != null && eventResult instanceof List) {
-            Snackbar.make(this.findViewById(R.id.fab), DATE_ERROR_PREFIX
-                    + getString(R.string.workouts_assigned_successfully), Snackbar.LENGTH_LONG)
+            List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
+            Snackbar.make(this.findViewById(R.id.fab), getString(R.string.workouts_assigned_successfully), Snackbar.LENGTH_LONG)
+                    .setAction(Constants.UNDO, undoAssignListener(assignedWorkouts))
+                    .setActionTextColor(getResources().getColor(R.color.app_blue_gray)).show();
+        } else if (eventResult != null && eventResult instanceof Set) {
+            Snackbar.make(this.findViewById(R.id.fab), getString(R.string.removed_assigned_workouts_successfully), Snackbar.LENGTH_LONG)
                     .show();
         } else {
-            Snackbar.make(this.findViewById(R.id.fab), DATE_ERROR_PREFIX
-                    + getString(R.string.assign_workout_error), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(this.findViewById(R.id.fab), getString(R.string.assign_workout_error), Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private View.OnClickListener undoAssignListener(final List<Workout> workoutsToRemove) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbFunctionObject removeAssignedWorkouts = new DbFunctionObject(workoutsToRemove, DbConstants.DELETE_WORKOUTS);
+                new DbAsyncTask(Constants.ASSIGN).execute(removeAssignedWorkouts);
+            }
+        };
     }
 }
