@@ -2,8 +2,11 @@ package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import butterknife.ButterKnife;
@@ -34,7 +37,28 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
                     .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commit();
         }
+        setupFloatingActionButton(this);
     }
+
+    @Override
+    void setupDrawerContent(NavigationView navigationView) {
+        // Check menu item of currently displayed activity
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
+        selectedItem.setChecked(true);
+        super.setupDrawerContent(navigationView);
+    }
+
+    private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_dumbbell_white);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               //todo
+            }
+        });
+    }
+
 
     public AbstractDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
@@ -53,6 +77,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
     }
 
     public void onItemPinned(int position) {
+        //todo remove this when pinned is also swipe to delete
 /*        final DialogFragment dialog = ItemPinnedMessageDialogFragment.newInstance(position);
 
         getSupportFragmentManager()
@@ -62,6 +87,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
     }
 
     public void onItemRemoved(int position) {
+        //todo
 /*        SnackbarManager.show(
                 Snackbar.with(getApplicationContext())
                         .text(R.string.snack_bar_text_item_removed)
