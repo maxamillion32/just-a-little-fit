@@ -14,6 +14,7 @@
     <string name="title_activity_base_navi_drawer">BaseNaviDrawerActivity</string>
     <string name="title_activity_assign">Assign</string>
     <string name="createEdit">CreateEdit</string>
+    <string name="title_activity_create_edit_workout">CreateEditWorkout</string>
 
     <!-- General Strings -->
     <string name="today_string">Today</string>

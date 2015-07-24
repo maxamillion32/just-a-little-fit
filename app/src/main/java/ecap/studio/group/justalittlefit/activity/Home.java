@@ -234,11 +234,9 @@ public class Home extends Activity {
 
     @OnClick(R.id.createEditHomeOption)
     void startCreateEditActivity() {
-        Toast.makeText(this,
-                getString(R.string.create_edit_string), Toast.LENGTH_SHORT)
-                .show();
-      /*  Intent intent = new Intent(this, CreateEdit.class);
-        this.startActivity(intent);*/
+        Intent intent = new Intent(this, CreateEditWorkout.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        this.startActivity(intent);
     }
 
     @OnClick(R.id.assignHomeOption)
