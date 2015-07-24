@@ -205,10 +205,10 @@ public class MyDraggableSwipeableItemAdapter
                 bgRes = R.drawable.swipe_neutral;
                 break;
             case RecyclerViewSwipeManager.DRAWABLE_SWIPE_LEFT_BACKGROUND:
-                bgRes = R.drawable.swipe_bg;
+                bgRes = R.drawable.swipe_bg_left;
                 break;
             case RecyclerViewSwipeManager.DRAWABLE_SWIPE_RIGHT_BACKGROUND:
-                bgRes = R.drawable.swipe_bg;
+                bgRes = R.drawable.swipe_bg_right;
                 break;
         }
 
@@ -220,18 +220,12 @@ public class MyDraggableSwipeableItemAdapter
         Log.d(TAG, "onSwipeItem(result = " + result + ")");
 
         switch (result) {
-            // swipe right
+            // swipe right delete
             case RecyclerViewSwipeManager.RESULT_SWIPED_RIGHT:
-                if (mProvider.getItem(position).isPinnedToSwipeLeft()) {
-                    // pinned --- back to default position
-                    return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_DEFAULT;
-                } else {
-                    // not pinned --- remove
-                    return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM;
-                }
-                // swipe left -- pin
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM;
+            // swipe left delete
             case RecyclerViewSwipeManager.RESULT_SWIPED_LEFT:
-                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_MOVE_TO_SWIPED_DIRECTION;
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM;
             // other --- do nothing
             case RecyclerViewSwipeManager.RESULT_CANCELED:
             default:

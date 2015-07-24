@@ -78,13 +78,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
     }
 
     public void onItemPinned(int position) {
-        //todo remove this when pinned is also swipe to delete
-/*        final DialogFragment dialog = ItemPinnedMessageDialogFragment.newInstance(position);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(dialog, FRAGMENT_TAG_ITEM_PINNED_DIALOG)
-                .commit();*/
+        // do nothing, pinning not supported in this app
     }
 
     public void onItemRemoved(int position) {
