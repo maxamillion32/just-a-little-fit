@@ -58,6 +58,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         ButterKnife.inject(this, frameLayout);
         initCalendarPicker(activity);
         setupFloatingActionButton(activity);
+        setTitle(R.string.assign_title_string);
     }
 
     @Override

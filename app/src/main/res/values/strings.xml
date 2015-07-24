@@ -89,6 +89,5 @@
     <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
     <string name="removed_assigned_workouts_successfully">Workout(s) assignment succesfully undone</string>
     <string name="assignHeaderText">Select date(s) to assign to your workout(s)</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>

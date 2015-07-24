@@ -38,6 +38,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
                     .commit();
         }
         setupFloatingActionButton(this);
+        setTitle(R.string.create_edit_title_string);
     }
 
     @Override
