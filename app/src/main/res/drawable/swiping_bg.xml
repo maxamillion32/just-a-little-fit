@@ -1,3 +1,3 @@
 <color
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/fallback_blue_gray"/>
+    android:color="@color/fallback_gray"/>
