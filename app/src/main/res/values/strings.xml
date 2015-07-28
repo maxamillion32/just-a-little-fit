@@ -22,6 +22,9 @@
     <string name="view_string">View</string>
     <string name="create_edit_string">Create/Edit</string>
     <string name="delete_item">Delete</string>
+    <string name="delete_all">Delete All</string>
+    <string name="add_workout">Add Workout</string>
+    <string name="leave_menu">Leave Menu</string>
     <string name="discard_item">Discard</string>
     <string name="back_option">Back</string>
     <string name="discard_all_option">Discard All</string>
