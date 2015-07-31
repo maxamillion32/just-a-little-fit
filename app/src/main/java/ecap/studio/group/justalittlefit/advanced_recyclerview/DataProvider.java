@@ -1,29 +1,56 @@
 package ecap.studio.group.justalittlefit.advanced_recyclerview;
 
-import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
+import android.util.Log;
 
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
+import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import ecap.studio.group.justalittlefit.bus.DataProviderBus;
+import ecap.studio.group.justalittlefit.database.DbAsyncTask;
+import ecap.studio.group.justalittlefit.database.DbConstants;
+import ecap.studio.group.justalittlefit.database.DbFunctionObject;
+import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.model.Workout;
+import ecap.studio.group.justalittlefit.util.Constants;
 
 public class DataProvider extends AbstractDataProvider {
     private List<ConcreteData> mData;
     private ConcreteData mLastRemovedData;
     private int mLastRemovedPosition = -1;
+    private String dataType;
 
-    public DataProvider() {
-        final String atoz = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public DataProvider(String dataType) {
+        DataProviderBus.getInstance().register(this);
+        switch (dataType) {
+            case Constants.WORKOUT:
+                this.dataType = dataType;
+                DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
+                new DbAsyncTask(Constants.DATA_PROV).execute(getAllWorkoutDfo);
+                break;
+        }
+    }
 
-        mData = new LinkedList<>();
+    @Subscribe
+    public void onAsyncTaskResult(DbTaskResult event) {
+        if (event == null || event.getResult() == null) {
+            Log.e("", ""); // Log error,
+        } else {
+            List<Workout> workouts = (List<Workout>) event.getResult();
+            mData = new LinkedList<>();
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < atoz.length(); j++) {
+            for (Workout workout : workouts) {
                 final long id = mData.size();
                 final int viewType = 0;
-                final String text = Character.toString(atoz.charAt(j));
                 final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
-                mData.add(new ConcreteData(id, viewType, text, swipeReaction));
+                mData.add(new ConcreteData(id, viewType, workout.getName(),
+                        swipeReaction, workout, dataType));
             }
         }
+
     }
 
     @Override
@@ -69,6 +96,12 @@ public class DataProvider extends AbstractDataProvider {
 
         final ConcreteData item = mData.remove(fromPosition);
 
+        switch (item.mDataType) {
+            case Constants.WORKOUT:
+                Workout workout = (Workout) item.mDataObject;
+                workout.setOrderNumber(toPosition);
+        }
+
         mData.add(toPosition, item);
         mLastRemovedPosition = -1;
     }
@@ -89,22 +122,17 @@ public class DataProvider extends AbstractDataProvider {
         private final int mViewType;
         private final int mSwipeReaction;
         private boolean mPinnedToSwipeLeft;
+        private Object mDataObject;
+        private String mDataType;
 
-        ConcreteData(long id, int viewType, String text, int swipeReaction) {
+        ConcreteData(long id, int viewType, String text, int swipeReaction,
+                     Object dataObject, String dataType) {
             mId = id;
             mViewType = viewType;
-            mText = makeText(id, text, swipeReaction);
+            mText = text;
             mSwipeReaction = swipeReaction;
-        }
-
-        private static String makeText(long id, String text, int swipeReaction) {
-            final StringBuilder sb = new StringBuilder();
-
-            sb.append(id);
-            sb.append(" - ");
-            sb.append(text);
-
-            return sb.toString();
+            mDataObject = dataObject;
+            mDataType = dataType;
         }
 
         @Override
@@ -146,6 +174,14 @@ public class DataProvider extends AbstractDataProvider {
         public void setPinnedToSwipeLeft(boolean pinedToSwipeLeft) {
             mPinnedToSwipeLeft = pinedToSwipeLeft;
         }
+    }
+
+     public List<Object> getDataObjects() {
+        List<Object> dataObjs = new ArrayList<>();
+        for (ConcreteData data : mData) {
+            dataObjs.add(data.mDataObject);
+        }
+        return dataObjs;
     }
 }
 

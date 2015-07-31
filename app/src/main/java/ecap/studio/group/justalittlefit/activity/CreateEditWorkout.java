@@ -14,6 +14,7 @@ import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
+import ecap.studio.group.justalittlefit.util.Constants;
 
 public class CreateEditWorkout extends BaseNaviDrawerActivity {
 
@@ -31,7 +32,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(new DataProviderFragment(), FRAGMENT_TAG_DATA_PROVIDER)
+                    .add(DataProviderFragment.newInstance(Constants.WORKOUT),
+                            FRAGMENT_TAG_DATA_PROVIDER)
                     .commit();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)

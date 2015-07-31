@@ -40,6 +40,8 @@ public class Constants {
 
     public static final String CREATE_EDIT_FRAG = "CreateEditFrag";
 
+    public static final String DATA_PROV = "DataProvider";
+
     public static final String ASSIGN_DIALOG = "AssignDialog";
 
     public static final String EMPTY_STRING = "";
@@ -79,5 +81,15 @@ public class Constants {
     public static final String UNDO = "Undo";
 
     public static final int ANDROID_SDK_INT = Build.VERSION.SDK_INT;
+
+    public static final String EXERCISE = "EXERCISE";
+
+    public static final String WORKOUT = "WORKOUT";
+
+    public static final String SET = "SET";
+
+    public static final int INT_ONE = 1;
+
+    public static final String DATA_FRAG_TYPE = "DATA_FRAG_TYPE";
 }
 

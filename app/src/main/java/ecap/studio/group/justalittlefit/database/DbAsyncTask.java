@@ -9,7 +9,7 @@ import java.util.List;
 import ecap.studio.group.justalittlefit.bus.AssignBus;
 import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditBus;
-import ecap.studio.group.justalittlefit.bus.CreateEditFragmentBus;
+import ecap.studio.group.justalittlefit.bus.DataProviderBus;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -31,7 +31,7 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
     @Override
     protected Object doInBackground(DbFunctionObject... params) {
         switch(invokingClass) {
-            case Constants.CREATE_EDIT_FRAG:
+            case Constants.DATA_PROV:
                 for (DbFunctionObject dfo : params) {
                     try {
                         switch (dfo.getFunctionInt()) {
@@ -100,8 +100,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
 
     @Override protected void onPostExecute(Object result) {
         switch (invokingClass) {
-            case Constants.CREATE_EDIT_FRAG:
-                CreateEditFragmentBus.getInstance().post(new DbTaskResult(result));
+            case Constants.DATA_PROV:
+                DataProviderBus.getInstance().post(new DbTaskResult(result));
                 break;
             case Constants.CREATE_EDIT_NO_SPACE:
                 CreateEditBus.getInstance().post(new DbTaskResult(result));
