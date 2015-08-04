@@ -40,7 +40,7 @@ public class Constants {
 
     public static final String CREATE_EDIT_FRAG = "CreateEditFrag";
 
-    public static final String DATA_PROV = "DataProvider";
+    public static final String CREATE_EDIT_WORKOUT = "CreateEditWorkout";
 
     public static final String ASSIGN_DIALOG = "AssignDialog";
 
@@ -91,5 +91,7 @@ public class Constants {
     public static final int INT_ONE = 1;
 
     public static final String DATA_FRAG_TYPE = "DATA_FRAG_TYPE";
+
+    public static final String WORKOUT_LIST = "WORKOUT_LIST";
 }
 

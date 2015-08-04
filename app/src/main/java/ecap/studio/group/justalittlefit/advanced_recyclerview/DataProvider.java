@@ -1,19 +1,11 @@
 package ecap.studio.group.justalittlefit.advanced_recyclerview;
 
-import android.util.Log;
-
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import ecap.studio.group.justalittlefit.bus.DataProviderBus;
-import ecap.studio.group.justalittlefit.database.DbAsyncTask;
-import ecap.studio.group.justalittlefit.database.DbConstants;
-import ecap.studio.group.justalittlefit.database.DbFunctionObject;
-import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -23,34 +15,21 @@ public class DataProvider extends AbstractDataProvider {
     private int mLastRemovedPosition = -1;
     private String dataType;
 
-    public DataProvider(String dataType) {
-        DataProviderBus.getInstance().register(this);
+    public DataProvider(String dataType, List<Workout> workouts) {
         switch (dataType) {
             case Constants.WORKOUT:
                 this.dataType = dataType;
-                DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
-                new DbAsyncTask(Constants.DATA_PROV).execute(getAllWorkoutDfo);
+                mData = new LinkedList<>();
+
+                for (Workout workout : workouts) {
+                    final long id = mData.size();
+                    final int viewType = 0;
+                    final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
+                    mData.add(new ConcreteData(id, viewType, workout.getName(),
+                            swipeReaction, workout, dataType));
+                }
                 break;
         }
-    }
-
-    @Subscribe
-    public void onAsyncTaskResult(DbTaskResult event) {
-        if (event == null || event.getResult() == null) {
-            Log.e("", ""); // Log error,
-        } else {
-            List<Workout> workouts = (List<Workout>) event.getResult();
-            mData = new LinkedList<>();
-
-            for (Workout workout : workouts) {
-                final long id = mData.size();
-                final int viewType = 0;
-                final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
-                mData.add(new ConcreteData(id, viewType, workout.getName(),
-                        swipeReaction, workout, dataType));
-            }
-        }
-
     }
 
     @Override
