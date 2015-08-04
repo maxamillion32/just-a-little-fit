@@ -1,5 +1,8 @@
 package ecap.studio.group.justalittlefit.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -12,7 +15,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 /**
  * Class that represents a workout within the application.
  */
-public class Workout implements Comparable<Workout> {
+public class Workout implements Comparable<Workout>, Parcelable {
 
     /** The display name of the Workout object */
     @DatabaseField(index = true, columnName = DbConstants.NAME_COLUMN_NAME, canBeNull = false)
@@ -169,5 +172,41 @@ public class Workout implements Comparable<Workout> {
         result = 31 * result + workoutId;
         return result;
     }
-}
 
+    protected Workout(Parcel in) {
+        name = in.readString();
+        workoutId = in.readInt();
+        orderNumber = in.readInt();
+        workoutDate = (DateTime) in.readValue(DateTime.class.getClassLoader());
+        exercises = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
+        isSelected = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(workoutId);
+        dest.writeInt(orderNumber);
+        dest.writeValue(workoutDate);
+        dest.writeValue(exercises);
+        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Workout> CREATOR = new Parcelable.Creator<Workout>() {
+        @Override
+        public Workout createFromParcel(Parcel in) {
+            return new Workout(in);
+        }
+
+        @Override
+        public Workout[] newArray(int size) {
+            return new Workout[size];
+        }
+    };
+}

@@ -1,5 +1,8 @@
 package ecap.studio.group.justalittlefit.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -9,7 +12,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 /**
  * Class that represents a single exercise within a {@link Workout)
  */
-public class Exercise implements Comparable<Exercise> {
+public class Exercise implements Comparable<Exercise>, Parcelable {
 
     /** The {@link Workout) that this Exercise is a part of */
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = DbConstants.WORKOUT_ID_COLUMN_NAME)
@@ -131,5 +134,47 @@ public class Exercise implements Comparable<Exercise> {
     public int compareTo(Exercise exercise) {
         return this.orderNumber - exercise.orderNumber;
     }
-}
 
+    protected Exercise(Parcel in) {
+        workout = (Workout) in.readValue(Workout.class.getClassLoader());
+        name = in.readString();
+        exerciseId = in.readInt();
+        orderNumber = in.readInt();
+        superSetSwitch = in.readByte() != 0x00;
+        isComplete = in.readByte() != 0x00;
+        isSelected = in.readByte() != 0x00;
+        sets = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
+        superSets = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(workout);
+        dest.writeString(name);
+        dest.writeInt(exerciseId);
+        dest.writeInt(orderNumber);
+        dest.writeByte((byte) (superSetSwitch ? 0x01 : 0x00));
+        dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
+        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
+        dest.writeValue(sets);
+        dest.writeValue(superSets);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Exercise> CREATOR = new Parcelable.Creator<Exercise>() {
+        @Override
+        public Exercise createFromParcel(Parcel in) {
+            return new Exercise(in);
+        }
+
+        @Override
+        public Exercise[] newArray(int size) {
+            return new Exercise[size];
+        }
+    };
+}

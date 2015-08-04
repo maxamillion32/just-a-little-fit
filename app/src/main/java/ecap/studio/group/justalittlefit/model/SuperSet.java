@@ -1,5 +1,8 @@
 package ecap.studio.group.justalittlefit.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -9,7 +12,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 /**
  * Class that represents a single SuperSet within an {@link Exercise)
  */
-public class SuperSet implements Comparable<SuperSet> {
+public class SuperSet implements Comparable<SuperSet>, Parcelable {
 
     /** The id of the SuperSet object */
     @DatabaseField(generatedId = true, columnName = DbConstants.SUPERSET_ID_COLUMN_NAME)
@@ -92,4 +95,41 @@ public class SuperSet implements Comparable<SuperSet> {
     public int compareTo(SuperSet superSet) {
         return this.orderNumber - superSet.orderNumber;
     }
+
+    protected SuperSet(Parcel in) {
+        superSetId = in.readInt();
+        orderNumber = in.readInt();
+        isComplete = in.readByte() != 0x00;
+        sets = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
+        exercise = (Exercise) in.readValue(Exercise.class.getClassLoader());
+        isSelected = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(superSetId);
+        dest.writeInt(orderNumber);
+        dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
+        dest.writeValue(sets);
+        dest.writeValue(exercise);
+        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<SuperSet> CREATOR = new Parcelable.Creator<SuperSet>() {
+        @Override
+        public SuperSet createFromParcel(Parcel in) {
+            return new SuperSet(in);
+        }
+
+        @Override
+        public SuperSet[] newArray(int size) {
+            return new SuperSet[size];
+        }
+    };
 }

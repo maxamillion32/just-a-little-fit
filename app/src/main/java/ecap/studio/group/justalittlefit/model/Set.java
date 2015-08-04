@@ -1,5 +1,8 @@
 package ecap.studio.group.justalittlefit.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.field.DatabaseField;
 
 import ecap.studio.group.justalittlefit.database.DbConstants;
@@ -7,7 +10,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 /**
  * Class that represents a single set within an {@link Exercise)
  */
-public class Set implements Comparable<Set> {
+public class Set implements Comparable<Set>, Parcelable {
 
     /** The display name of the Set
      * (will not be displayed unless Set is part of a {@link SuperSet}) */
@@ -159,4 +162,51 @@ public class Set implements Comparable<Set> {
     public int compareTo(Set setObj) {
         return this.orderNumber - setObj.orderNumber;
     }
+
+    protected Set(Parcel in) {
+        name = in.readString();
+        setId = in.readInt();
+        isComplete = in.readByte() != 0x00;
+        exercise = (Exercise) in.readValue(Exercise.class.getClassLoader());
+        superSet = (SuperSet) in.readValue(SuperSet.class.getClassLoader());
+        reps = in.readInt();
+        value = in.readLong();
+        weightTypeCode = in.readString();
+        exerciseTypeCode = in.readString();
+        orderNumber = in.readInt();
+        isSelected = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(setId);
+        dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
+        dest.writeValue(exercise);
+        dest.writeValue(superSet);
+        dest.writeInt(reps);
+        dest.writeLong(value);
+        dest.writeString(weightTypeCode);
+        dest.writeString(exerciseTypeCode);
+        dest.writeInt(orderNumber);
+        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Set> CREATOR = new Parcelable.Creator<Set>() {
+        @Override
+        public Set createFromParcel(Parcel in) {
+            return new Set(in);
+        }
+
+        @Override
+        public Set[] newArray(int size) {
+            return new Set[size];
+        }
+    };
 }
