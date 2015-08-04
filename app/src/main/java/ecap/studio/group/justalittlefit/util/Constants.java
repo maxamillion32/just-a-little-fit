@@ -93,5 +93,7 @@ public class Constants {
     public static final String DATA_FRAG_TYPE = "DATA_FRAG_TYPE";
 
     public static final String WORKOUT_LIST = "WORKOUT_LIST";
+
+    public static final int DB_ERR_CODE = -1;
 }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,10 +28,14 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDialog;
+import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutDeletionListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 
-public class CreateEditWorkout extends BaseNaviDrawerActivity {
+public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutDeletionListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -116,7 +121,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
     public void onAsyncTaskResult(DbTaskResult event) {
         if (event == null || event.getResult() == null) {
             Log.e(LOG_TAG, getString(R.string.workout_list_error));
-        } else {
+        } else if (event.getResult() instanceof List) {
             List<Workout> workouts = (List<Workout>) event.getResult();
             getSupportFragmentManager().beginTransaction()
                     .add(DataProviderFragment.newInstance(Constants.WORKOUT, new ArrayList<>(workouts)),
@@ -126,7 +131,19 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
                     .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commit();
 
+        } else if (event.getResult() instanceof Integer) {
+            // todo Update recyclerview
         }
+    }
+
+    private void displayConfirmDeleteAllWorkoutDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ConfirmDeleteWorkoutDialog dialog = new ConfirmDeleteWorkoutDialog();
+        dialog.show(fm, getString(R.string.confirmDeleteWorkoutDialogTag));
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(getString(R.string.confirmDeleteWorkoutDialog_selectAll_bool), true);
+        dialog.setArguments(bundle);
     }
 
     @Override
@@ -137,8 +154,36 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_all:
+                displayConfirmDeleteAllWorkoutDialog();
+                break;
+            case R.id.action_info:
+                Utils.displayLongToast(this, "Info");;
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+
+    @Override
     protected void onDestroy() {
         CreateEditWorkoutBus.getInstance().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onDeleteWorkoutClick(ConfirmDialog dialog) {
+       // Swipe takes care of single delete
+    }
+
+    @Override
+    public void onDeleteAllWorkoutsClick(ConfirmDialog dialog) {
+        DbFunctionObject deleteWorkoutsDfo =
+                new DbFunctionObject(null, DbConstants.DELETE_WORKOUTS);
+        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
     }
 }

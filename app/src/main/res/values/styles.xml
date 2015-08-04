@@ -34,4 +34,10 @@
         <item name="android:scrollbars">vertical</item>
     </style>
 
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/app_blue_gray</item>
+        <item name="android:textColorPrimary">@color/app_gray</item>
+        <item name="android:background">@color/fallback_gray</item>
+    </style>
+
 </resources>

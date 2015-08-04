@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import ecap.studio.group.justalittlefit.model.Workout;
+import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
 /**
@@ -57,16 +58,18 @@ public class WorkoutDbHelper {
         return deletedIdSet;
     }
 
-    public static LinkedHashSet deleteUnassignedWorkouts(List<Workout> workouts) {
+    public static Integer deleteUnassignedWorkouts() {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         try {
-            dao.delete(workouts);
-            List<Workout> workoutsAfterDelete = WorkoutDbHelper.getUnassignedWorkouts();
-            Utils.reorderWorkouts(workoutsAfterDelete);
-            LinkedHashSet<Workout> workoutsAfterDeleteSet = new LinkedHashSet<>(workoutsAfterDelete);
-            return workoutsAfterDeleteSet;
+            QueryBuilder<Workout, Integer> queryBuilder = dao.queryBuilder();
+            Where where = queryBuilder.where();
+            where.isNull(DbConstants.WORKOUT_DATE_COLUMN_NAME);
+            queryBuilder.setWhere(where);
+            queryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
+            List<Workout> workouts = queryBuilder.query();
+            return dao.delete(workouts);
         } catch (SQLException e) {
-            return null;
+            return Constants.DB_ERR_CODE;
         }
     }
 
