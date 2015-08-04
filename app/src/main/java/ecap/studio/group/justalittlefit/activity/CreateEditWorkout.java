@@ -7,6 +7,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -61,7 +63,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.ic_dumbbell_white);
+        fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,6 +127,13 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity {
                     .commit();
 
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_create_edit_workouts, menu);
+        return true;
     }
 
     @Override
