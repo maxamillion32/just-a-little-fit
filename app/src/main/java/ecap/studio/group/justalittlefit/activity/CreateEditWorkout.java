@@ -143,6 +143,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     (DataProvider) ((DataProviderFragment) dataFrag).getDataProvider();
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
+                Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.confirmDeleteWorkoutDialog_success));
             } else {
                 Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.deletion_workout_error));
             }
