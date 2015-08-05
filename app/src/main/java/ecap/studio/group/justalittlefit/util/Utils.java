@@ -1,6 +1,8 @@
 package ecap.studio.group.justalittlefit.util;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -72,5 +75,13 @@ public class Utils {
             dateTimes.add(new DateTime(date));
         }
         return dateTimes;
+    }
+
+    public static void displayLongSimpleSnackbar(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show();
+    }
+
+    public static void displayShortSimpleSnackbar(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
     }
 }

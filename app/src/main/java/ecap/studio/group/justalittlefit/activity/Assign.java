@@ -97,8 +97,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
             @Override
             public void onClick(View view) {
                 if (assignCalendar.getSelectedDates().isEmpty()) {
-                    Snackbar.make(view, getString(R.string.enforceDatesForAssignment), Snackbar.LENGTH_LONG)
-                            .setAction(Constants.UNDO, null).show();
+                    Utils.displayLongSimpleSnackbar(view, getString(R.string.enforceDatesForAssignment));
                 } else {
                     setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
                     FragmentManager fm = activity.getSupportFragmentManager();
@@ -145,10 +144,9 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                     .setAction(Constants.UNDO, undoAssignListener(assignedWorkouts))
                     .setActionTextColor(getResources().getColor(R.color.app_blue_gray)).show();
         } else if (eventResult != null && eventResult instanceof Set) {
-            Snackbar.make(this.findViewById(R.id.fab), getString(R.string.removed_assigned_workouts_successfully), Snackbar.LENGTH_LONG)
-                    .show();
+            Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.removed_assigned_workouts_successfully));
         } else {
-            Snackbar.make(this.findViewById(R.id.fab), getString(R.string.assign_workout_error), Snackbar.LENGTH_LONG).show();
+            Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.assign_workout_error));
         }
     }
 
