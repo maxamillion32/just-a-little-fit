@@ -31,9 +31,9 @@ public class DataProviderFragment extends Fragment {
 
         if (args != null) {
             dataType = args.getString(Constants.DATA_FRAG_TYPE);
+            workouts = args.getParcelableArrayList(Constants.WORKOUT_LIST);
             switch (dataType) {
                 case Constants.WORKOUT:
-                    workouts = args.getParcelableArrayList(Constants.WORKOUT_LIST);
                     mDataProvider = new DataProvider(dataType, workouts);
                     break;
             }

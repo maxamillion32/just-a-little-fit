@@ -21,7 +21,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.MyDraggableSwipeableItemAdapter;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
 import ecap.studio.group.justalittlefit.database.DbAsyncTask;
@@ -121,6 +123,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     public void onAsyncTaskResult(DbTaskResult event) {
         if (event == null || event.getResult() == null) {
             Log.e(LOG_TAG, getString(R.string.workout_list_error));
+            Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_list_error));
         } else if (event.getResult() instanceof List) {
             List<Workout> workouts = (List<Workout>) event.getResult();
             getSupportFragmentManager().beginTransaction()
@@ -132,7 +135,17 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     .commit();
 
         } else if (event.getResult() instanceof Integer) {
-            // todo Update recyclerview
+            final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+            final Fragment dataFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
+            MyDraggableSwipeableItemAdapter adapter =
+                    ((RecyclerListViewFragment) recyclerFrag).getAdapter();
+            DataProvider dataProvider =
+                    (DataProvider) ((DataProviderFragment) dataFrag).getDataProvider();
+            if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
+                adapter.removeAllItems(dataProvider.getCount() - 1);
+            } else {
+                Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.deletion_workout_error));
+            }
         }
     }
 

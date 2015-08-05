@@ -176,6 +176,10 @@ public class RecyclerListViewFragment extends Fragment {
         return ((CreateEditWorkout) getActivity()).getDataProvider();
     }
 
+    public MyDraggableSwipeableItemAdapter getAdapter() {
+        return (MyDraggableSwipeableItemAdapter) mAdapter;
+    }
+
     public void notifyItemChanged(int position) {
         mAdapter.notifyItemChanged(position);
     }

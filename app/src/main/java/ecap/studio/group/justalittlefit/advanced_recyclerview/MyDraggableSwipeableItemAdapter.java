@@ -282,4 +282,11 @@ public class MyDraggableSwipeableItemAdapter
             drawable.setState(EMPTY_STATE);
         }
     }
+
+    public void removeAllItems(int dataSize) {
+        for(int i = 0; i <= dataSize; i++){
+            mProvider.removeItem(0);
+            notifyItemRemoved(0);
+        }
+    }
 }
