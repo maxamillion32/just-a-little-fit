@@ -5,7 +5,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/confirmDialogTextView"
+        android:id="@+id/appDialogTextView"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:textColor="@color/app_gray"

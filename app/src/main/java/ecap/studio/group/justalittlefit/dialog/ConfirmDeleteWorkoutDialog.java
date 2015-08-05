@@ -12,7 +12,8 @@ import ecap.studio.group.justalittlefit.util.Constants;
 /**
  * Dialog that will confirm deletion of a workout(s).
  */
-public class ConfirmDeleteWorkoutDialog extends ConfirmDialog {
+public class ConfirmDeleteWorkoutDialog extends AppBaseDialog {
+    private static final String DELETE_ALL_WORKOUTS = "Delete All Workouts?";
     ConfirmWorkoutDeletionListener listener;
 
     @Override
@@ -21,7 +22,7 @@ public class ConfirmDeleteWorkoutDialog extends ConfirmDialog {
         final boolean deleteAllTitle = getArguments().getBoolean(getString(R.string.confirmDeleteWorkoutDialog_selectAll_bool));
         final String deleteOptString = (deleteAllTitle) ? getString(R.string.delete_all) :
                 getString(R.string.delete_item);
-        setTitleTextView(deleteAllTitle);
+        setTitleTextView(DELETE_ALL_WORKOUTS);
         setPositiveButton(deleteOptString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

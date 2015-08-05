@@ -31,7 +31,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
-import ecap.studio.group.justalittlefit.dialog.ConfirmDialog;
+import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutDeletionListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
@@ -189,12 +189,12 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     }
 
     @Override
-    public void onDeleteWorkoutClick(ConfirmDialog dialog) {
+    public void onDeleteWorkoutClick(AppBaseDialog dialog) {
        // Swipe takes care of single delete
     }
 
     @Override
-    public void onDeleteAllWorkoutsClick(ConfirmDialog dialog) {
+    public void onDeleteAllWorkoutsClick(AppBaseDialog dialog) {
         DbFunctionObject deleteWorkoutsDfo =
                 new DbFunctionObject(null, DbConstants.DELETE_WORKOUTS);
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);

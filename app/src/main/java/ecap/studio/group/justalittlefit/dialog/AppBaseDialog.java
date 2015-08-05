@@ -18,22 +18,20 @@ import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 
 /**
- * Base confirm dialog class.
+ * Base dialog class.
  */
-public class ConfirmDialog extends DialogFragment {
+public class AppBaseDialog extends DialogFragment {
 
-    @InjectView(R.id.confirmDialogTextView)
+    @InjectView(R.id.appDialogTextView)
     TextView titleTextView;
     AlertDialog confirmDialog;
-    private static final String DELETE_ALL = "Delete All Workouts?";
-    private static final String DELETE_SOME = "Delete Workout(s)?";
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.confirm_dialog_view, null);
+        View view = inflater.inflate(R.layout.app_dialog_view, null);
         builder.setView(view);
         ButterKnife.inject(this, view);
         confirmDialog = builder.create();
@@ -48,8 +46,8 @@ public class ConfirmDialog extends DialogFragment {
         setButton(btnText, onClickListener, false);
     }
 
-    public void setTitleTextView(boolean deleteAll) {
-        titleTextView.setText((deleteAll) ? DELETE_ALL : DELETE_SOME);
+    public void setTitleTextView(String title) {
+        titleTextView.setText(title);
     }
 
     private void setButton(String btnText, DialogInterface.OnClickListener onClickListener, boolean isPositiveBtn) {
