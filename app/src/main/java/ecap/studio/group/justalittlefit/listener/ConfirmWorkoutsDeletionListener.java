@@ -5,8 +5,7 @@ import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
 /**
  * Dialog listener to confirm deletions.
  */
-public interface ConfirmWorkoutDeletionListener {
-    public void onDeleteWorkoutClick(AppBaseDialog dialog);
+public interface ConfirmWorkoutsDeletionListener {
     public void onDeleteAllWorkoutsClick(AppBaseDialog dialog);
 }
 

@@ -32,12 +32,12 @@ import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
-import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutDeletionListener;
+import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutDeletionListener {
+public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutsDeletionListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -153,10 +153,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         FragmentManager fm = getSupportFragmentManager();
         ConfirmDeleteWorkoutDialog dialog = new ConfirmDeleteWorkoutDialog();
         dialog.show(fm, getString(R.string.confirmDeleteWorkoutDialogTag));
-
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(getString(R.string.confirmDeleteWorkoutDialog_selectAll_bool), true);
-        dialog.setArguments(bundle);
     }
 
     @Override
@@ -186,11 +182,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     protected void onDestroy() {
         CreateEditWorkoutBus.getInstance().unregister(this);
         super.onDestroy();
-    }
-
-    @Override
-    public void onDeleteWorkoutClick(AppBaseDialog dialog) {
-       // Swipe takes care of single delete
     }
 
     @Override
