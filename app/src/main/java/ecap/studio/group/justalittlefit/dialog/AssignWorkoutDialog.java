@@ -1,12 +1,12 @@
 package ecap.studio.group.justalittlefit.dialog;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +44,8 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                new ContextThemeWrapper(getActivity(), R.style.Theme_AppCompat_Light_Dialog));
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(
+                new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
         ButterKnife.inject(this, view);
@@ -53,7 +53,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
         AssignDialogBus.getInstance().register(this);
         DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
         new DbAsyncTask(Constants.ASSIGN_DIALOG).execute(getAllWorkoutDfo);
-
+        builder.setTitle(getString(R.string.assignWorkoutDialogHeaderMsg));
         builder.setView(view);
         builder.setPositiveButton(getString(R.string.assignWorkoutDialog_assign), new DialogInterface.OnClickListener() {
             @Override

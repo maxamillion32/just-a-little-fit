@@ -38,6 +38,8 @@
     <string name="confirm">Confirm</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="got_it">Got It</string>
+
 
     <!-- CreateWorkoutDialog Strings -->
     <string name="createWorkoutDialog_nameMsg">Workout Name:</string>
@@ -67,7 +69,13 @@
     <string name="confirmDeleteWorkoutDialog_error">An error occurred while trying to delete the workout(s). Please try again.</string>
     <string name="confirmDeleteWorkoutDialog_success">Workout(s) deleted successfully</string>
     <string name="confirmDeleteWorkoutDialog_selectAll_bool">Title Boolean</string>
-    <string name="noImplementsConfirmDeletionListener">doesn\'t implement ConfirmDeletionListener.</string>
+    <string name="noImplementsConfirmDeletionListener">doesn\'t implement ConfirmWorkoutsDeletionListener.</string>
+
+    <!-- InformationDialog Strings -->
+    <string name="infoDialogTag">Information Dialog Tag</string>
+    <string name="deleteBySwipe">- Workouts can be deleted via a left or right swipe.</string>
+    <string name="dragSort">- Workouts can be rearranged by long pressing the dark
+        gray area on the far left of the row and dragging the workout either up or down.</string>
 
     <!-- AssignWorkoutDialog Strings -->
     <string name="assignWorkoutDialogHeaderMsg">Choose Workout(s) To Assign:</string>
