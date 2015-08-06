@@ -31,18 +31,23 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.dialog.AddWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
 import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.listener.AddWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutsDeletionListener {
+public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutsDeletionListener,
+        AddWorkoutDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
+    FloatingActionButton fab;
+    boolean afterInsert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +76,12 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     }
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo
+                displayAddWorkoutDialog();
             }
         });
     }
@@ -121,10 +126,16 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     .add(DataProviderFragment.newInstance(Constants.WORKOUT, new ArrayList<>(workouts)),
                             FRAGMENT_TAG_DATA_PROVIDER)
                     .commit();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
-                    .commit();
-
+            if (afterInsert) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                        .commit();
+                afterInsert = false;
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                        .commit();
+            }
         } else if (event.getResult() instanceof Integer) {
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
             final Fragment dataFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
@@ -134,12 +145,12 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     (DataProvider) ((DataProviderFragment) dataFrag).getDataProvider();
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
-                Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.confirmDeleteWorkoutDialog_success));
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteWorkoutDialog_success));
             } else {
-                Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.deletion_workout_error));
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
             }
         } else if (event.getResult() instanceof Workout) {
-            Utils.displayLongActionSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_deleted),
+            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
                     Constants.UNDO, undoWorkoutDelete((Workout) event.getResult()),
                     getResources().getColor(R.color.app_blue_gray));
         } else if (event.getResult() instanceof Boolean) {
@@ -148,10 +159,13 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 if (position >= 0) {
                     final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
                     ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
-                    Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab),
+                    Utils.displayLongSimpleSnackbar(fab,
                             getString(R.string.workout_removal_undone));
                 } else {
-                    displayGeneralWorkoutListError();
+                    afterInsert = true;
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
+                    DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
+                    new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
                 }
             }
         } else {
@@ -168,6 +182,12 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = new InformationDialog();
+        dialog.show(fm, getString(R.string.infoDialogTag));
+    }
+
+    private void displayAddWorkoutDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddWorkoutDialog dialog = new AddWorkoutDialog();
         dialog.show(fm, getString(R.string.infoDialogTag));
     }
 
@@ -223,5 +243,20 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     void displayGeneralWorkoutListError() {
         Log.e(LOG_TAG, getString(R.string.workout_list_error));
         Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_list_error));
+    }
+
+    @Override
+    public void onAddWorkoutClick(AddWorkoutDialog dialog) {
+        String newWorkoutName = dialog.getAddWorkoutText().getText().toString();
+        final Fragment dataFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
+        DataProvider dataProvider =
+                (DataProvider) ((DataProviderFragment) dataFrag).getDataProvider();
+        if (dataProvider != null && dataProvider.getCount() >= 0) {
+            Workout newWorkout = new Workout(newWorkoutName, dataProvider.getCount());
+            DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
+            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+        } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
+        }
     }
 }

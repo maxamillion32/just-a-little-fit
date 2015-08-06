@@ -40,16 +40,14 @@
     <string name="no">No</string>
     <string name="got_it">Got It</string>
 
-
-    <!-- CreateWorkoutDialog Strings -->
-    <string name="createWorkoutDialog_nameMsg">Workout Name:</string>
-    <string name="createWorkoutDialog_add">Add</string>
-    <string name="createWorkoutDialog_cancel">Cancel</string>
-    <string name="createWorkout_requireName">You must enter a name for your workout</string>
-    <string name="createWorkoutDialogTag">Create Workout Dialog Tag</string>
-    <string name="createWorkout_success_prefix">Workout:</string>
-    <string name="createWorkout_success_suffix">added successfully </string>
-    <string name="noImplementsCreateWorkoutDialogListener">doesn\'t implement CreateWorkoutDialogListener.</string>
+    <!-- AddWorkoutDialog Strings -->
+    <string name="addWorkoutDialog_Title">Workout Name:</string>
+    <string name="addWorkoutDialog_add">Add Workout</string>
+    <string name="addWorkoutDialog_cancel">Cancel</string>
+    <string name="addWorkout_requireName">You must enter a name for your workout</string>
+    <string name="addWorkoutDialogTag">Create Workout Dialog Tag</string>
+    <string name="addWorkout_success">Workout successfully added</string>
+    <string name="noImplementsAddWorkoutDialogListener">doesn\'t implement AddWorkoutDialogListener.</string>
 
     <!-- RepositionWorkoutDialog Strings -->
     <string name="repositionWorkoutDialog_title">Select a position for the Workout:</string>

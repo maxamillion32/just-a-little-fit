@@ -43,6 +43,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     @InjectView(R.id.assignCalendar)
     CalendarPickerView assignCalendar;
+    FloatingActionButton fab;
     private List<DateTime> dateTimes;
 
     @Override
@@ -90,7 +91,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     }
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,13 +140,13 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
         if (eventResult != null && eventResult instanceof List) {
             List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
-            Utils.displayLongActionSnackbar(this.findViewById(R.id.fab), getString(R.string.workouts_assigned_successfully),
+            Utils.displayLongActionSnackbar(fab, getString(R.string.workouts_assigned_successfully),
                     Constants.UNDO, undoAssignListener(assignedWorkouts),
                     getResources().getColor(R.color.app_blue_gray));
         } else if (eventResult != null && eventResult instanceof Set) {
-            Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.removed_assigned_workouts_successfully));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.removed_assigned_workouts_successfully));
         } else {
-            Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.assign_workout_error));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.assign_workout_error));
         }
     }
 

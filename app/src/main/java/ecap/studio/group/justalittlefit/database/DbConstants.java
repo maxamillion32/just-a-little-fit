@@ -17,13 +17,13 @@ public class DbConstants {
     /** An int representation for deleting {@link ecap.studio.group.justalittlefit.model.Workout} objects from the db */
     public static final int DELETE_WORKOUTS = 3;
 
-    /** An int representation for for inserting an {@link ecap.studio.group.justalittlefit.model.Workout} to the db */
+    /** An int representation for for inserting an {@link ecap.studio.group.justalittlefit.model.Workout} object to the db */
     public static final int INSERT_WORKOUT = 4;
 
-    /** An int representation for for updating a list of {@link ecap.studio.group.justalittlefit.model.Workout} in the db */
+    /** An int representation for for updating a list of {@link ecap.studio.group.justalittlefit.model.Workout} objects in the db */
     public static final int UPDATE_WORKOUTS = 5;
 
-    /** An int representation for for assigning a list of {@link ecap.studio.group.justalittlefit.model.Workout} to dates in the db */
+    /** An int representation for for assigning a list of {@link ecap.studio.group.justalittlefit.model.Workout} objects to dates in the db */
     public static final int ASSIGN_WORKOUTS = 6;
 
     /** An int representation for deleting a {@link ecap.studio.group.justalittlefit.model.Workout} object from the db */

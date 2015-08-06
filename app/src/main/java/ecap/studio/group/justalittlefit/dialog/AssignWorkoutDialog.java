@@ -44,7 +44,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(
+        AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
@@ -90,7 +90,6 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                 });
             }
         });
-
         return assignWorkoutDialog;
     }
 
