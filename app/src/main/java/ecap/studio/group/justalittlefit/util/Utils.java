@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -83,5 +82,20 @@ public class Utils {
 
     public static void displayShortSimpleSnackbar(View view, String msg) {
         Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public static void displayLongActionSnackbar(View view, String msg,
+                                                 String actionText,
+                                                 View.OnClickListener listener, int colorInt) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+                .setAction(actionText, listener)
+                .setActionTextColor(colorInt).show();
+    }
+    public static void displayShortActionSnackbar(View view, String msg,
+                                                  String actionText,
+                                                  View.OnClickListener listener, int colorInt) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_SHORT)
+                .setAction(actionText, listener)
+                .setActionTextColor(colorInt).show();
     }
 }

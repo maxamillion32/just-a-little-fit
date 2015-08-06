@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -83,9 +82,9 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                 DateTime maxDate = minDate.plusYears(1).minusDays(1);
                 DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(DATE_FORMAT);
 
-                Snackbar.make(activity.findViewById(R.id.fab), DATE_ERROR_PREFIX
-                        + dateTimeFormatter.print(minDate) + AND + dateTimeFormatter.print(maxDate), Snackbar.LENGTH_LONG)
-                        .show();
+                Utils.displayLongSimpleSnackbar(activity.findViewById(R.id.fab),
+                        DATE_ERROR_PREFIX + dateTimeFormatter.print(minDate) + AND +
+                                dateTimeFormatter.print(maxDate));
             }
         });
     }
@@ -140,9 +139,9 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
         if (eventResult != null && eventResult instanceof List) {
             List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
-            Snackbar.make(this.findViewById(R.id.fab), getString(R.string.workouts_assigned_successfully), Snackbar.LENGTH_LONG)
-                    .setAction(Constants.UNDO, undoAssignListener(assignedWorkouts))
-                    .setActionTextColor(getResources().getColor(R.color.app_blue_gray)).show();
+            Utils.displayLongActionSnackbar(this.findViewById(R.id.fab), getString(R.string.workouts_assigned_successfully),
+                    Constants.UNDO, undoAssignListener(assignedWorkouts),
+                    getResources().getColor(R.color.app_blue_gray));
         } else if (eventResult != null && eventResult instanceof Set) {
             Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.removed_assigned_workouts_successfully));
         } else {
