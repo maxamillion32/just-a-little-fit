@@ -19,7 +19,7 @@ public class ConfirmDeleteWorkoutDialog extends AppBaseDialog {
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        setTitleTextView(DELETE_ALL_WORKOUTS);
+        setTitle(DELETE_ALL_WORKOUTS);
         setPositiveButton(getString(R.string.delete_all), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

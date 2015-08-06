@@ -30,8 +30,9 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
-import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
+import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
@@ -156,6 +157,11 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         dialog.show(fm, getString(R.string.confirmDeleteWorkoutDialogTag));
     }
 
+    private void displayInfoDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = new InformationDialog();
+        dialog.show(fm, getString(R.string.infoDialogTag));
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -170,7 +176,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 displayConfirmDeleteAllWorkoutDialog();
                 break;
             case R.id.action_info:
-                Utils.displayLongToast(this, "Info");;
+                displayInfoDialog();
                 break;
             default:
                 break;
