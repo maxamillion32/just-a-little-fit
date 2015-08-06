@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -169,6 +170,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         InformationDialog dialog = new InformationDialog();
         dialog.show(fm, getString(R.string.infoDialogTag));
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -179,6 +181,9 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
             case R.id.action_delete_all:
                 displayConfirmDeleteAllWorkoutDialog();
                 break;
@@ -188,7 +193,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             default:
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
 
