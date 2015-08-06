@@ -101,30 +101,19 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         // do nothing, pinning not supported in this app
     }
 
-    public void onItemRemoved(int position) {
-        //todo
-/*        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(R.string.snack_bar_text_item_removed)
-                        .actionLabel(R.string.snack_bar_action_undo)
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                onItemUndoActionClicked();
-                            }
-                        })
-                        .actionColorResource(R.color.snackbar_action_color_done)
-                        .duration(5000)
-                        .type(SnackbarType.SINGLE_LINE)
-                        .swipeToDismiss(false)
-                , this);*/
+    public void onItemRemoved(int position, String dataType, Object dataObject) {
+        switch (dataType) {
+            case Constants.WORKOUT:
+                Workout workoutToDelete = (Workout) dataObject;
+                DbFunctionObject deleteWorkout = new DbFunctionObject(workoutToDelete, DbConstants.DELETE_WORKOUT);
+                new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkout);
+        }
     }
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         if (event == null || event.getResult() == null) {
-            Log.e(LOG_TAG, getString(R.string.workout_list_error));
-            Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_list_error));
+            displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof List) {
             List<Workout> workouts = (List<Workout>) event.getResult();
             getSupportFragmentManager().beginTransaction()
@@ -148,6 +137,24 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             } else {
                 Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.deletion_workout_error));
             }
+        } else if (event.getResult() instanceof Workout) {
+            Utils.displayLongActionSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_deleted),
+                    Constants.UNDO, undoWorkoutDelete((Workout) event.getResult()),
+                    getResources().getColor(R.color.app_blue_gray));
+        } else if (event.getResult() instanceof Boolean) {
+            if ((Boolean) event.getResult()) {
+                int position = getDataProvider().undoLastRemoval();
+                if (position >= 0) {
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                    ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                    Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab),
+                            getString(R.string.workout_removal_undone));
+                } else {
+                    displayGeneralWorkoutListError();
+                }
+            }
+        } else {
+            displayGeneralWorkoutListError();
         }
     }
 
@@ -196,5 +203,20 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         DbFunctionObject deleteWorkoutsDfo =
                 new DbFunctionObject(null, DbConstants.DELETE_WORKOUTS);
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
+    }
+
+    private View.OnClickListener undoWorkoutDelete(final Workout workout) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbFunctionObject insertWorkout = new DbFunctionObject(workout, DbConstants.INSERT_WORKOUT);
+                new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+            }
+        };
+    }
+
+    void displayGeneralWorkoutListError() {
+        Log.e(LOG_TAG, getString(R.string.workout_list_error));
+        Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_list_error));
     }
 }

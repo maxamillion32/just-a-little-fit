@@ -16,6 +16,10 @@ public abstract class AbstractDataProvider {
         public abstract void setPinnedToSwipeLeft(boolean pinned);
 
         public abstract boolean isPinnedToSwipeLeft();
+
+        public abstract Object getDataObject();
+
+        public abstract String getDataType();
     }
 
     public abstract int getCount();

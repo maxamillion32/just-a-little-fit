@@ -26,6 +26,9 @@ public class DbConstants {
     /** An int representation for for assigning a list of {@link ecap.studio.group.justalittlefit.model.Workout} to dates in the db */
     public static final int ASSIGN_WORKOUTS = 6;
 
+    /** An int representation for deleting a {@link ecap.studio.group.justalittlefit.model.Workout} object from the db */
+    public static final int DELETE_WORKOUT = 7;
+
     /** The column name for the id field of {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 

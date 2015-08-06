@@ -153,6 +153,16 @@ public class DataProvider extends AbstractDataProvider {
         public void setPinnedToSwipeLeft(boolean pinedToSwipeLeft) {
             mPinnedToSwipeLeft = pinedToSwipeLeft;
         }
+
+        @Override
+        public Object getDataObject() {
+            return mDataObject;
+        }
+
+        @Override
+        public String getDataType() {
+            return mDataType;
+        }
     }
 
      public List<Object> getDataObjects() {

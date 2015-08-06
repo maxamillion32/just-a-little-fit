@@ -67,8 +67,8 @@ public class RecyclerListViewFragment extends Fragment {
         final MyDraggableSwipeableItemAdapter myItemAdapter = new MyDraggableSwipeableItemAdapter(getDataProvider());
         myItemAdapter.setEventListener(new MyDraggableSwipeableItemAdapter.EventListener() {
             @Override
-            public void onItemRemoved(int position) {
-                ((CreateEditWorkout) getActivity()).onItemRemoved(position);
+            public void onItemRemoved(int position, String dataType, Object dataObject) {
+                ((CreateEditWorkout) getActivity()).onItemRemoved(position, dataType, dataObject);
             }
 
             @Override

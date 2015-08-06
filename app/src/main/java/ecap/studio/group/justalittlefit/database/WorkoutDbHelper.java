@@ -9,7 +9,6 @@ import org.joda.time.DateTime;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,6 @@ import java.util.concurrent.Callable;
 
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 /**
  * Helper class that will handle database functionality on objects of type
@@ -58,6 +56,16 @@ public class WorkoutDbHelper {
         return deletedIdSet;
     }
 
+    public static Workout deleteWorkout(Workout workout) {
+        try {
+            Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+            dao.delete(workout);
+            return workout;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public static Integer deleteUnassignedWorkouts() {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         try {
@@ -73,11 +81,11 @@ public class WorkoutDbHelper {
         }
     }
 
-    public static Workout createWorkout(Workout workout) {
+    public static Boolean createWorkout(Workout workout) {
         try {
             Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
             dao.create(workout);
-            return workout;
+            return true;
         } catch (SQLException e) {
             return null;
         }
