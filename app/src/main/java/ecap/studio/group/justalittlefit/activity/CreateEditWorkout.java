@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.squareup.otto.Subscribe;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProvider;
@@ -48,6 +50,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
     boolean afterInsert;
+    @InjectView(R.id.rlDefault)
+    RelativeLayout rlDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,27 +140,35 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                         .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                         .commit();
             }
+
+            if (workouts.size() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
         } else if (event.getResult() instanceof Integer) {
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-            final Fragment dataFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
             MyDraggableSwipeableItemAdapter adapter =
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
-                    (DataProvider) ((DataProviderFragment) dataFrag).getDataProvider();
+                    (DataProvider)getDataProvider();
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteWorkoutDialog_success));
+                rlDefault.setVisibility(View.VISIBLE);
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
             }
         } else if (event.getResult() instanceof Workout) {
+            determineDefaultStatus();
             Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
                     Constants.UNDO, undoWorkoutDelete((Workout) event.getResult()),
                     getResources().getColor(R.color.app_blue_gray));
         } else if (event.getResult() instanceof Boolean) {
             if ((Boolean) event.getResult()) {
                 int position = getDataProvider().undoLastRemoval();
-                if (position >= 0) {
+                int currentDataCount = ((DataProvider)getDataProvider()).getCount();
+                if (position >= 0 && (position != 0 && currentDataCount != 1)) {
                     final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
                     ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
                     Utils.displayLongSimpleSnackbar(fab,
@@ -248,15 +260,24 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     public void onAddWorkoutClick(AddWorkoutDialog dialog) {
         String newWorkoutName = dialog.getAddWorkoutText().getText().toString();
-        final Fragment dataFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
         DataProvider dataProvider =
-                (DataProvider) ((DataProviderFragment) dataFrag).getDataProvider();
+                (DataProvider)getDataProvider();
         if (dataProvider != null && dataProvider.getCount() >= 0) {
             Workout newWorkout = new Workout(newWorkoutName, dataProvider.getCount());
             DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
         } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
+        }
+    }
+
+    void determineDefaultStatus() {
+        DataProvider dataProvider =
+                (DataProvider)getDataProvider();
+        if (dataProvider != null && dataProvider.getCount() == 0) {
+            rlDefault.setVisibility(View.VISIBLE);
+        } else {
+            rlDefault.setVisibility(View.INVISIBLE);
         }
     }
 }

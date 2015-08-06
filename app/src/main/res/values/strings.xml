@@ -100,6 +100,7 @@
     <string name="workout_deleted">Workout deleted</string>
     <string name="removed_assigned_workouts_successfully">Workout(s) assignment successfully undone</string>
     <string name="workout_removal_undone">Workout restored</string>
-    <string name="assignHeaderText">Select date(s) to assign to your workout(s)</string>
+    <string name="assignHeaderText">Select date(s) to assign to your Workout(s)</string>
+    <string name="emptyWorkoutViewText">Click the \'+\' button to add a Workout</string>
 
 </resources>
