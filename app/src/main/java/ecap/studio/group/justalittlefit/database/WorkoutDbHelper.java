@@ -81,6 +81,16 @@ public class WorkoutDbHelper {
         }
     }
 
+    public static String revertWorkout(Workout workout) {
+        try {
+            Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+            dao.create(workout);
+            return Boolean.TRUE.toString();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public static Boolean createWorkout(Workout workout) {
         try {
             Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();

@@ -29,6 +29,10 @@ public class DbConstants {
     /** An int representation for deleting a {@link ecap.studio.group.justalittlefit.model.Workout} object from the db */
     public static final int DELETE_WORKOUT = 7;
 
+    /** An int representation for for inserting a (previously deleted)
+     *  {@link ecap.studio.group.justalittlefit.model.Workout} object to the db */
+    public static final int REVERT_WORKOUT = 8;
+
     /** The column name for the id field of {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 

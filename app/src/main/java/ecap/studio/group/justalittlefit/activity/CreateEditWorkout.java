@@ -151,7 +151,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             MyDraggableSwipeableItemAdapter adapter =
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
-                    (DataProvider)getDataProvider();
+                    (DataProvider) getDataProvider();
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteWorkoutDialog_success));
@@ -165,21 +165,16 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     Constants.UNDO, undoWorkoutDelete((Workout) event.getResult()),
                     getResources().getColor(R.color.app_blue_gray));
         } else if (event.getResult() instanceof Boolean) {
-            if ((Boolean) event.getResult()) {
-                int position = getDataProvider().undoLastRemoval();
-                int currentDataCount = ((DataProvider)getDataProvider()).getCount();
-                if (position >= 0 && (position != 0 && currentDataCount != 1)) {
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-                    ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
-                    Utils.displayLongSimpleSnackbar(fab,
-                            getString(R.string.workout_removal_undone));
-                } else {
-                    afterInsert = true;
-                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
-                    DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
-                    new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
-                }
-            }
+            afterInsert = true;
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
+            DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
+            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
+        } else if (event.getResult() instanceof String) {
+            int position = getDataProvider().undoLastRemoval();
+            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+            ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+            Utils.displayLongSimpleSnackbar(fab,
+                    getString(R.string.workout_removal_undone));
         } else {
             displayGeneralWorkoutListError();
         }
@@ -246,7 +241,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbFunctionObject insertWorkout = new DbFunctionObject(workout, DbConstants.INSERT_WORKOUT);
+                DbFunctionObject insertWorkout = new DbFunctionObject(workout, DbConstants.REVERT_WORKOUT);
                 new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
             }
         };
