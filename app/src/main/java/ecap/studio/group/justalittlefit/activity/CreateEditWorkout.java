@@ -257,10 +257,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         String newWorkoutName = dialog.getAddWorkoutText().getText().toString();
         DataProvider dataProvider =
                 (DataProvider)getDataProvider();
-        if (dataProvider != null && dataProvider.getCount() >= 0) {
-            Workout newWorkout = new Workout(newWorkoutName, dataProvider.getCount());
-            DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
-            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null) {
+            if (!dataProvider.getDisplayNames().contains(newWorkoutName.trim())) {
+                Workout newWorkout = new Workout(newWorkoutName, dataProvider.getCount());
+                DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
+                new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error_already_exists));
+            }
         } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
         }

@@ -88,6 +88,7 @@
     <string name="db_error">An error occurred. Please try again.</string>
     <string name="workout_list_error">An error occurred in displaying your Workout list. Please try again.</string>
     <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>
+    <string name="add_workout_error_already_exists">Workout not added. Please add only uniquely named workouts to the Workout list.</string>
     <string name="reposition_workout_error">An error occurred in repositioning your workout to the Workout list. Please try again.</string>
     <string name="updating_workout_error">An error occurred in updating your workout(s) in the Workout list. Please try again.</string>
     <string name="deletion_workout_error">An error occurred in deleting your workout(s) from the Workout list. Please try again.</string>

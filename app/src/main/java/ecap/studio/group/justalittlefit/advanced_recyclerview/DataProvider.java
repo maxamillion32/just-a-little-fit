@@ -14,12 +14,14 @@ public class DataProvider extends AbstractDataProvider {
     private ConcreteData mLastRemovedData;
     private int mLastRemovedPosition = -1;
     private String dataType;
+    private List<String> displayNames;
 
     public DataProvider(String dataType, List<Workout> workouts) {
         switch (dataType) {
             case Constants.WORKOUT:
                 this.dataType = dataType;
                 mData = new LinkedList<>();
+                displayNames = new ArrayList<>();
 
                 for (Workout workout : workouts) {
                     final long id = mData.size();
@@ -27,6 +29,7 @@ public class DataProvider extends AbstractDataProvider {
                     final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
                     mData.add(new ConcreteData(id, viewType, workout.getName(),
                             swipeReaction, workout, dataType));
+                    displayNames.add(workout.getName().trim());
                 }
                 break;
         }
@@ -171,6 +174,10 @@ public class DataProvider extends AbstractDataProvider {
             dataObjs.add(data.mDataObject);
         }
         return dataObjs;
+    }
+
+    public List<String> getDisplayNames() {
+        return displayNames;
     }
 }
 
