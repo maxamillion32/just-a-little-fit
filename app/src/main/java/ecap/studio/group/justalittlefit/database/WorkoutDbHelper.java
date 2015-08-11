@@ -118,13 +118,19 @@ public class WorkoutDbHelper {
         return workouts;
     }
 
-    public static void updateWorkout(Workout workout) throws SQLException {
+    public static Boolean updateWorkout(Workout workout) {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
-        dao.update(workout);
+        try {
+            dao.update(workout);
+            return true;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
-    public static List<Workout> updateWorkouts(final List<Workout> workouts) {
+    public static Set<Workout> updateWorkouts(final List<Workout> workouts) {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        HashSet<Workout> workoutSet = new HashSet<>();
         try {
             dao.callBatchTasks(new Callable<Void>() {
                 public Void call() throws SQLException {
@@ -137,7 +143,8 @@ public class WorkoutDbHelper {
         } catch (Exception e) {
             return null;
         }
-        return workouts;
+        workoutSet.addAll(workouts);
+        return workoutSet;
     }
 
     public static List<Workout> assignDatesToWorkouts(LinkedList<Object> list) throws SQLException {

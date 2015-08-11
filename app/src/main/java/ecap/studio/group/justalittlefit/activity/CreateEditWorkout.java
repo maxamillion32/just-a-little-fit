@@ -19,6 +19,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -130,6 +131,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         hideProgressDialog();
         if (event == null || event.getResult() == null) {
             displayGeneralWorkoutListError();
+        } else if (event.getResult() instanceof Set) {
+            // onPause result returned and data order saved
         } else if (event.getResult() instanceof List) {
             List<Workout> workouts = (List<Workout>) event.getResult();
             getSupportFragmentManager().beginTransaction()
@@ -227,6 +230,20 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DataProvider dataProvider =
+                (DataProvider)getDataProvider();
+        List<Workout> workoutsToSave = (List<Workout>)(Object)dataProvider.getDataObjects();
+        for(int i = 0; i < workoutsToSave.size(); i++) {
+            workoutsToSave.get(i).setOrderNumber(i);
+        }
+        DbFunctionObject saveWorkoutsDfo =
+                new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
+        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
     }
 
 

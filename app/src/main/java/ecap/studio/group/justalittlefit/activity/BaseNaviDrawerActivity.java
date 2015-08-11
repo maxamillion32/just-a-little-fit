@@ -50,7 +50,6 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         String activityTitle = activity.getTitle().toString().trim();
                         String selectedTitle = menuItem.getTitle().toString().trim();
-                        Intent selectedIntent;
 
                         if (selectedTitle.equals(activityTitle)) {
                              /* do nothing, menu item will be checked and close out drawer after

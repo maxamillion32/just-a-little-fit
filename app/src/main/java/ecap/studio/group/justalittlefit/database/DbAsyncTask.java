@@ -44,6 +44,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                                 return WorkoutDbHelper.createWorkout((Workout) dfo.getDbObject());
                             case DbConstants.REVERT_WORKOUT:
                                 return WorkoutDbHelper.revertWorkout((Workout) dfo.getDbObject());
+                            case DbConstants.UPDATE_WORKOUTS:
+                                return WorkoutDbHelper.updateWorkouts((List<Workout>) dfo.getDbObject());
                         }
                     } catch (SQLException e) {
                         return null;
