@@ -96,6 +96,11 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         return ((DataProviderFragment) fragment).getDataProvider();
     }
 
+    public RecyclerListViewFragment getRecyclerViewFrag() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+        return ((RecyclerListViewFragment) fragment);
+    }
+
     public void onItemClicked(int position) {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
         AbstractDataProvider.Data data = getDataProvider().getItem(position);
@@ -122,6 +127,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
+        hideProgressDialog();
         if (event == null || event.getResult() == null) {
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof List) {
@@ -232,6 +238,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     @Override
     public void onDeleteAllWorkoutsClick(AppBaseDialog dialog) {
+        showProgressDialog();
         DbFunctionObject deleteWorkoutsDfo =
                 new DbFunctionObject(null, DbConstants.DELETE_WORKOUTS);
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
@@ -254,6 +261,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     @Override
     public void onAddWorkoutClick(AddWorkoutDialog dialog) {
+        showProgressDialog();
         String newWorkoutName = dialog.getAddWorkoutText().getText().toString();
         DataProvider dataProvider =
                 (DataProvider)getDataProvider();
@@ -277,6 +285,18 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             rlDefault.setVisibility(View.VISIBLE);
         } else {
             rlDefault.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    void showProgressDialog() {
+        if (isProgressDialogReady()) {
+            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+        }
+    }
+
+    void hideProgressDialog() {
+        if (isProgressDialogReady()) {
+            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
         }
     }
 }

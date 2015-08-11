@@ -1,5 +1,6 @@
 package ecap.studio.group.justalittlefit.advanced_recyclerview;
 
+import android.app.Activity;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
@@ -21,6 +23,7 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.activity.BaseNaviDrawerActivity;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 
 public class RecyclerListViewFragment extends Fragment {
@@ -32,6 +35,8 @@ public class RecyclerListViewFragment extends Fragment {
     private RecyclerViewDragDropManager mRecyclerViewDragDropManager;
     private RecyclerViewSwipeManager mRecyclerViewSwipeManager;
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
+    private ProgressBar progressDialog;
+    private Activity mActivity;
 
     public RecyclerListViewFragment() {
         super();
@@ -45,6 +50,10 @@ public class RecyclerListViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressDialog = (ProgressBar) getView().findViewById(R.id.progressDialog);
+        progressDialog.bringToFront();
+        ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(true);
 
         //noinspection ConstantConditions
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
@@ -158,6 +167,8 @@ public class RecyclerListViewFragment extends Fragment {
         mAdapter = null;
         mLayoutManager = null;
 
+        ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(false);
+
         super.onDestroyView();
     }
 
@@ -187,5 +198,15 @@ public class RecyclerListViewFragment extends Fragment {
     public void notifyItemInserted(int position) {
         mAdapter.notifyItemInserted(position);
         mRecyclerView.scrollToPosition(position);
+    }
+
+    public ProgressBar getProgressDialog() {
+        return progressDialog;
+    }
+
+    @Override
+    public void onAttach (Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
     }
 }

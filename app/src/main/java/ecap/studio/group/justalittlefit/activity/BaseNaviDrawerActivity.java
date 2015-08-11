@@ -18,6 +18,7 @@ import ecap.studio.group.justalittlefit.util.Utils;
 public class BaseNaviDrawerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     FrameLayout frameLayout;
+    boolean progressDialogReady;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,14 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setProgressDialogReady(boolean progressDialogReady) {
+        this.progressDialogReady = progressDialogReady;
+    }
+
+    public boolean isProgressDialogReady() {
+        return progressDialogReady;
     }
 }
 
