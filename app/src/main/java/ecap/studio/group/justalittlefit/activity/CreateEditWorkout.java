@@ -135,7 +135,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             getSupportFragmentManager().beginTransaction()
                     .add(DataProviderFragment.newInstance(Constants.WORKOUT, new ArrayList<>(workouts)),
                             FRAGMENT_TAG_DATA_PROVIDER)
-                    .commit();
+                    .commitAllowingStateLoss();
             if (afterInsert) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
@@ -144,7 +144,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             } else {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
 
             if (workouts.size() == 0) {

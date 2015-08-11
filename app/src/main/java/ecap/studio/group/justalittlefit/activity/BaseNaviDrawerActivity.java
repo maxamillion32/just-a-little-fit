@@ -58,9 +58,15 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
                         } else if (selectedTitle.equals(activity.getString(R.string.today_string).trim())) {
                             Utils.displayLongToast(activity, (activity.getString(R.string.today_string).trim()));
                         } else if (selectedTitle.equals(activity.getString(R.string.create_edit_string).trim())) {
-                            Utils.displayLongToast(activity, (activity.getString(R.string.create_edit_string).trim()));
+                            Intent createEditWorkoutIntent =
+                                    new Intent(activity, CreateEditWorkout.class);
+                            createEditWorkoutIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            activity.startActivity(createEditWorkoutIntent);
                         } else if (selectedTitle.equals(activity.getString(R.string.assign_string).trim())) {
-                            Utils.displayLongToast(activity, (activity.getString(R.string.assign_string).trim()));
+                            Intent assignIntent =
+                                    new Intent(activity, Assign.class);
+                            assignIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            activity.startActivity(assignIntent);
                         } else if (selectedTitle.equals(activity.getString(R.string.view_string).trim())) {
                             Utils.displayLongToast(activity, (activity.getString(R.string.view_string).trim()));
                         } else {
