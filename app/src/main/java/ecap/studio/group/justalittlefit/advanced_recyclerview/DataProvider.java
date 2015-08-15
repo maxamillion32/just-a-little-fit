@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -17,21 +18,33 @@ public class DataProvider extends AbstractDataProvider {
     private List<String> displayNames;
 
     public DataProvider(String dataType, List<Workout> workouts) {
-        switch (dataType) {
-            case Constants.WORKOUT:
-                this.dataType = dataType;
-                mData = new LinkedList<>();
-                displayNames = new ArrayList<>();
+        this.dataType = dataType;
+        mData = new LinkedList<>();
+        displayNames = new ArrayList<>();
 
-                for (Workout workout : workouts) {
-                    final long id = mData.size();
-                    final int viewType = 0;
-                    final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
-                    mData.add(new ConcreteData(id, viewType, workout.getName(),
-                            swipeReaction, workout, dataType));
-                    displayNames.add(workout.getName().trim());
-                }
-                break;
+        for (Workout workout : workouts) {
+            final long id = mData.size();
+            final int viewType = 0;
+            final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
+            mData.add(new ConcreteData(id, viewType, workout.getName(),
+                    swipeReaction, workout, dataType));
+            displayNames.add(workout.getName().trim());
+        }
+    }
+
+
+    public DataProvider(List<Exercise> exercises, String dataType) {
+        this.dataType = dataType;
+        mData = new LinkedList<>();
+        displayNames = new ArrayList<>();
+
+        for (Exercise exercise : exercises) {
+            final long id = mData.size();
+            final int viewType = 0;
+            final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
+            mData.add(new ConcreteData(id, viewType, exercise.getName(),
+                    swipeReaction, exercise, dataType));
+            displayNames.add(exercise.getName().trim());
         }
     }
 

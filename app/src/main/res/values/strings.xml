@@ -11,6 +11,7 @@
     <string name="assign_title_string">Assign Workout(s)</string>
     <string name="view_title_string">View Workout(s)</string>
     <string name="create_edit_title_string">Create/Edit Workout(s)</string>
+    <string name="create_edit_exercise_title_string">Create/Edit Exercise(s)</string>
     <string name="title_activity_base_navi_drawer">BaseNaviDrawerActivity</string>
     <string name="title_activity_assign">Assign</string>
     <string name="createEdit">CreateEdit</string>
@@ -93,6 +94,7 @@
     <string name="updating_workout_error">An error occurred in updating your workout(s) in the Workout list. Please try again.</string>
     <string name="deletion_workout_error">An error occurred in deleting your workout(s) from the Workout list. Please try again.</string>
     <string name="assign_workout_error">An error occurred in assigning date/dates to your workout(s). Please try again.</string>
+    <string name="data_load_error">An error occurred in loading workout data. Please try again.</string>
 
     <!-- General Messages -->
     <string name="workout_list_empty_for_create_edit">Your Workout list is empty. Click the \'+\' sign to add a Workout.</string>
@@ -102,6 +104,10 @@
     <string name="removed_assigned_workouts_successfully">Workout(s) assignment successfully undone</string>
     <string name="workout_removal_undone">Workout restored</string>
     <string name="assignHeaderText">Select date(s) to assign to your Workout(s)</string>
-    <string name="emptyWorkoutViewText">Click the \'+\' button to add a Workout</string>
+    <string name="emptyWorkoutViewText">Click the + button to add a Workout</string>
+    <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>
+    <string name="title_activity_create_edit_exercise">CreateEditExercise</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

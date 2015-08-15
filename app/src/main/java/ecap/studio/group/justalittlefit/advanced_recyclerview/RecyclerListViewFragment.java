@@ -24,6 +24,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.BaseNaviDrawerActivity;
+import ecap.studio.group.justalittlefit.activity.CreateEditExercise;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 
 public class RecyclerListViewFragment extends Fragment {
@@ -37,6 +38,8 @@ public class RecyclerListViewFragment extends Fragment {
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
     private ProgressBar progressDialog;
     private Activity mActivity;
+    private CreateEditWorkout workoutActivity;
+    private CreateEditExercise exerciseActivity;
 
     public RecyclerListViewFragment() {
         super();
@@ -54,6 +57,7 @@ public class RecyclerListViewFragment extends Fragment {
         progressDialog = (ProgressBar) getView().findViewById(R.id.progressDialog);
         progressDialog.bringToFront();
         ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(true);
+        this.populateActivity();
 
         //noinspection ConstantConditions
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
@@ -76,13 +80,17 @@ public class RecyclerListViewFragment extends Fragment {
         final MyDraggableSwipeableItemAdapter myItemAdapter = new MyDraggableSwipeableItemAdapter(getDataProvider());
         myItemAdapter.setEventListener(new MyDraggableSwipeableItemAdapter.EventListener() {
             @Override
-            public void onItemRemoved(int position, String dataType, Object dataObject) {
-                ((CreateEditWorkout) getActivity()).onItemRemoved(position, dataType, dataObject);
+            public void onItemRemoved(int position, Object dataObject) {
+                if (workoutActivity != null) {
+                    workoutActivity.onItemRemoved(position, dataObject);
+                } else if (exerciseActivity != null) {
+                    exerciseActivity.onItemRemoved(position, dataObject);
+                }
             }
 
             @Override
             public void onItemPinned(int position) {
-                ((CreateEditWorkout) getActivity()).onItemPinned(position);
+                // do nothing, pinning not supported in this app
             }
 
             @Override
@@ -166,16 +174,22 @@ public class RecyclerListViewFragment extends Fragment {
         }
         mAdapter = null;
         mLayoutManager = null;
-
         ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(false);
+        mActivity = null;
+        workoutActivity = null;
+        exerciseActivity = null;
 
         super.onDestroyView();
     }
 
     private void onItemViewClick(View v, boolean pinned) {
         int position = mRecyclerView.getChildPosition(v);
-        if (position != RecyclerView.NO_POSITION) {
-            ((CreateEditWorkout) getActivity()).onItemClicked(position);
+        if (workoutActivity != null) {
+            if (position != RecyclerView.NO_POSITION) {
+                workoutActivity.onItemClicked(position);
+            }
+        } else {
+
         }
     }
 
@@ -184,7 +198,12 @@ public class RecyclerListViewFragment extends Fragment {
     }
 
     public AbstractDataProvider getDataProvider() {
-        return ((CreateEditWorkout) getActivity()).getDataProvider();
+        if (workoutActivity != null) {
+            return workoutActivity.getDataProvider();
+        } else if (exerciseActivity != null) {
+            return exerciseActivity.getDataProvider();
+        }
+        return null;
     }
 
     public MyDraggableSwipeableItemAdapter getAdapter() {
@@ -208,5 +227,15 @@ public class RecyclerListViewFragment extends Fragment {
     public void onAttach (Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
+    }
+
+    private void populateActivity() {
+        if (mActivity instanceof CreateEditWorkout) {
+            workoutActivity = (CreateEditWorkout) mActivity;
+            exerciseActivity = null;
+        } else if (mActivity instanceof CreateEditExercise)  {
+            exerciseActivity = (CreateEditExercise) mActivity;
+            workoutActivity = null;
+        }
     }
 }

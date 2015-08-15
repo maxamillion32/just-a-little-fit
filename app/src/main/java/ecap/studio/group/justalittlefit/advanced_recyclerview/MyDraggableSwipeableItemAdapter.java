@@ -33,7 +33,7 @@ public class MyDraggableSwipeableItemAdapter
     private View.OnClickListener mSwipeableViewContainerOnClickListener;
 
     public interface EventListener {
-        void onItemRemoved(int position, String dataType, Object dataObject);
+        void onItemRemoved(int position, Object dataObject);
 
         void onItemPinned(int position);
 
@@ -244,7 +244,7 @@ public class MyDraggableSwipeableItemAdapter
             notifyItemRemoved(position);
 
             if (mEventListener != null) {
-                mEventListener.onItemRemoved(position, item.getDataType(), item.getDataObject());
+                mEventListener.onItemRemoved(position, item.getDataObject());
             }
         } else if (reaction == RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_MOVE_TO_SWIPED_DIRECTION) {
             item.setPinnedToSwipeLeft(true);

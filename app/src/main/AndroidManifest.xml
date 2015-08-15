@@ -27,6 +27,11 @@
             android:label="@string/title_activity_create_edit_workout"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".activity.CreateEditExercise"
+            android:label="@string/title_activity_create_edit_exercise"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

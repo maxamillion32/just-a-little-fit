@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -40,6 +41,7 @@ import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AddWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
+import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
@@ -91,7 +93,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         });
     }
 
-
     public AbstractDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
         return ((DataProviderFragment) fragment).getDataProvider();
@@ -105,25 +106,21 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     public void onItemClicked(int position) {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
         AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        Workout workout = (Workout) data.getDataObject();
+        Intent createEditExercise = new Intent(this, CreateEditExercise.class);
+        createEditExercise.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        if (data.isPinnedToSwipeLeft()) {
-            // unpin if tapped the pinned item
-            data.setPinnedToSwipeLeft(false);
-            ((RecyclerListViewFragment) fragment).notifyItemChanged(position);
-        }
+        ArrayList<Exercise> exercises = new ArrayList<>(workout.getExercises());
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(Constants.EXERCISES, exercises);
+        createEditExercise.putExtras(bundle);
+        startActivity(createEditExercise);
     }
 
-    public void onItemPinned(int position) {
-        // do nothing, pinning not supported in this app
-    }
-
-    public void onItemRemoved(int position, String dataType, Object dataObject) {
-        switch (dataType) {
-            case Constants.WORKOUT:
-                Workout workoutToDelete = (Workout) dataObject;
-                DbFunctionObject deleteWorkout = new DbFunctionObject(workoutToDelete, DbConstants.DELETE_WORKOUT);
-                new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkout);
-        }
+    public void onItemRemoved(int position, Object dataObject) {
+        Workout workoutToDelete = (Workout) dataObject;
+        DbFunctionObject deleteWorkout = new DbFunctionObject(workoutToDelete, DbConstants.DELETE_WORKOUT);
+        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkout);
     }
 
     @Subscribe
@@ -142,7 +139,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             if (afterInsert) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
-                        .commit();
+                        .commitAllowingStateLoss();
                 afterInsert = false;
             } else {
                 getSupportFragmentManager().beginTransaction()
@@ -210,7 +207,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_create_edit_workouts, menu);
+        inflater.inflate(R.menu.menu_create_edit, menu);
         return true;
     }
 

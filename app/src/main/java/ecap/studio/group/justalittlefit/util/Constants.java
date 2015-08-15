@@ -94,8 +94,12 @@ public class Constants {
 
     public static final String WORKOUT_LIST = "WORKOUT_LIST";
 
+    public static final String EXERCISE_LIST = "EXERCISE_LIST";
+
     public static final String NEWLINE = "\n";
 
     public static final int DB_ERR_CODE = -1;
+
+    public static final String EXERCISES = "execises";
 }
 
