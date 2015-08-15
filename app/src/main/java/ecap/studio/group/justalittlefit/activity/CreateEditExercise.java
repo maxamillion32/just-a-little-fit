@@ -24,6 +24,7 @@ import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFr
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class CreateEditExercise extends BaseNaviDrawerActivity {
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -42,6 +43,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
         View contentView = inflater.inflate(R.layout.activity_create_edit_exercise, null, false);
         frameLayout.addView(contentView, 0);
         ButterKnife.inject(this, frameLayout);
+        setupFloatingActionButton(this);
         setTitle(R.string.create_edit_exercise_title_string);
 
         if (savedInstanceState == null) {
@@ -115,7 +117,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
         if (extras != null && extras.containsKey(Constants.EXERCISES)) {
             exercises = extras.getParcelableArrayList(Constants.EXERCISES);
         } else {
-            // Display snackbar
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
         }
         return exercises;
     }

@@ -136,15 +136,12 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     .add(DataProviderFragment.newInstance(Constants.WORKOUT, new ArrayList<>(workouts)),
                             FRAGMENT_TAG_DATA_PROVIDER)
                     .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                    .commitAllowingStateLoss();
+
             if (afterInsert) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
-                        .commitAllowingStateLoss();
                 afterInsert = false;
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
-                        .commitAllowingStateLoss();
             }
 
             if (workouts.size() == 0) {
