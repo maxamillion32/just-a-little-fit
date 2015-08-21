@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +52,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
+    private HashSet<Workout> workoutsToDelete;
     FloatingActionButton fab;
     boolean afterInsert;
     @InjectView(R.id.rlDefault)
@@ -72,6 +74,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         }
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_title_string);
+        workoutsToDelete = new HashSet<>();
     }
 
     @Override
@@ -104,7 +107,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     }
 
     public void onItemClicked(int position) {
-        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
         AbstractDataProvider.Data data = getDataProvider().getItem(position);
         Workout workout = (Workout) data.getDataObject();
         Intent createEditExercise = new Intent(this, CreateEditExercise.class);
@@ -117,10 +119,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         startActivity(createEditExercise);
     }
 
-    public void onItemRemoved(int position, Object dataObject) {
+    public void onItemRemoved(Object dataObject) {
+        determineDefaultStatus();
+        Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
+                Constants.UNDO, undoWorkoutDelete(),
+                getResources().getColor(R.color.app_blue_gray));
+
         Workout workoutToDelete = (Workout) dataObject;
-        DbFunctionObject deleteWorkout = new DbFunctionObject(workoutToDelete, DbConstants.DELETE_WORKOUT);
-        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkout);
+        this.workoutsToDelete.add(workoutToDelete);
     }
 
     @Subscribe
@@ -162,22 +168,22 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
             }
-        } else if (event.getResult() instanceof Workout) {
-            determineDefaultStatus();
-            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
-                    Constants.UNDO, undoWorkoutDelete((Workout) event.getResult()),
-                    getResources().getColor(R.color.app_blue_gray));
+        } else if (event.getResult() instanceof String) {
+            // onPause delete returned, reorder workouts before leaving activity
+            DataProvider dataProvider =
+                    (DataProvider) getDataProvider();
+            List<Workout> workoutsToSave = (List<Workout>) (Object) dataProvider.getDataObjects();
+            for (int i = 0; i < workoutsToSave.size(); i++) {
+                workoutsToSave.get(i).setOrderNumber(i);
+            }
+            DbFunctionObject saveWorkoutsDfo =
+                    new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
+            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
         } else if (event.getResult() instanceof Boolean) {
             afterInsert = true;
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
             DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
-        } else if (event.getResult() instanceof String) {
-            int position = getDataProvider().undoLastRemoval();
-            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-            ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
-            Utils.displayLongSimpleSnackbar(fab,
-                    getString(R.string.workout_removal_undone));
         } else {
             displayGeneralWorkoutListError();
         }
@@ -229,17 +235,27 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     protected void onPause() {
         super.onPause();
+        if (workoutsToDelete != null && !workoutsToDelete.isEmpty()) {
+            DbFunctionObject deleteWorkoutsDfo =
+                    new DbFunctionObject(new ArrayList<>(workoutsToDelete),
+                            DbConstants.DELETE_WORKOUTS);
+            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
+        } else {
+           reorderWorkouts();
+        }
+    }
+
+    private void reorderWorkouts() {
         DataProvider dataProvider =
-                (DataProvider)getDataProvider();
-        List<Workout> workoutsToSave = (List<Workout>)(Object)dataProvider.getDataObjects();
-        for(int i = 0; i < workoutsToSave.size(); i++) {
+                (DataProvider) getDataProvider();
+        List<Workout> workoutsToSave = (List<Workout>) (Object) dataProvider.getDataObjects();
+        for (int i = 0; i < workoutsToSave.size(); i++) {
             workoutsToSave.get(i).setOrderNumber(i);
         }
         DbFunctionObject saveWorkoutsDfo =
                 new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
     }
-
 
     @Override
     protected void onDestroy() {
@@ -251,16 +267,23 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     public void onDeleteAllWorkoutsClick(AppBaseDialog dialog) {
         showProgressDialog();
         DbFunctionObject deleteWorkoutsDfo =
-                new DbFunctionObject(null, DbConstants.DELETE_WORKOUTS);
+                new DbFunctionObject(null, DbConstants.DELETE_ALL_WORKOUTS);
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
     }
 
-    private View.OnClickListener undoWorkoutDelete(final Workout workout) {
+    private View.OnClickListener undoWorkoutDelete() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbFunctionObject insertWorkout = new DbFunctionObject(workout, DbConstants.REVERT_WORKOUT);
-                new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+                int position = getDataProvider().undoLastRemoval();
+                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                Utils.displayLongSimpleSnackbar(fab,
+                        getString(R.string.workout_removal_undone));
+                AbstractDataProvider.Data data = getDataProvider().getItem(position);
+                Workout workout = (Workout) data.getDataObject();
+                workoutsToDelete.remove(workout);
+                determineDefaultStatus();
             }
         };
     }

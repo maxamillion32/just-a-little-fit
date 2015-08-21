@@ -82,7 +82,7 @@ public class RecyclerListViewFragment extends Fragment {
             @Override
             public void onItemRemoved(int position, Object dataObject) {
                 if (workoutActivity != null) {
-                    workoutActivity.onItemRemoved(position, dataObject);
+                    workoutActivity.onItemRemoved(dataObject);
                 } else if (exerciseActivity != null) {
                     exerciseActivity.onItemRemoved(position, dataObject);
                 }

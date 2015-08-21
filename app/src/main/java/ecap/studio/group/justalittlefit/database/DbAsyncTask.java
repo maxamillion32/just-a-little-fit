@@ -36,14 +36,14 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.GET_ALL_UNASSIGNED_WORKOUTS:
                                 return WorkoutDbHelper.getUnassignedWorkouts();
-                            case DbConstants.DELETE_WORKOUTS:
+                            case DbConstants.DELETE_ALL_WORKOUTS:
                                 return WorkoutDbHelper.deleteUnassignedWorkouts();
+                            case DbConstants.DELETE_WORKOUTS:
+                                return WorkoutDbHelper.deleteWorkouts((List<Workout>) dfo.getDbObject());
                             case DbConstants.DELETE_WORKOUT:
                                 return WorkoutDbHelper.deleteWorkout((Workout) dfo.getDbObject());
                             case DbConstants.INSERT_WORKOUT:
                                 return WorkoutDbHelper.createWorkout((Workout) dfo.getDbObject());
-                            case DbConstants.REVERT_WORKOUT:
-                                return WorkoutDbHelper.revertWorkout((Workout) dfo.getDbObject());
                             case DbConstants.UPDATE_WORKOUTS:
                                 return WorkoutDbHelper.updateWorkouts((List<Workout>) dfo.getDbObject());
                         }

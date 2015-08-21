@@ -40,7 +40,7 @@ public class WorkoutDbHelper {
         return workout;
     }
 
-    public static Set deleteWorkouts(List<Workout> workouts) {
+    public static String deleteWorkouts(List<Workout> workouts) {
         Set<Integer> deletedIdSet = new HashSet<>();
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         try {
@@ -53,7 +53,7 @@ public class WorkoutDbHelper {
             deletedIdSet.add(workout.getWorkoutId());
         }
 
-        return deletedIdSet;
+        return Boolean.TRUE.toString();
     }
 
     public static Workout deleteWorkout(Workout workout) {
@@ -78,16 +78,6 @@ public class WorkoutDbHelper {
             return dao.delete(workouts);
         } catch (SQLException e) {
             return Constants.DB_ERR_CODE;
-        }
-    }
-
-    public static String revertWorkout(Workout workout) {
-        try {
-            Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
-            dao.create(workout);
-            return Boolean.TRUE.toString();
-        } catch (SQLException e) {
-            return null;
         }
     }
 
