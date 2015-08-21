@@ -121,4 +121,10 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
         }
         return exercises;
     }
+
+    @Override
+    protected void onDestroy() {
+        CreateEditExerciseBus.getInstance().unregister(this);
+        super.onDestroy();
+    }
 }
