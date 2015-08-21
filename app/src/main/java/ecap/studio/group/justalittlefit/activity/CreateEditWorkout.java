@@ -189,10 +189,10 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         }
     }
 
-    private void displayConfirmDeleteAllWorkoutDialog() {
+    private void displayConfirmDeleteAllWorkoutsDialog() {
         FragmentManager fm = getSupportFragmentManager();
         ConfirmDeleteWorkoutsDialog dialog = new ConfirmDeleteWorkoutsDialog();
-        dialog.show(fm, getString(R.string.confirmDeleteWorkoutDialogTag));
+        dialog.show(fm, getString(R.string.confirmDeleteWorkoutsDialogTag));
     }
 
     private void displayInfoDialog() {
@@ -221,7 +221,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_delete_all:
-                displayConfirmDeleteAllWorkoutDialog();
+                displayConfirmDeleteAllWorkoutsDialog();
                 break;
             case R.id.action_info:
                 displayInfoDialog();
@@ -265,10 +265,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     @Override
     public void onDeleteAllWorkoutsClick(AppBaseDialog dialog) {
-        showProgressDialog();
-        DbFunctionObject deleteWorkoutsDfo =
-                new DbFunctionObject(null, DbConstants.DELETE_ALL_WORKOUTS);
-        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
+        if (rlDefault.getVisibility() == View.VISIBLE) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.no_workouts_to_delete));
+        } else {
+            showProgressDialog();
+            DbFunctionObject deleteWorkoutsDfo =
+                    new DbFunctionObject(null, DbConstants.DELETE_ALL_WORKOUTS);
+            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
+        }
     }
 
     private View.OnClickListener undoWorkoutDelete() {

@@ -23,12 +23,15 @@ import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvid
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
+import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteExercisesDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class CreateEditExercise extends BaseNaviDrawerActivity {
+public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener {
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
@@ -92,7 +95,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_delete_all:
-                //Display ConfirmDeleteAllExercises
+                displayConfirmDeleteAllExercisesDialog();
                 break;
             case R.id.action_info:
                 displayInfoDialog();
@@ -130,9 +133,20 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
         dialog.show(fm, getString(R.string.infoDialogTagExercise));
     }
 
+    private void displayConfirmDeleteAllExercisesDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ConfirmDeleteExercisesDialog dialog = new ConfirmDeleteExercisesDialog();
+        dialog.show(fm, getString(R.string.confirmDeleteWorkoutsDialogTag));
+    }
+
     @Override
     protected void onDestroy() {
         CreateEditExerciseBus.getInstance().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onDeleteAllExercisesClick(AppBaseDialog dialog) {
+
     }
 }

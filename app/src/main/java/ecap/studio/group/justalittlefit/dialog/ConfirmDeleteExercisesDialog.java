@@ -6,24 +6,32 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import ecap.studio.group.justalittlefit.R;
-import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
+import ecap.studio.group.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
- * Dialog that will confirm deletion of all workouts in view.
+ * Dialog that will confirm deletion of all exercises in view.
  */
-public class ConfirmDeleteWorkoutsDialog extends AppBaseDialog {
-    private static final String DELETE_ALL_WORKOUTS = "Delete All Workouts?";
-    ConfirmWorkoutsDeletionListener listener;
+public class ConfirmDeleteExercisesDialog extends AppBaseDialog {
+    private static final String DELETE_ALL_EXERCISES = "Delete All Exercises?";
+    ConfirmExercisesDeletionListener listener;
+
+    public static ConfirmDeleteExercisesDialog newInstance(String dialogType) {
+        ConfirmDeleteExercisesDialog dialog = new ConfirmDeleteExercisesDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.DIALOG_TYPE, dialogType);
+        dialog.setArguments(bundle);
+        return dialog;
+    }
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        setTitle(DELETE_ALL_WORKOUTS);
+        setTitle(DELETE_ALL_EXERCISES);
         setPositiveButton(getString(R.string.delete_all), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listener.onDeleteAllWorkoutsClick(ConfirmDeleteWorkoutsDialog.this);
+                listener.onDeleteAllExercisesClick(ConfirmDeleteExercisesDialog.this);
             }
         });
         setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -39,10 +47,10 @@ public class ConfirmDeleteWorkoutsDialog extends AppBaseDialog {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            listener = (ConfirmWorkoutsDeletionListener) activity;
+            listener = (ConfirmExercisesDeletionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + Constants.SPACE +
-                    getString(R.string.noImplementsConfirmDeletionListener));
+                    getString(R.string.noImplementsConfirmExerciseDeletionListener));
         }
     }
 }

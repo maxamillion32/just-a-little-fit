@@ -62,13 +62,16 @@
     <string name="repositionHelper">Reposition Helper Object</string>
     <string name="repositionedWorkout_success">Workout repositioned successfully</string>
 
-    <!-- ConfirmDeleteWorkoutDialog Strings -->
-    <string name="confirmDeleteWorkoutDialogTag">Confirm Delete Workout Dialog Tag</string>
+    <!-- ConfirmDeleteDialog Strings -->
+    <string name="confirmDeleteWorkoutsDialogTag">Confirm Delete Workouts Dialog Tag</string>
+    <string name="confirmDeleteExercisesDialogTag">Confirm Delete Exercises Dialog Tag</string>
     <string name="confirmDeleteWorkoutDialog_delete">Delete</string>
     <string name="confirmDeleteWorkoutDialog_error">An error occurred while trying to delete the workout(s). Please try again.</string>
     <string name="confirmDeleteWorkoutDialog_success">Workout(s) deleted successfully</string>
+    <string name="no_workouts_to_delete">There are no workouts to delete</string>
     <string name="confirmDeleteWorkoutDialog_selectAll_bool">Title Boolean</string>
     <string name="noImplementsConfirmDeletionListener">doesn\'t implement ConfirmWorkoutsDeletionListener.</string>
+    <string name="noImplementsConfirmExerciseDeletionListener">doesn\'t implement ConfirmExercisesDeletionListener.</string>
 
     <!-- InformationDialog Strings -->
     <string name="infoDialogTag">Information Dialog Tag</string>
