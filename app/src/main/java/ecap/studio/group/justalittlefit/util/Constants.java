@@ -101,5 +101,13 @@ public class Constants {
     public static final int DB_ERR_CODE = -1;
 
     public static final String EXERCISES = "execises";
+
+    public static final String EXERCISES_NORM_CASE = "Execises";
+
+    public static final String WORKOUTS_NORM_CASE = "Workouts";
+
+    public static final String SETS_NORM_CASE = "Sets";
+
+    public static final String DIALOG_TYPE = "DialogType";
 }
 

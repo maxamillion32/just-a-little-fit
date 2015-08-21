@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvid
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
+import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
@@ -93,7 +95,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
                 //Display ConfirmDeleteAllExercises
                 break;
             case R.id.action_info:
-                // DisplayInfoDialog for Exercise
+                displayInfoDialog();
                 break;
             default:
                 break;
@@ -120,6 +122,12 @@ public class CreateEditExercise extends BaseNaviDrawerActivity {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
         }
         return exercises;
+    }
+
+    private void displayInfoDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = InformationDialog.newInstance(Constants.EXERCISES_NORM_CASE);
+        dialog.show(fm, getString(R.string.infoDialogTagExercise));
     }
 
     @Override

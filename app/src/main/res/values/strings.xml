@@ -72,8 +72,12 @@
 
     <!-- InformationDialog Strings -->
     <string name="infoDialogTag">Information Dialog Tag</string>
+    <string name="infoDialogTagExercise">Information Dialog Tag Exercise</string>
     <string name="deleteBySwipe">- Workouts can be deleted via a left or right swipe.</string>
     <string name="dragSort">- Workouts can be rearranged by long pressing the dark
+        gray area on the far left of the row and dragging the workout either up or down.</string>
+    <string name="deleteBySwipe_exercise">- Exercises can be deleted via a left or right swipe.</string>
+    <string name="dragSort_exercise">- Exercises can be rearranged by long pressing the dark
         gray area on the far left of the row and dragging the workout either up or down.</string>
 
     <!-- AssignWorkoutDialog Strings -->
