@@ -12,7 +12,7 @@ import ecap.studio.group.justalittlefit.util.Constants;
 /**
  * Dialog that will confirm deletion of a workout(s).
  */
-public class ConfirmDeleteWorkoutDialog extends AppBaseDialog {
+public class ConfirmDeleteWorkoutsDialog extends AppBaseDialog {
     private static final String DELETE_ALL_WORKOUTS = "Delete All Workouts?";
     ConfirmWorkoutsDeletionListener listener;
 
@@ -23,7 +23,7 @@ public class ConfirmDeleteWorkoutDialog extends AppBaseDialog {
         setPositiveButton(getString(R.string.delete_all), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listener.onDeleteAllWorkoutsClick(ConfirmDeleteWorkoutDialog.this);
+                listener.onDeleteAllWorkoutsClick(ConfirmDeleteWorkoutsDialog.this);
             }
         });
         setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

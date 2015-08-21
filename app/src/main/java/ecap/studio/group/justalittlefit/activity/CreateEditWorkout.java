@@ -38,7 +38,7 @@ import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.AddWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
-import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutDialog;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutsDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AddWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
@@ -191,7 +191,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     private void displayConfirmDeleteAllWorkoutDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        ConfirmDeleteWorkoutDialog dialog = new ConfirmDeleteWorkoutDialog();
+        ConfirmDeleteWorkoutsDialog dialog = new ConfirmDeleteWorkoutsDialog();
         dialog.show(fm, getString(R.string.confirmDeleteWorkoutDialogTag));
     }
 
