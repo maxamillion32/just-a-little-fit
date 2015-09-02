@@ -54,8 +54,9 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private static final String FRAGMENT_LIST_VIEW = "list view";
     private HashSet<Workout> workoutsToDelete;
     FloatingActionButton fab;
-    boolean afterInsert;
     boolean busRegistered;
+    boolean reorderTriggeredByAddWorkout;
+    String addedWorkoutName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -137,7 +138,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         if (event == null || event.getResult() == null) {
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof Set) {
-            // onPause result returned and data order saved
+            // Data order saved
+            if (reorderTriggeredByAddWorkout) {
+                // Call method to add workout to view
+                addWorkoutToUI();
+            } else {
+                // onPause result returned and data order saved, reset boolean trigger
+                reorderTriggeredByAddWorkout = false;
+            }
         } else if (event.getResult() instanceof List) {
             List<Workout> workouts = (List<Workout>) event.getResult();
             getSupportFragmentManager().beginTransaction()
@@ -147,10 +155,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
-
-            if (afterInsert) {
-                afterInsert = false;
-            }
 
             if (workouts.size() == 0) {
                 rlDefault.setVisibility(View.VISIBLE);
@@ -182,7 +186,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
         } else if (event.getResult() instanceof Boolean) {
-            afterInsert = true;
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
             DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
@@ -311,19 +314,25 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     public void onAddWorkoutClick(AddWorkoutDialog dialog) {
         showProgressDialog();
-        String newWorkoutName = dialog.getAddWorkoutText().getText().toString();
+        reorderTriggeredByAddWorkout = true;
+        reorderWorkouts();
+        addedWorkoutName = dialog.getAddWorkoutText().getText().toString();
+    }
+
+    private void addWorkoutToUI() {
         DataProvider dataProvider =
                 (DataProvider)getDataProvider();
-        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null) {
-            if (!dataProvider.getDisplayNames().contains(newWorkoutName.trim())) {
-                Workout newWorkout = new Workout(newWorkoutName, dataProvider.getCount());
+        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
+                && addedWorkoutName != null) {
+            if (!dataProvider.getDisplayNames().contains(addedWorkoutName.trim())) {
+                Workout newWorkout = new Workout(addedWorkoutName, dataProvider.getCount());
                 DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
                 new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error_already_exists));
             }
         } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
         }
     }
 
