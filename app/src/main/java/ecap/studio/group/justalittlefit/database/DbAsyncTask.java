@@ -8,7 +8,9 @@ import java.util.List;
 
 import ecap.studio.group.justalittlefit.bus.AssignBus;
 import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
+import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
+import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -52,19 +54,11 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
-            case Constants.CREATE_EDIT_NO_SPACE:
+            case Constants.CREATE_EDIT_EXERCISE:
                 for (DbFunctionObject dfo : params) {
                     switch (dfo.getFunctionInt()) {
-                        case DbConstants.INSERT_WORKOUT:
-                            if (dfo.getDbObject() instanceof Workout) {
-                                return WorkoutDbHelper.createWorkout((Workout) dfo.getDbObject());
-                            }
-                            break;
-                        case DbConstants.UPDATE_WORKOUTS:
-                            if (dfo.getDbObject() instanceof List) {
-                                return WorkoutDbHelper.updateWorkouts((List<Workout>) dfo.getDbObject());
-                            }
-                            break;
+                        case DbConstants.DELETE_ALL_EXERCISES:
+                            return WorkoutDbHelper.deleteExercises((List<Exercise>) dfo.getDbObject());
                     }
                 }
                 break;
@@ -107,6 +101,9 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
         switch (invokingClass) {
             case Constants.CREATE_EDIT_WORKOUT:
                 CreateEditWorkoutBus.getInstance().post(new DbTaskResult(result));
+                break;
+            case Constants.CREATE_EDIT_EXERCISE:
+                CreateEditExerciseBus.getInstance().post(new DbTaskResult(result));
                 break;
             case Constants.ASSIGN_DIALOG:
                 AssignDialogBus.getInstance().post(new DbTaskResult(result));

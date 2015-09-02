@@ -55,13 +55,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private HashSet<Workout> workoutsToDelete;
     FloatingActionButton fab;
     boolean afterInsert;
+    boolean busRegistered;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CreateEditWorkoutBus.getInstance().register(this);
+        registerBus();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_create_edit_workout, null, false);
@@ -72,6 +73,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
         }
+
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_title_string);
         workoutsToDelete = new HashSet<>();
@@ -235,6 +237,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterBus();
         if (workoutsToDelete != null && !workoutsToDelete.isEmpty()) {
             DbFunctionObject deleteWorkoutsDfo =
                     new DbFunctionObject(new ArrayList<>(workoutsToDelete),
@@ -242,6 +245,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
         } else {
            reorderWorkouts();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!busRegistered) {
+            registerBus();
         }
     }
 
@@ -259,7 +270,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     @Override
     protected void onDestroy() {
-        CreateEditWorkoutBus.getInstance().unregister(this);
+        unregisterBus();
         super.onDestroy();
     }
 
@@ -335,6 +346,20 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     void hideProgressDialog() {
         if (isProgressDialogReady()) {
             getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            CreateEditWorkoutBus.getInstance().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            CreateEditWorkoutBus.getInstance().unregister(this);
+            busRegistered = false;
         }
     }
 }

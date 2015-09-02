@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -41,18 +42,12 @@ public class WorkoutDbHelper {
     }
 
     public static String deleteWorkouts(List<Workout> workouts) {
-        Set<Integer> deletedIdSet = new HashSet<>();
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         try {
             dao.delete(workouts);
         } catch (SQLException e) {
             return null;
         }
-
-        for (Workout workout : workouts) {
-            deletedIdSet.add(workout.getWorkoutId());
-        }
-
         return Boolean.TRUE.toString();
     }
 
@@ -149,5 +144,15 @@ public class WorkoutDbHelper {
         }
 
         return createWorkouts(workoutsToAssign);
+    }
+
+    public static String deleteExercises(List<Exercise> exercises) {
+        Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
+        try {
+            dao.delete(exercises);
+        } catch (SQLException e) {
+            return null;
+        }
+        return Boolean.TRUE.toString();
     }
 }

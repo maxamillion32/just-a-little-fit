@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
+import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
@@ -15,6 +16,13 @@ import ecap.studio.group.justalittlefit.util.Constants;
 public class ConfirmDeleteWorkoutsDialog extends AppBaseDialog {
     private static final String DELETE_ALL_WORKOUTS = "Delete All Workouts?";
     ConfirmWorkoutsDeletionListener listener;
+
+    public static ConfirmDeleteExercisesDialog newInstance(Workout workout) {
+        ConfirmDeleteExercisesDialog dialog = new ConfirmDeleteExercisesDialog();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.WORKOUT, workout);
+        return dialog;
+    }
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {

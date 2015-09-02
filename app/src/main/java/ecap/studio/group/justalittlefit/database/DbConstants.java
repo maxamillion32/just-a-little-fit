@@ -32,6 +32,9 @@ public class DbConstants {
     /** An int representation for deleting all unassigned {@link ecap.studio.group.justalittlefit.model.Workout} objects from the db */
     public static final int DELETE_ALL_WORKOUTS = 8;
 
+    /** An int representation for deleting all unassigned {@link ecap.studio.group.justalittlefit.model.Exercise} objects from the db */
+    public static final int DELETE_ALL_EXERCISES = 9;
+
     /** The column name for the id field of {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 

@@ -42,6 +42,8 @@ public class Constants {
 
     public static final String CREATE_EDIT_WORKOUT = "CreateEditWorkout";
 
+    public static final String CREATE_EDIT_EXERCISE = "CreateEditExercise";
+
     public static final String ASSIGN_DIALOG = "AssignDialog";
 
     public static final String EMPTY_STRING = "";

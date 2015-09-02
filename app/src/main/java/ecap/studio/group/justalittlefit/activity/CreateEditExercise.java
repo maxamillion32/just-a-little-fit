@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +22,21 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.MyDraggableSwipeableItemAdapter;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
+import ecap.studio.group.justalittlefit.database.DbAsyncTask;
+import ecap.studio.group.justalittlefit.database.DbConstants;
+import ecap.studio.group.justalittlefit.database.DbFunctionObject;
+import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
 import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteExercisesDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
@@ -35,14 +44,16 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
+    Workout parentWorkout;
     boolean afterInsert;
+    boolean busRegistered;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CreateEditExerciseBus.getInstance().register(this);
+        registerBus();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_create_edit_exercise, null, false);
@@ -60,6 +71,24 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
+        }
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(DbTaskResult event) {
+        if (event.getResult() instanceof String) {
+            final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+            MyDraggableSwipeableItemAdapter adapter =
+                    ((RecyclerListViewFragment) recyclerFrag).getAdapter();
+            DataProvider dataProvider =
+                    (DataProvider) getDataProvider();
+            if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
+                adapter.removeAllItems(dataProvider.getCount() - 1);
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteExerciseDialog_success));
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_exercise_error));
+            }
         }
     }
 
@@ -117,10 +146,13 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     }
 
     private List<Exercise> retrieveExercises() {
-        List exercises = new ArrayList();
+        ArrayList<Exercise> exercises = new ArrayList<>();
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(Constants.EXERCISES)) {
             exercises = extras.getParcelableArrayList(Constants.EXERCISES);
+            if (!exercises.isEmpty()) {
+                parentWorkout = exercises.get(0).getWorkout();
+            }
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
         }
@@ -141,12 +173,44 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     @Override
     protected void onDestroy() {
-        CreateEditExerciseBus.getInstance().unregister(this);
+        unregisterBus();
         super.onDestroy();
     }
 
     @Override
-    public void onDeleteAllExercisesClick(AppBaseDialog dialog) {
+    protected void onPause() {
+        super.onPause();
+        unregisterBus();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!busRegistered) {
+            registerBus();
+        }
+    }
+    @Override
+    public void onDeleteAllExercisesClick(AppBaseDialog dialog) {
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        List<Exercise> exercises = (List<Exercise>) (Object) dataProvider.getDataObjects();
+        DbFunctionObject deleteExercises =
+                new DbFunctionObject(exercises, DbConstants.DELETE_ALL_EXERCISES);
+        new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteExercises);
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            CreateEditExerciseBus.getInstance().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            CreateEditExerciseBus.getInstance().unregister(this);
+            busRegistered = false;
+        }
     }
 }
