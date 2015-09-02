@@ -24,7 +24,7 @@ import ecap.studio.group.justalittlefit.util.Utils;
  */
 public class AddWorkoutDialog extends DialogFragment {
     private AddWorkoutDialogListener listener;
-    @InjectView(R.id.addWorkoutDialogEditText)
+    @InjectView(R.id.etField)
     EditText addWorkoutText;
 
     @Override
@@ -32,7 +32,7 @@ public class AddWorkoutDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_workout_dialog_view, null);
+        View view = inflater.inflate(R.layout.add_workout_exercise_dialog_view, null);
         ButterKnife.inject(this, view);
         builder.setTitle(getString(R.string.addWorkoutDialog_Title));
         builder.setView(view);

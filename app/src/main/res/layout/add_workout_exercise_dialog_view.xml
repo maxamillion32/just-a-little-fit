@@ -5,7 +5,7 @@
     android:background="@color/fallback_gray">
 
     <EditText
-        android:id="@+id/addWorkoutDialogEditText"
+        android:id="@+id/etField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
