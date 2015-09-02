@@ -155,4 +155,58 @@ public class WorkoutDbHelper {
         }
         return Boolean.TRUE.toString();
     }
+
+    public static Boolean createExercise(Exercise exercise) {
+        try {
+            Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
+            dao.create(exercise);
+            return true;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static Boolean updateExercise(Exercise exercise) {
+        Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
+        try {
+            dao.update(exercise);
+            return true;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static Set<Exercise> updateExercises(final List<Exercise> exercises) {
+        Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
+        HashSet<Exercise> exerciseSet = new HashSet<>();
+        try {
+            dao.callBatchTasks(new Callable<Void>() {
+                public Void call() throws SQLException {
+                    for (Exercise exercise : exercises) {
+                        updateExercise(exercise);
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            return null;
+        }
+        exerciseSet.addAll(exercises);
+        return exerciseSet;
+    }
+
+    public static List<Exercise> getExercisesByWorkout(final Workout workout) {
+        Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
+        QueryBuilder<Exercise, Integer> exQueryBuilder = dao.queryBuilder();
+        List<Exercise> exercises;
+
+        try {
+            exQueryBuilder.where().in(DbConstants.WORKOUT_ID_COLUMN_NAME, workout);
+            exercises = exQueryBuilder.query();
+        } catch (SQLException e) {
+            return null;
+        }
+
+        return exercises;
+    }
 }

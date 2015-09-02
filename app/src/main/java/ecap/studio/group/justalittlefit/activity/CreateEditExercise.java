@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,22 +32,26 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.dialog.AddExerciseDialog;
 import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
 import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteExercisesDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.listener.AddExerciseDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener {
+public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener,
+        AddExerciseDialogListener {
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
     Workout parentWorkout;
-    boolean afterInsert;
     boolean busRegistered;
+    boolean reorderTriggeredByAddExercise;
+    String addedExerciseName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -76,6 +81,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
+        hideProgressDialog();
         if (event.getResult() instanceof String) {
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
             MyDraggableSwipeableItemAdapter adapter =
@@ -89,6 +95,34 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_exercise_error));
             }
+        } else if (event.getResult() instanceof Set) {
+            // Data order saved
+            if (reorderTriggeredByAddExercise) {
+                // Call method to add exercise to view
+                addExerciseToUI();
+            } else {
+                // onPause result returned and data order saved, reset boolean trigger
+                reorderTriggeredByAddExercise = false;
+            }
+        } else if (event.getResult() instanceof List) {
+            List<Exercise> exercises = (List<Exercise>) event.getResult();
+            getSupportFragmentManager().beginTransaction()
+                    .add(DataProviderFragment.newInstance(new ArrayList<>(exercises), Constants.EXERCISE),
+                            FRAGMENT_TAG_DATA_PROVIDER)
+                    .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                    .commitAllowingStateLoss();
+
+            if (exercises.size() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
+        } else if (event.getResult() instanceof Boolean) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
+            DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
+            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
         }
     }
 
@@ -106,7 +140,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Call to display add Exercise dialog
+                displayAddExerciseDialog();
             }
         });
     }
@@ -200,6 +234,18 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteExercises);
     }
 
+
+    private void displayAddExerciseDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddExerciseDialog dialog = new AddExerciseDialog();
+        dialog.show(fm, getString(R.string.addExerciseDialogTag));
+    }
+
+    public RecyclerListViewFragment getRecyclerViewFrag() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+        return ((RecyclerListViewFragment) fragment);
+    }
+
     private void registerBus() {
         if (!busRegistered) {
             CreateEditExerciseBus.getInstance().register(this);
@@ -211,6 +257,55 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         if (busRegistered) {
             CreateEditExerciseBus.getInstance().unregister(this);
             busRegistered = false;
+        }
+    }
+
+    void showProgressDialog() {
+        if (isProgressDialogReady()) {
+            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+        }
+    }
+
+    void hideProgressDialog() {
+        if (isProgressDialogReady()) {
+            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void reorderExercises() {
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        List<Exercise> exercisesToSave = (List<Exercise>) (Object) dataProvider.getDataObjects();
+        for (int i = 0; i < exercisesToSave.size(); i++) {
+            exercisesToSave.get(i).setOrderNumber(i);
+        }
+        DbFunctionObject saveExercisesDfo =
+                new DbFunctionObject(exercisesToSave, DbConstants.UPDATE_EXERCISES);
+        new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(saveExercisesDfo);
+    }
+
+    @Override
+    public void onAddExerciseClick(AddExerciseDialog dialog) {
+        showProgressDialog();
+        reorderTriggeredByAddExercise = true;
+        reorderExercises();
+        addedExerciseName = dialog.getAddExerciseText().getText().toString();
+    }
+
+    private void addExerciseToUI() {
+        DataProvider dataProvider =
+                (DataProvider)getDataProvider();
+        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
+                && addedExerciseName != null) {
+            if (!dataProvider.getDisplayNames().contains(addedExerciseName.trim())) {
+                Exercise newExercise = new Exercise(parentWorkout, addedExerciseName, dataProvider.getCount());
+                DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
+                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(insertExercise);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+            }
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
         }
     }
 }
