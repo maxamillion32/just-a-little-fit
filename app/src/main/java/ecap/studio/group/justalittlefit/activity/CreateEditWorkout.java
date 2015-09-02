@@ -206,7 +206,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private void displayAddWorkoutDialog() {
         FragmentManager fm = getSupportFragmentManager();
         AddWorkoutDialog dialog = new AddWorkoutDialog();
-        dialog.show(fm, getString(R.string.infoDialogTag));
+        dialog.show(fm, getString(R.string.addWorkoutDialogTag));
     }
 
     @Override
