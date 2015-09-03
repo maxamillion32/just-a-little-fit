@@ -16,7 +16,6 @@ import java.util.concurrent.Callable;
 
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
-import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
  * Helper class that will handle database functionality on objects of type
@@ -72,7 +71,7 @@ public class WorkoutDbHelper {
             List<Workout> workouts = queryBuilder.query();
             return dao.delete(workouts);
         } catch (SQLException e) {
-            return Constants.DB_ERR_CODE;
+            return null;
         }
     }
 
@@ -146,6 +145,14 @@ public class WorkoutDbHelper {
         return createWorkouts(workoutsToAssign);
     }
 
+    public static Integer deleteAllExercisesFromUI(List<Exercise> exercises) {
+        if (deleteExercises(exercises) != null) {
+            return exercises.size();
+        } else {
+            return null;
+        }
+    }
+
     public static String deleteExercises(List<Exercise> exercises) {
         Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
         try {
@@ -199,9 +206,9 @@ public class WorkoutDbHelper {
         Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
         QueryBuilder<Exercise, Integer> exQueryBuilder = dao.queryBuilder();
         List<Exercise> exercises;
-
         try {
             exQueryBuilder.where().in(DbConstants.WORKOUT_ID_COLUMN_NAME, workout);
+            exQueryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
             exercises = exQueryBuilder.query();
         } catch (SQLException e) {
             return null;

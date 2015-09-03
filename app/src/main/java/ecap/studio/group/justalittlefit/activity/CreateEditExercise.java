@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +53,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     boolean busRegistered;
     boolean reorderTriggeredByAddExercise;
     String addedExerciseName;
+    private HashSet<Exercise> exercisesToDelete;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -66,23 +68,23 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         ButterKnife.inject(this, frameLayout);
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_exercise_title_string);
+        exercisesToDelete = new HashSet<>();
 
         if (savedInstanceState == null) {
-            List<Exercise> exercises = retrieveExercises();
-            getSupportFragmentManager().beginTransaction()
-                    .add(DataProviderFragment.newInstance(new ArrayList<>(exercises), Constants.EXERCISE),
-                            FRAGMENT_TAG_DATA_PROVIDER)
-                    .commitAllowingStateLoss();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
-                    .commitAllowingStateLoss();
+            parentWorkout = getParentWorkout();
+            if (parentWorkout != null) {
+                DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
+                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
+            }
         }
     }
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         hideProgressDialog();
-        if (event.getResult() instanceof String) {
+        if (event.getResult() instanceof Integer) {
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
             MyDraggableSwipeableItemAdapter adapter =
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
@@ -113,7 +115,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
-
             if (exercises.size() == 0) {
                 rlDefault.setVisibility(View.VISIBLE);
             } else {
@@ -123,6 +124,9 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
             DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
             new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
+        } else if (event.getResult() instanceof String) {
+            // onPause delete returned, reorder workouts before leaving activity
+            reorderExercises();
         }
     }
 
@@ -174,23 +178,39 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         return ((DataProviderFragment) fragment).getDataProvider();
     }
 
-    public void onItemRemoved(int position, Object dataObject) {
+    public void onItemRemoved(Object dataObject) {
+        determineDefaultStatus();
+        Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_deleted),
+                Constants.UNDO, undoExerciseDelete(),
+                getResources().getColor(R.color.app_blue_gray));
         Exercise exercise = (Exercise) dataObject;
-        //db logic to delete exercise
+        this.exercisesToDelete.add(exercise);
     }
 
-    private List<Exercise> retrieveExercises() {
-        ArrayList<Exercise> exercises = new ArrayList<>();
-        Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.EXERCISES)) {
-            exercises = extras.getParcelableArrayList(Constants.EXERCISES);
-            if (!exercises.isEmpty()) {
-                parentWorkout = exercises.get(0).getWorkout();
+    private View.OnClickListener undoExerciseDelete() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = getDataProvider().undoLastRemoval();
+                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                Utils.displayLongSimpleSnackbar(fab,
+                        getString(R.string.exercise_removal_undone));
+                AbstractDataProvider.Data data = getDataProvider().getItem(position);
+                Exercise exercise = (Exercise) data.getDataObject();
+                exercisesToDelete.remove(exercise);
+                determineDefaultStatus();
             }
+        };
+    }
+
+    private Workout getParentWorkout() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.WORKOUT)) {
+           return extras.getParcelable(Constants.WORKOUT);
         } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
+            return null;
         }
-        return exercises;
     }
 
     private void displayInfoDialog() {
@@ -215,6 +235,14 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     protected void onPause() {
         super.onPause();
         unregisterBus();
+        if (exercisesToDelete != null && !exercisesToDelete.isEmpty()) {
+            DbFunctionObject deleteWorkoutsDfo =
+                    new DbFunctionObject(new ArrayList<>(exercisesToDelete),
+                            DbConstants.DELETE_EXERCISES);
+            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteWorkoutsDfo);
+        } else {
+            reorderExercises();
+        }
     }
 
     @Override
@@ -308,4 +336,15 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
         }
     }
+
+    void determineDefaultStatus() {
+        DataProvider dataProvider =
+                (DataProvider)getDataProvider();
+        if (dataProvider != null && dataProvider.getCount() == 0) {
+            rlDefault.setVisibility(View.VISIBLE);
+        } else {
+            rlDefault.setVisibility(View.INVISIBLE);
+        }
+    }
+
 }

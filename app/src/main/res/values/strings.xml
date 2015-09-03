@@ -53,7 +53,7 @@
     <!-- AddExeriseDialog Strings -->
     <string name="addExerciseDialog_Title">Exercise Name:</string>
     <string name="addExerciseDialog_add">Add Exercise</string>
-    <string name="addExercise_requireName">You must enter a name for your workout</string>
+    <string name="addExercise_requireName">You must enter a name for your exercise</string>
     <string name="addExerciseDialogTag">Create Exercise Dialog Tag</string>
     <string name="addExercise_success">Exercise successfully added</string>
     <string name="noImplementsAddExerciseDialogListener">doesn\'t implement AddExerciseDialogListener.</string>
@@ -108,7 +108,7 @@
     <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>
     <string name="add_exercise_error">An error occurred in adding your exercise to the Exercise list. Please try again.</string>
     <string name="add_workout_error_already_exists">Workout not added. Please add only uniquely named workouts to the Workout list.</string>
-    <string name="add_exercise_error_already_exists">Exercise not added. Please add only uniquely named exercise to the Exercise list.</string>
+    <string name="add_exercise_error_already_exists">Exercise not added. Please add only uniquely named exercises to the Exercise list.</string>
     <string name="reposition_workout_error">An error occurred in repositioning your workout to the Workout list. Please try again.</string>
     <string name="updating_workout_error">An error occurred in updating your workout(s) in the Workout list. Please try again.</string>
     <string name="deletion_workout_error">An error occurred in deleting your workout(s) from the Workout list. Please try again.</string>
@@ -121,8 +121,10 @@
     <string name="workout_list_empty_for_assign">Your Workout list is empty. Please create one to continue.</string>
     <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
     <string name="workout_deleted">Workout deleted</string>
+    <string name="exercise_deleted">Exercise deleted</string>
     <string name="removed_assigned_workouts_successfully">Workout(s) assignment successfully undone</string>
     <string name="workout_removal_undone">Workout restored</string>
+    <string name="exercise_removal_undone">Exercise restored</string>
     <string name="assignHeaderText">Select date(s) to assign to your Workout(s)</string>
     <string name="emptyWorkoutViewText">Click the + button to add a Workout</string>
     <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>

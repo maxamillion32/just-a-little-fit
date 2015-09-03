@@ -100,8 +100,6 @@ public class Constants {
 
     public static final String NEWLINE = "\n";
 
-    public static final int DB_ERR_CODE = -1;
-
     public static final String EXERCISES = "execises";
 
     public static final String EXERCISES_NORM_CASE = "Execises";

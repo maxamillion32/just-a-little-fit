@@ -42,7 +42,6 @@ import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteWorkoutsDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AddWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
-import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
@@ -115,9 +114,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         Intent createEditExercise = new Intent(this, CreateEditExercise.class);
         createEditExercise.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        ArrayList<Exercise> exercises = new ArrayList<>(workout.getExercises());
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.EXERCISES, exercises);
+        bundle.putParcelable(Constants.WORKOUT, workout);
         createEditExercise.putExtras(bundle);
         startActivity(createEditExercise);
     }
@@ -127,7 +125,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
                 Constants.UNDO, undoWorkoutDelete(),
                 getResources().getColor(R.color.app_blue_gray));
-
         Workout workoutToDelete = (Workout) dataObject;
         this.workoutsToDelete.add(workoutToDelete);
     }
@@ -176,15 +173,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             }
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder workouts before leaving activity
-            DataProvider dataProvider =
-                    (DataProvider) getDataProvider();
-            List<Workout> workoutsToSave = (List<Workout>) (Object) dataProvider.getDataObjects();
-            for (int i = 0; i < workoutsToSave.size(); i++) {
-                workoutsToSave.get(i).setOrderNumber(i);
-            }
-            DbFunctionObject saveWorkoutsDfo =
-                    new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
-            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
+            reorderWorkouts();
         } else if (event.getResult() instanceof Boolean) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
             DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);

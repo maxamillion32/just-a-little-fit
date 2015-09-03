@@ -58,13 +58,15 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 for (DbFunctionObject dfo : params) {
                     switch (dfo.getFunctionInt()) {
                         case DbConstants.DELETE_ALL_EXERCISES:
-                            return WorkoutDbHelper.deleteExercises((List<Exercise>) dfo.getDbObject());
+                            return WorkoutDbHelper.deleteAllExercisesFromUI((List<Exercise>) dfo.getDbObject());
                         case DbConstants.UPDATE_EXERCISES:
                             return WorkoutDbHelper.updateExercises((List<Exercise>) dfo.getDbObject());
                         case DbConstants.INSERT_EXERCISE:
                             return WorkoutDbHelper.createExercise((Exercise) dfo.getDbObject());
                         case DbConstants.GET_EXERCISES_BY_WORKOUT:
                             return WorkoutDbHelper.getExercisesByWorkout((Workout) dfo.getDbObject());
+                        case DbConstants.DELETE_EXERCISES:
+                            return WorkoutDbHelper.deleteExercises((List<Exercise>) dfo.getDbObject());
                     }
                 }
                 break;

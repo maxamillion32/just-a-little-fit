@@ -45,6 +45,9 @@ public class DbConstants {
      * a {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final int GET_EXERCISES_BY_WORKOUT = 12;
 
+    /** An int representation for deleting {@link ecap.studio.group.justalittlefit.model.Exercise} objects from the db */
+    public static final int DELETE_EXERCISES = 13;
+
     /** The column name for the id field of {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 
