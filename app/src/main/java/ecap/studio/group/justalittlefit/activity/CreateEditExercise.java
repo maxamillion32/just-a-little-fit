@@ -265,6 +265,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             registerBus();
         }
     }
+
     @Override
     public void onDeleteAllExercisesClick(AppBaseDialog dialog) {
         DataProvider dataProvider =

@@ -115,4 +115,18 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
             busRegistered = false;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterBus();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!busRegistered) {
+            registerBus();
+        }
+    }
 }
