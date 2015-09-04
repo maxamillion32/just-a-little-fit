@@ -32,6 +32,11 @@
             android:label="@string/title_activity_create_edit_exercise"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".activity.CreateEditSet"
+            android:label="@string/title_activity_create_edit_set"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

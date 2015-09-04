@@ -12,6 +12,7 @@
     <string name="view_title_string">View Workout(s)</string>
     <string name="create_edit_title_string">Create/Edit Workout(s)</string>
     <string name="create_edit_exercise_title_string">Create/Edit Exercise(s)</string>
+    <string name="create_edit_set_title_string">Create/Edit Set(s)</string>
     <string name="title_activity_base_navi_drawer">BaseNaviDrawerActivity</string>
     <string name="title_activity_assign">Assign</string>
     <string name="createEdit">CreateEdit</string>
@@ -105,6 +106,7 @@
     <string name="db_error">An error occurred. Please try again.</string>
     <string name="workout_list_error">An error occurred in displaying your Workout list. Please try again.</string>
     <string name="exercise_list_error">An error occurred in displaying your Exercise list. Please try again.</string>
+    <string name="set_list_error">An error occurred in displaying your Set list. Please try again.</string>
     <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>
     <string name="add_exercise_error">An error occurred in adding your exercise to the Exercise list. Please try again.</string>
     <string name="add_workout_error_already_exists">Workout not added. Please add only uniquely named workouts to the Workout list.</string>
@@ -128,8 +130,10 @@
     <string name="assignHeaderText">Select date(s) to assign to your Workout(s)</string>
     <string name="emptyWorkoutViewText">Click the + button to add a Workout</string>
     <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>
+    <string name="emptySetViewText">Click the + button to add a Set</string>
     <string name="title_activity_create_edit_exercise">CreateEditExercise</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_create_edit_set">CreateEditSet</string>
 
 </resources>

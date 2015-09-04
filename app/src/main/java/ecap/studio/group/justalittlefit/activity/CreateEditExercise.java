@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,7 +19,6 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -40,6 +40,7 @@ import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AddExerciseDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
@@ -185,6 +186,18 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                 getResources().getColor(R.color.app_blue_gray));
         Exercise exercise = (Exercise) dataObject;
         this.exercisesToDelete.add(exercise);
+    }
+
+    public void onItemClicked(int position) {
+        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        Exercise exercise = (Exercise) data.getDataObject();
+        Intent createEditSet = new Intent(this, CreateEditSet.class);
+        createEditSet.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.EXERCISE, exercise);
+        createEditSet.putExtras(bundle);
+        startActivity(createEditSet);
     }
 
     private View.OnClickListener undoExerciseDelete() {

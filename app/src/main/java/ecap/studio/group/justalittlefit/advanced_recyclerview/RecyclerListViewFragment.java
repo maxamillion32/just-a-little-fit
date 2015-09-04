@@ -189,7 +189,9 @@ public class RecyclerListViewFragment extends Fragment {
                 workoutActivity.onItemClicked(position);
             }
         } else {
-
+            if (exerciseActivity != null && position != RecyclerView.NO_POSITION) {
+                exerciseActivity.onItemClicked(position);
+            }
         }
     }
 
