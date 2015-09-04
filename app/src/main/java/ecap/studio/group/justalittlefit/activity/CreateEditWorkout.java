@@ -296,8 +296,9 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     }
 
     void displayGeneralWorkoutListError() {
-        Log.e(LOG_TAG, getString(R.string.workout_list_error));
-        Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), getString(R.string.workout_list_error));
+        String errorMsg = getString(R.string.workout_list_error);
+        Log.e(LOG_TAG, errorMsg);
+        Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), errorMsg);
     }
 
     @Override

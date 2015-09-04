@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import ecap.studio.group.justalittlefit.util.Utils;
 
 public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener,
         AddExerciseDialogListener {
+    private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
@@ -85,7 +87,9 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         hideProgressDialog();
-        if (event.getResult() instanceof Integer) {
+        if (event == null || event.getResult() == null) {
+            displayGeneralExerciseListError();
+        } else if (event.getResult() instanceof Integer) {
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
             MyDraggableSwipeableItemAdapter adapter =
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
@@ -128,6 +132,8 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder workouts before leaving activity
             reorderExercises();
+        } else {
+            displayGeneralExerciseListError();
         }
     }
 
@@ -361,4 +367,9 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         }
     }
 
+    void displayGeneralExerciseListError() {
+        String errorMsg = getString(R.string.exercise_list_error);
+        Log.e(LOG_TAG, errorMsg);
+        Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), errorMsg);
+    }
 }
