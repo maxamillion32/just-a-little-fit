@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.util.Constants;
@@ -133,7 +135,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
                 // Display delete all set dialog
                 break;
             case R.id.action_info:
-                // Display info dialog
+                displayInfoDialog();
                 break;
             default:
                 break;
@@ -249,6 +251,12 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         } else {
             rlDefault.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void displayInfoDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = InformationDialog.newInstance(Constants.SETS_NORM_CASE);
+        dialog.show(fm, getString(R.string.infoDialogTagSet));
     }
 
     @Override

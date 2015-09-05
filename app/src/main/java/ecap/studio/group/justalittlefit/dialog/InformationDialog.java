@@ -34,6 +34,8 @@ public class InformationDialog extends AppBaseDialog {
                         + Constants.NEWLINE + getString(R.string.dragSort_exercise));
                 break;
             case Constants.SETS_NORM_CASE:
+                setDialogMessage(getString(R.string.deleteBySwipe_set) + Constants.NEWLINE
+                        + Constants.NEWLINE + getString(R.string.dragSort_set));
                 break;
             case Constants.WORKOUTS_NORM_CASE:
                 setDialogMessage(getString(R.string.deleteBySwipe) + Constants.NEWLINE
