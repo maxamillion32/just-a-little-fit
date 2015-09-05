@@ -261,4 +261,14 @@ public class WorkoutDbHelper {
         hashSet.addAll(sets);
         return hashSet;
     }
+
+    public static String deleteSets(List<ecap.studio.group.justalittlefit.model.Set> sets) {
+        Dao<ecap.studio.group.justalittlefit.model.Set, Integer> dao = DaoHelper.getInstance().getSetDao();
+        try {
+            dao.delete(sets);
+        } catch (SQLException e) {
+            return null;
+        }
+        return Boolean.TRUE.toString();
+    }
 }

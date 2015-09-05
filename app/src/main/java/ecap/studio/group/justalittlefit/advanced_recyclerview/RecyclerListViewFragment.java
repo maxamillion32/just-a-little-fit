@@ -87,6 +87,8 @@ public class RecyclerListViewFragment extends Fragment {
                     createEditWorkoutActivity.onItemRemoved(dataObject);
                 } else if (createEditExerciseActivity != null) {
                     createEditExerciseActivity.onItemRemoved(dataObject);
+                }  else if (createEditSetActivity != null) {
+                    createEditSetActivity.onItemRemoved(dataObject);
                 }
             }
 

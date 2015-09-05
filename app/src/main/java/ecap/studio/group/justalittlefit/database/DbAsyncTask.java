@@ -79,6 +79,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return WorkoutDbHelper.getSetsByExercise((Exercise) dfo.getDbObject());
                         case DbConstants.UPDATE_SETS:
                             return WorkoutDbHelper.updateSets((List<Set>) dfo.getDbObject());
+                        case DbConstants.DELETE_SETS:
+                            return WorkoutDbHelper.deleteSets((List<Set>) dfo.getDbObject());
                     }
                 }
             case Constants.ASSIGN_DIALOG:

@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -110,6 +111,9 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
                 // onPause result returned and data order saved, reset boolean trigger
                 reorderTriggeredByAddSet = false;
             }
+        } else if (event.getResult() instanceof String) {
+            // onPause delete returned, reorder sets before leaving activity
+            reorderSets();
         }
     }
 
@@ -135,6 +139,32 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onItemRemoved(Object dataObject) {
+        determineDefaultStatus();
+        Utils.displayLongActionSnackbar(fab, getString(R.string.set_deleted),
+                Constants.UNDO, undoSetDelete(),
+                getResources().getColor(R.color.app_blue_gray));
+        Set set = (Set) dataObject;
+        this.setsToDelete.add(set);
+    }
+
+    private View.OnClickListener undoSetDelete() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = getDataProvider().undoLastRemoval();
+                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                Utils.displayLongSimpleSnackbar(fab,
+                        getString(R.string.exercise_removal_undone));
+                AbstractDataProvider.Data data = getDataProvider().getItem(position);
+                Set set = (Set) data.getDataObject();
+                setsToDelete.remove(set);
+                determineDefaultStatus();
+            }
+        };
     }
 
     private Exercise getParentExercise() {
@@ -170,7 +200,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         return ((RecyclerListViewFragment) fragment);
     }
 
-    private void reorderExercises() {
+    private void reorderSets() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
         List<Set> setsToReorder = (List<Set>) (Object) dataProvider.getDataObjects();
@@ -211,6 +241,16 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         }
     }
 
+    void determineDefaultStatus() {
+        DataProvider dataProvider =
+                (DataProvider)getDataProvider();
+        if (dataProvider != null && dataProvider.getCount() == 0) {
+            rlDefault.setVisibility(View.VISIBLE);
+        } else {
+            rlDefault.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         unregisterBus();
@@ -230,12 +270,12 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         super.onPause();
         unregisterBus();
         if (setsToDelete != null && !setsToDelete.isEmpty()) {
-            /*DbFunctionObject deleteWorkoutsDfo =
+            DbFunctionObject deleteSetsDfo =
                     new DbFunctionObject(new ArrayList<>(setsToDelete),
-                            DbConstants.DELETE_EXERCISES);
-            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteWorkoutsDfo);*/
+                            DbConstants.DELETE_SETS);
+            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSetsDfo);
         } else {
-            reorderExercises();
+            reorderSets();
         }
     }
 }

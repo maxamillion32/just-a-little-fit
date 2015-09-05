@@ -130,7 +130,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
             new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
         } else if (event.getResult() instanceof String) {
-            // onPause delete returned, reorder workouts before leaving activity
+            // onPause delete returned, reorder exercises before leaving activity
             reorderExercises();
         } else {
             displayGeneralExerciseListError();
