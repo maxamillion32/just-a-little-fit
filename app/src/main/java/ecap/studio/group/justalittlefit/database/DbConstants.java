@@ -48,6 +48,10 @@ public class DbConstants {
     /** An int representation for deleting {@link ecap.studio.group.justalittlefit.model.Exercise} objects from the db */
     public static final int DELETE_EXERCISES = 13;
 
+    /** An int representation for for getting a list of {@link ecap.studio.group.justalittlefit.model.Set} objects in the db via
+     * a {@link ecap.studio.group.justalittlefit.model.Exercise} */
+    public static final int GET_SETS_BY_EXERCISE = 14;
+
     /** The column name for the id field of {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 

@@ -3,6 +3,7 @@ package ecap.studio.group.justalittlefit.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,18 +11,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.HashSet;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
+import ecap.studio.group.justalittlefit.database.DbAsyncTask;
+import ecap.studio.group.justalittlefit.database.DbConstants;
+import ecap.studio.group.justalittlefit.database.DbFunctionObject;
+import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
 public class CreateEditSet extends BaseNaviDrawerActivity {
+    private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
@@ -46,8 +58,8 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         if (savedInstanceState == null) {
             parentExercise = getParentExercise();
             if (parentExercise != null) {
-                // Create DFO
-                // Execute DbAsyncTask using DFO
+                DbFunctionObject getSetsByExercise = new DbFunctionObject(parentExercise, DbConstants.GET_SETS_BY_EXERCISE);
+                new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(getSetsByExercise);
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
             }
@@ -67,6 +79,27 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
                 // Display add set dialog method
             }
         });
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(DbTaskResult event) {
+        hideProgressDialog();
+        if (event.getResult() instanceof List) {
+            List<Set> sets = (List<Set>) event.getResult();
+            HashSet<Set> setsObj = new HashSet<>(sets);
+            getSupportFragmentManager().beginTransaction()
+                    .add(DataProviderFragment.newInstance(setsObj, Constants.SET),
+                            FRAGMENT_TAG_DATA_PROVIDER)
+                    .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                    .commitAllowingStateLoss();
+            if (sets.size() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override
@@ -102,6 +135,11 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         }
     }
 
+    public AbstractDataProvider getDataProvider() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
+        return ((DataProviderFragment) fragment).getDataProvider();
+    }
+
     private void registerBus() {
         if (!busRegistered) {
             CreateEditSetBus.getInstance().register(this);
@@ -113,6 +151,23 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         if (busRegistered) {
             CreateEditSetBus.getInstance().unregister(this);
             busRegistered = false;
+        }
+    }
+
+    public RecyclerListViewFragment getRecyclerViewFrag() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+        return ((RecyclerListViewFragment) fragment);
+    }
+
+    void showProgressDialog() {
+        if (isProgressDialogReady()) {
+            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+        }
+    }
+
+    void hideProgressDialog() {
+        if (isProgressDialogReady()) {
+            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
         }
     }
 

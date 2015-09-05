@@ -204,16 +204,31 @@ public class WorkoutDbHelper {
 
     public static List<Exercise> getExercisesByWorkout(final Workout workout) {
         Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
-        QueryBuilder<Exercise, Integer> exQueryBuilder = dao.queryBuilder();
+        QueryBuilder<Exercise, Integer> queryBuilder = dao.queryBuilder();
         List<Exercise> exercises;
         try {
-            exQueryBuilder.where().in(DbConstants.WORKOUT_ID_COLUMN_NAME, workout);
-            exQueryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
-            exercises = exQueryBuilder.query();
+            queryBuilder.where().in(DbConstants.WORKOUT_ID_COLUMN_NAME, workout);
+            queryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
+            exercises = queryBuilder.query();
         } catch (SQLException e) {
             return null;
         }
 
         return exercises;
+    }
+
+    public static List<ecap.studio.group.justalittlefit.model.Set> getSetsByExercise(final Exercise exercise) {
+        Dao<ecap.studio.group.justalittlefit.model.Set, Integer> dao = DaoHelper.getInstance().getSetDao();
+        QueryBuilder<ecap.studio.group.justalittlefit.model.Set, Integer> queryBuilder = dao.queryBuilder();
+        List<ecap.studio.group.justalittlefit.model.Set> sets;
+        try {
+            queryBuilder.where().in(DbConstants.EXERCISE_ID_COLUMN_NAME, exercise);
+            queryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
+            sets = queryBuilder.query();
+        } catch (SQLException e) {
+            return null;
+        }
+
+        return sets;
     }
 }

@@ -44,6 +44,8 @@ public class Constants {
 
     public static final String CREATE_EDIT_EXERCISE = "CreateEditExercise";
 
+    public static final String CREATE_EDIT_SET = "CreateEditSet";
+
     public static final String ASSIGN_DIALOG = "AssignDialog";
 
     public static final String EMPTY_STRING = "";
@@ -97,6 +99,8 @@ public class Constants {
     public static final String WORKOUT_LIST = "WORKOUT_LIST";
 
     public static final String EXERCISE_LIST = "EXERCISE_LIST";
+
+    public static final String SET_LIST = "SET_LIST";
 
     public static final String NEWLINE = "\n";
 

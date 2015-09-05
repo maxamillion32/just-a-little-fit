@@ -25,6 +25,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.BaseNaviDrawerActivity;
 import ecap.studio.group.justalittlefit.activity.CreateEditExercise;
+import ecap.studio.group.justalittlefit.activity.CreateEditSet;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 
 public class RecyclerListViewFragment extends Fragment {
@@ -38,8 +39,9 @@ public class RecyclerListViewFragment extends Fragment {
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
     private ProgressBar progressDialog;
     private Activity mActivity;
-    private CreateEditWorkout workoutActivity;
-    private CreateEditExercise exerciseActivity;
+    private CreateEditWorkout createEditWorkoutActivity;
+    private CreateEditExercise createEditExerciseActivity;
+    private CreateEditSet createEditSetActivity;
 
     public RecyclerListViewFragment() {
         super();
@@ -81,10 +83,10 @@ public class RecyclerListViewFragment extends Fragment {
         myItemAdapter.setEventListener(new MyDraggableSwipeableItemAdapter.EventListener() {
             @Override
             public void onItemRemoved(int position, Object dataObject) {
-                if (workoutActivity != null) {
-                    workoutActivity.onItemRemoved(dataObject);
-                } else if (exerciseActivity != null) {
-                    exerciseActivity.onItemRemoved(dataObject);
+                if (createEditWorkoutActivity != null) {
+                    createEditWorkoutActivity.onItemRemoved(dataObject);
+                } else if (createEditExerciseActivity != null) {
+                    createEditExerciseActivity.onItemRemoved(dataObject);
                 }
             }
 
@@ -176,21 +178,21 @@ public class RecyclerListViewFragment extends Fragment {
         mLayoutManager = null;
         ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(false);
         mActivity = null;
-        workoutActivity = null;
-        exerciseActivity = null;
+        createEditWorkoutActivity = null;
+        createEditExerciseActivity = null;
 
         super.onDestroyView();
     }
 
     private void onItemViewClick(View v, boolean pinned) {
         int position = mRecyclerView.getChildPosition(v);
-        if (workoutActivity != null) {
+        if (createEditWorkoutActivity != null) {
             if (position != RecyclerView.NO_POSITION) {
-                workoutActivity.onItemClicked(position);
+                createEditWorkoutActivity.onItemClicked(position);
             }
         } else {
-            if (exerciseActivity != null && position != RecyclerView.NO_POSITION) {
-                exerciseActivity.onItemClicked(position);
+            if (createEditExerciseActivity != null && position != RecyclerView.NO_POSITION) {
+                createEditExerciseActivity.onItemClicked(position);
             }
         }
     }
@@ -200,10 +202,12 @@ public class RecyclerListViewFragment extends Fragment {
     }
 
     public AbstractDataProvider getDataProvider() {
-        if (workoutActivity != null) {
-            return workoutActivity.getDataProvider();
-        } else if (exerciseActivity != null) {
-            return exerciseActivity.getDataProvider();
+        if (createEditWorkoutActivity != null) {
+            return createEditWorkoutActivity.getDataProvider();
+        } else if (createEditExerciseActivity != null) {
+            return createEditExerciseActivity.getDataProvider();
+        } else if (createEditSetActivity != null) {
+            return createEditSetActivity.getDataProvider();
         }
         return null;
     }
@@ -233,11 +237,17 @@ public class RecyclerListViewFragment extends Fragment {
 
     private void populateActivity() {
         if (mActivity instanceof CreateEditWorkout) {
-            workoutActivity = (CreateEditWorkout) mActivity;
-            exerciseActivity = null;
-        } else if (mActivity instanceof CreateEditExercise)  {
-            exerciseActivity = (CreateEditExercise) mActivity;
-            workoutActivity = null;
+            createEditWorkoutActivity = (CreateEditWorkout) mActivity;
+            createEditExerciseActivity = null;
+            createEditSetActivity = null;
+        } else if (mActivity instanceof CreateEditExercise) {
+            createEditExerciseActivity = (CreateEditExercise) mActivity;
+            createEditWorkoutActivity = null;
+            createEditSetActivity = null;
+        } else if (mActivity instanceof CreateEditSet) {
+            createEditSetActivity = (CreateEditSet) mActivity;
+            createEditWorkoutActivity = null;
+            createEditExerciseActivity = null;
         }
     }
 }

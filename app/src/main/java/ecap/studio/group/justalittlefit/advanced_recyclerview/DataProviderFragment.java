@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
@@ -16,6 +18,7 @@ public class DataProviderFragment extends Fragment {
     private String dataType;
     private ArrayList<Workout> workouts;
     private ArrayList<Exercise> exercises;
+    private ArrayList<Set> sets;
 
     public static DataProviderFragment newInstance(String dataType, ArrayList<Workout> workouts) {
         DataProviderFragment fragment = new DataProviderFragment();
@@ -31,6 +34,16 @@ public class DataProviderFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(Constants.DATA_FRAG_TYPE, dataType);
         args.putParcelableArrayList(Constants.EXERCISE_LIST, exercises);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static DataProviderFragment newInstance(java.util.Set<Set> sets, String dataType) {
+        DataProviderFragment fragment = new DataProviderFragment();
+        ArrayList<Set> setArrayList = new ArrayList<>(sets);
+        Bundle args = new Bundle();
+        args.putString(Constants.DATA_FRAG_TYPE, dataType);
+        args.putParcelableArrayList(Constants.SET_LIST, setArrayList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,6 +65,11 @@ public class DataProviderFragment extends Fragment {
                 case Constants.EXERCISE:
                     exercises = args.getParcelableArrayList(Constants.EXERCISE_LIST);
                     mDataProvider = new DataProvider(exercises, dataType);
+                    break;
+                case Constants.SET:
+                    sets = args.getParcelableArrayList(Constants.SET_LIST);
+                    HashSet<Set> hashSet = new HashSet<>(sets);
+                    mDataProvider = new DataProvider(hashSet, Constants.SET);
                     break;
             }
         } else {

@@ -9,6 +9,7 @@ import java.util.List;
 import ecap.studio.group.justalittlefit.bus.AssignBus;
 import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
+import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -70,6 +71,13 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
+            case Constants.CREATE_EDIT_SET:
+                for (DbFunctionObject dfo : params) {
+                    switch (dfo.getFunctionInt()) {
+                        case DbConstants.GET_SETS_BY_EXERCISE:
+                            return WorkoutDbHelper.getSetsByExercise((Exercise) dfo.getDbObject());
+                    }
+                }
             case Constants.ASSIGN_DIALOG:
                 for (DbFunctionObject dfo : params) {
                     try {
@@ -112,6 +120,9 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 break;
             case Constants.CREATE_EDIT_EXERCISE:
                 CreateEditExerciseBus.getInstance().post(new DbTaskResult(result));
+                break;
+            case Constants.CREATE_EDIT_SET:
+                CreateEditSetBus.getInstance().post(new DbTaskResult(result));
                 break;
             case Constants.ASSIGN_DIALOG:
                 AssignDialogBus.getInstance().post(new DbTaskResult(result));
