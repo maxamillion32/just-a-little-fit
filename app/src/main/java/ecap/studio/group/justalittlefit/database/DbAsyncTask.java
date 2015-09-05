@@ -12,6 +12,7 @@ import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
 import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -76,6 +77,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     switch (dfo.getFunctionInt()) {
                         case DbConstants.GET_SETS_BY_EXERCISE:
                             return WorkoutDbHelper.getSetsByExercise((Exercise) dfo.getDbObject());
+                        case DbConstants.UPDATE_SETS:
+                            return WorkoutDbHelper.updateSets((List<Set>) dfo.getDbObject());
                     }
                 }
             case Constants.ASSIGN_DIALOG:

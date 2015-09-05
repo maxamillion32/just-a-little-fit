@@ -14,12 +14,14 @@ import android.widget.RelativeLayout;
 import com.squareup.otto.Subscribe;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
@@ -41,7 +43,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
     boolean busRegistered;
     boolean reorderTriggeredByAddSet;
     String addedSetName;
-    private HashSet<Set> exercisesToDelete;
+    private HashSet<Set> setsToDelete;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -67,7 +69,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
 
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_set_title_string);
-        exercisesToDelete = new HashSet<>();
+        setsToDelete = new HashSet<>();
     }
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
@@ -86,7 +88,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         hideProgressDialog();
         if (event.getResult() instanceof List) {
             List<Set> sets = (List<Set>) event.getResult();
-            HashSet<Set> setsObj = new HashSet<>(sets);
+            LinkedHashSet<Set> setsObj = new LinkedHashSet<>(sets);
             getSupportFragmentManager().beginTransaction()
                     .add(DataProviderFragment.newInstance(setsObj, Constants.SET),
                             FRAGMENT_TAG_DATA_PROVIDER)
@@ -98,6 +100,15 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
                 rlDefault.setVisibility(View.VISIBLE);
             } else {
                 rlDefault.setVisibility(View.INVISIBLE);
+            }
+        } else if (event.getResult() instanceof Set) {
+            // Data order saved
+            if (reorderTriggeredByAddSet) {
+                // Call method to add exercise to view
+                addSetToUI();
+            } else {
+                // onPause result returned and data order saved, reset boolean trigger
+                reorderTriggeredByAddSet = false;
             }
         }
     }
@@ -159,6 +170,35 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         return ((RecyclerListViewFragment) fragment);
     }
 
+    private void reorderExercises() {
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        List<Set> setsToReorder = (List<Set>) (Object) dataProvider.getDataObjects();
+        for (int i = 0; i < setsToReorder.size(); i++) {
+            setsToReorder.get(i).setOrderNumber(i);
+        }
+        DbFunctionObject reorderSetsDfo =
+                new DbFunctionObject(setsToReorder, DbConstants.UPDATE_SETS);
+        new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(reorderSetsDfo);
+    }
+
+    private void addSetToUI() {
+      /*  DataProvider dataProvider =
+                (DataProvider)getDataProvider();
+        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
+                && addedExerciseName != null) {
+            if (!dataProvider.getDisplayNames().contains(addedExerciseName.trim())) {
+                Exercise newExercise = new Exercise(parentWorkout, addedExerciseName, dataProvider.getCount());
+                DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
+                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(insertExercise);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+            }
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
+        }*/
+    }
+
     void showProgressDialog() {
         if (isProgressDialogReady()) {
             getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
@@ -182,6 +222,20 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         super.onResume();
         if (!busRegistered) {
             registerBus();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterBus();
+        if (setsToDelete != null && !setsToDelete.isEmpty()) {
+            /*DbFunctionObject deleteWorkoutsDfo =
+                    new DbFunctionObject(new ArrayList<>(setsToDelete),
+                            DbConstants.DELETE_EXERCISES);
+            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteWorkoutsDfo);*/
+        } else {
+            reorderExercises();
         }
     }
 }

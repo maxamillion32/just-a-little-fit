@@ -231,4 +231,34 @@ public class WorkoutDbHelper {
 
         return sets;
     }
+
+    public static Boolean updateSet(ecap.studio.group.justalittlefit.model.Set set) {
+        Dao<ecap.studio.group.justalittlefit.model.Set, Integer> dao = DaoHelper.getInstance().getSetDao();
+        try {
+            dao.update(set);
+            return true;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static Set<ecap.studio.group.justalittlefit.model.Set> updateSets
+            (final List<ecap.studio.group.justalittlefit.model.Set> sets) {
+        Dao<ecap.studio.group.justalittlefit.model.Set, Integer> dao = DaoHelper.getInstance().getSetDao();
+        HashSet<ecap.studio.group.justalittlefit.model.Set> hashSet = new HashSet<>();
+        try {
+            dao.callBatchTasks(new Callable<Void>() {
+                public Void call() throws SQLException {
+                    for (ecap.studio.group.justalittlefit.model.Set set : sets) {
+                        updateSet(set);
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            return null;
+        }
+        hashSet.addAll(sets);
+        return hashSet;
+    }
 }

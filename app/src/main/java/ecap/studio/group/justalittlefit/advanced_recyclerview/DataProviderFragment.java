@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
@@ -68,7 +68,7 @@ public class DataProviderFragment extends Fragment {
                     break;
                 case Constants.SET:
                     sets = args.getParcelableArrayList(Constants.SET_LIST);
-                    HashSet<Set> hashSet = new HashSet<>(sets);
+                    LinkedHashSet<Set> hashSet = new LinkedHashSet<>(sets);
                     mDataProvider = new DataProvider(hashSet, Constants.SET);
                     break;
             }
