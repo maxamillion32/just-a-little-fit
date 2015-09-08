@@ -101,9 +101,9 @@ public class Constants {
 
     public static final String NEWLINE = "\n";
 
-    public static final String EXERCISES = "execises";
+    public static final String EXERCISES = "exercises";
 
-    public static final String EXERCISES_NORM_CASE = "Execises";
+    public static final String EXERCISES_NORM_CASE = "Exercises";
 
     public static final String WORKOUTS_NORM_CASE = "Workouts";
 
