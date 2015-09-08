@@ -16,14 +16,6 @@ public class ConfirmDeleteExercisesDialog extends AppBaseDialog {
     private static final String DELETE_ALL_EXERCISES = "Delete All Exercises?";
     ConfirmExercisesDeletionListener listener;
 
-    public static ConfirmDeleteExercisesDialog newInstance(String dialogType) {
-        ConfirmDeleteExercisesDialog dialog = new ConfirmDeleteExercisesDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.DIALOG_TYPE, dialogType);
-        dialog.setArguments(bundle);
-        return dialog;
-    }
-
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
