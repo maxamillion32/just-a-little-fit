@@ -39,17 +39,17 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     try {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.GET_ALL_UNASSIGNED_WORKOUTS:
-                                return WorkoutDbHelper.getUnassignedWorkouts();
+                                return QueryExecutor.getUnassignedWorkouts();
                             case DbConstants.DELETE_ALL_WORKOUTS:
-                                return WorkoutDbHelper.deleteUnassignedWorkouts();
+                                return QueryExecutor.deleteUnassignedWorkouts();
                             case DbConstants.DELETE_WORKOUTS:
-                                return WorkoutDbHelper.deleteWorkouts((List<Workout>) dfo.getDbObject());
+                                return QueryExecutor.deleteWorkouts((List<Workout>) dfo.getDbObject());
                             case DbConstants.DELETE_WORKOUT:
-                                return WorkoutDbHelper.deleteWorkout((Workout) dfo.getDbObject());
+                                return QueryExecutor.deleteWorkout((Workout) dfo.getDbObject());
                             case DbConstants.INSERT_WORKOUT:
-                                return WorkoutDbHelper.createWorkout((Workout) dfo.getDbObject());
+                                return QueryExecutor.createWorkout((Workout) dfo.getDbObject());
                             case DbConstants.UPDATE_WORKOUTS:
-                                return WorkoutDbHelper.updateWorkouts((List<Workout>) dfo.getDbObject());
+                                return QueryExecutor.updateWorkouts((List<Workout>) dfo.getDbObject());
                         }
                     } catch (SQLException e) {
                         return null;
@@ -60,15 +60,15 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 for (DbFunctionObject dfo : params) {
                     switch (dfo.getFunctionInt()) {
                         case DbConstants.DELETE_ALL_EXERCISES:
-                            return WorkoutDbHelper.deleteAllExercisesFromUI((List<Exercise>) dfo.getDbObject());
+                            return QueryExecutor.deleteAllExercisesFromUI((List<Exercise>) dfo.getDbObject());
                         case DbConstants.UPDATE_EXERCISES:
-                            return WorkoutDbHelper.updateExercises((List<Exercise>) dfo.getDbObject());
+                            return QueryExecutor.updateExercises((List<Exercise>) dfo.getDbObject());
                         case DbConstants.INSERT_EXERCISE:
-                            return WorkoutDbHelper.createExercise((Exercise) dfo.getDbObject());
+                            return QueryExecutor.createExercise((Exercise) dfo.getDbObject());
                         case DbConstants.GET_EXERCISES_BY_WORKOUT:
-                            return WorkoutDbHelper.getExercisesByWorkout((Workout) dfo.getDbObject());
+                            return QueryExecutor.getExercisesByWorkout((Workout) dfo.getDbObject());
                         case DbConstants.DELETE_EXERCISES:
-                            return WorkoutDbHelper.deleteExercises((List<Exercise>) dfo.getDbObject());
+                            return QueryExecutor.deleteExercises((List<Exercise>) dfo.getDbObject());
                     }
                 }
                 break;
@@ -76,11 +76,11 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 for (DbFunctionObject dfo : params) {
                     switch (dfo.getFunctionInt()) {
                         case DbConstants.GET_SETS_BY_EXERCISE:
-                            return WorkoutDbHelper.getSetsByExercise((Exercise) dfo.getDbObject());
+                            return QueryExecutor.getSetsByExercise((Exercise) dfo.getDbObject());
                         case DbConstants.UPDATE_SETS:
-                            return WorkoutDbHelper.updateSets((List<Set>) dfo.getDbObject());
+                            return QueryExecutor.updateSets((List<Set>) dfo.getDbObject());
                         case DbConstants.DELETE_SETS:
-                            return WorkoutDbHelper.deleteSets((List<Set>) dfo.getDbObject());
+                            return QueryExecutor.deleteSets((List<Set>) dfo.getDbObject());
                     }
                 }
             case Constants.ASSIGN_DIALOG:
@@ -88,7 +88,7 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     try {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.GET_ALL_UNASSIGNED_WORKOUTS:
-                                return WorkoutDbHelper.getUnassignedWorkouts();
+                                return QueryExecutor.getUnassignedWorkouts();
                         }
                     } catch (SQLException e) {
                         return null;
@@ -101,12 +101,12 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.ASSIGN_WORKOUTS:
                                 if (dfo.getDbObject() instanceof LinkedList) {
-                                    return WorkoutDbHelper.assignDatesToWorkouts((LinkedList<Object>) dfo.getDbObject());
+                                    return QueryExecutor.assignDatesToWorkouts((LinkedList<Object>) dfo.getDbObject());
                                 }
                                 break;
                             case DbConstants.DELETE_WORKOUTS:
                                 if (dfo.getDbObject() instanceof List) {
-                                    return WorkoutDbHelper.deleteWorkouts((List<Workout>) dfo.getDbObject());
+                                    return QueryExecutor.deleteWorkouts((List<Workout>) dfo.getDbObject());
                                 }
                         }
                     } catch (SQLException e) {

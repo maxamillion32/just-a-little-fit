@@ -21,7 +21,7 @@ import ecap.studio.group.justalittlefit.model.Workout;
  * Helper class that will handle database functionality on objects of type
  * {@link ecap.studio.group.justalittlefit.model.Workout}
  */
-public class WorkoutDbHelper {
+public class QueryExecutor {
 
     public static List<Workout> getUnassignedWorkouts() throws SQLException {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
