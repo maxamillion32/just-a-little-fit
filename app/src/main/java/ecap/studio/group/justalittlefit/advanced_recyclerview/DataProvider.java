@@ -58,9 +58,9 @@ public class DataProvider extends AbstractDataProvider {
             final long id = mData.size();
             final int viewType = 0;
             final int swipeReaction = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_LEFT | RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
-            mData.add(new ConcreteData(id, viewType, set.getName(),
+            mData.add(new ConcreteData(id, viewType, returnSetRowDisplayText(set),
                     swipeReaction, set, dataType));
-            displayNames.add(set.getName().trim());
+            displayNames.add(returnSetRowDisplayText(set).trim());
         }
     }
 
@@ -207,6 +207,26 @@ public class DataProvider extends AbstractDataProvider {
 
     public List<String> getDisplayNames() {
         return displayNames;
+    }
+
+    private String returnSetRowDisplayText(Set set) {
+        switch (set.getExerciseTypeCode()) {
+            case Constants.REPS:
+                return set.getReps() + " rep(s) of " + set.getWeight() + Constants.SPACE + set.getWeightTypeCode().toLowerCase();
+            case Constants.LOGGED_TIMED:
+                return set.getReps() + " rep(s) timed at " + forceTwoDigitTime(set.getHours()) + Constants.COLON
+                        + forceTwoDigitTime(set.getMinutes()) + Constants.COLON + forceTwoDigitTime(set.getSeconds());
+        }
+        return null;
+    }
+
+    private String forceTwoDigitTime(int timeVal) {
+        String timeString = String.valueOf(timeVal);
+        if (timeString.length() == 1) {
+            return "0" + timeString;
+        } else {
+            return timeString;
+        }
     }
 }
 

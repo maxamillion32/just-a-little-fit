@@ -94,6 +94,9 @@ public class DbConstants {
     /** The column name for the seconds field of {@link ecap.studio.group.justalittlefit.model.Set} */
     public static final String SECONDS_COLUMN_NAME = "secs";
 
+    /** The column name for the weight amount field of {@link ecap.studio.group.justalittlefit.model.Set} */
+    public static final String WEIGHT_AMOUNT_COLUMN_NAME = "wt_amt";
+
     /** The column name for the weightTypeCode field of {@link ecap.studio.group.justalittlefit.model.Set} */
     public static final String WEIGHT_CODE_COLUMN_NAME = "wt_code";
 

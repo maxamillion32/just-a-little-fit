@@ -1,5 +1,5 @@
 #
-# generated on 2015/09/08 11:24:00
+# generated on 2015/09/08 11:52:48
 #
 # --table-start--
 dataClass=ecap.studio.group.justalittlefit.model.Workout
@@ -80,12 +80,6 @@ dataClass=ecap.studio.group.justalittlefit.model.Set
 tableName=set
 # --table-fields-start--
 # --field-start--
-fieldName=name
-columnName=name
-canBeNull=false
-indexName=set_name_idx
-# --field-end--
-# --field-start--
 fieldName=setId
 columnName=set_id
 generatedId=true
@@ -105,6 +99,10 @@ foreignAutoRefresh=true
 fieldName=reps
 columnName=rep_count
 canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=weight
+columnName=wt_amt
 # --field-end--
 # --field-start--
 fieldName=hours

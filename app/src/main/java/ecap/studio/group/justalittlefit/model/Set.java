@@ -12,10 +12,6 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
  */
 public class Set implements Comparable<Set>, Parcelable {
 
-    /** The display name of the Set */
-    @DatabaseField(index = true, columnName = DbConstants.NAME_COLUMN_NAME, canBeNull = false)
-    private String name;
-
     /** The id of the Set object */
     @DatabaseField(generatedId = true, columnName = DbConstants.SET_ID_COLUMN_NAME)
     private int setId;
@@ -31,6 +27,10 @@ public class Set implements Comparable<Set>, Parcelable {
     /** The number of reps in the Set */
     @DatabaseField(canBeNull = false, columnName = DbConstants.REPS_COLUMN_NAME)
     private int reps;
+
+    /** The measured weight */
+    @DatabaseField(columnName = DbConstants.WEIGHT_AMOUNT_COLUMN_NAME)
+    private Integer weight;
 
     /** The measured work of this Set in hours */
     @DatabaseField(columnName = DbConstants.HOURS_COLUMN_NAME)
@@ -58,20 +58,23 @@ public class Set implements Comparable<Set>, Parcelable {
 
     public Set() {}
 
-    public Set(String name, int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber) {
-        this.name = name;
+    public Set(int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber, Integer weight) {
         this.reps = reps;
         this.weightTypeCode = weightTypeCode;
         this.exerciseTypeCode = exerciseTypeCode;
         this.orderNumber = orderNumber;
+        this.weight = weight;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Set(int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber, Integer hours,
+               Integer minutes, Integer seconds) {
+        this.reps = reps;
+        this.weightTypeCode = weightTypeCode;
+        this.exerciseTypeCode = exerciseTypeCode;
+        this.orderNumber = orderNumber;
+        this.minutes = minutes;
+        this.seconds = seconds;
+        this.hours = hours;
     }
 
     public Exercise getExercise() {
@@ -154,17 +157,25 @@ public class Set implements Comparable<Set>, Parcelable {
         this.seconds = seconds;
     }
 
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
     @Override
     public int compareTo(Set setObj) {
         return this.orderNumber - setObj.orderNumber;
     }
 
     protected Set(Parcel in) {
-        name = in.readString();
         setId = in.readInt();
         isComplete = in.readByte() != 0x00;
         exercise = (Exercise) in.readValue(Exercise.class.getClassLoader());
         reps = in.readInt();
+        weight = in.readByte() == 0x00 ? null : in.readInt();
         hours = in.readByte() == 0x00 ? null : in.readInt();
         minutes = in.readByte() == 0x00 ? null : in.readInt();
         seconds = in.readByte() == 0x00 ? null : in.readInt();
@@ -180,11 +191,16 @@ public class Set implements Comparable<Set>, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
         dest.writeInt(setId);
         dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
         dest.writeValue(exercise);
         dest.writeInt(reps);
+        if (weight == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(weight);
+        }
         if (hours == null) {
             dest.writeByte((byte) (0x00));
         } else {

@@ -22,9 +22,6 @@ public class Constants {
     /** String code for reps */
     public static final String REPS = "REPS";
 
-    /** String code for timer */
-    public static final String TIMED = "T";
-
     /** String code for logged time */
     public static final String LOGGED_TIMED = "LT";
 
@@ -113,5 +110,7 @@ public class Constants {
     public static final String SETS_NORM_CASE = "Sets";
 
     public static final String DIALOG_TYPE = "DialogType";
+
+    public static final String COLON = ":";
 }
 
