@@ -31,15 +31,21 @@ public class InformationDialog extends AppBaseDialog {
         switch(dialogType) {
             case Constants.EXERCISES_NORM_CASE:
                 setDialogMessage(getString(R.string.deleteBySwipe_exercise) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.dragSort_exercise));
+                        + Constants.NEWLINE + getString(R.string.dragSort_exercise)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onClick_exercise)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onSave));
                 break;
             case Constants.SETS_NORM_CASE:
                 setDialogMessage(getString(R.string.deleteBySwipe_set) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.dragSort_set));
+                        + Constants.NEWLINE + getString(R.string.dragSort_set)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onClick_set)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onSave));
                 break;
             case Constants.WORKOUTS_NORM_CASE:
                 setDialogMessage(getString(R.string.deleteBySwipe) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.dragSort));
+                        + Constants.NEWLINE + getString(R.string.dragSort)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onClick)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onSave));
                 break;
         }
         setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {

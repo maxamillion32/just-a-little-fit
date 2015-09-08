@@ -90,12 +90,16 @@
     <string name="deleteBySwipe">- Workouts can be deleted via a left or right swipe.</string>
     <string name="dragSort">- Workouts can be rearranged by long pressing the dark
         gray area on the far left of the row and dragging the workout either up or down.</string>
+    <string name="onClick">- Clicking on a Workout will bring you to its Exercise list.</string>
+    <string name="onSave">- Leaving this screen will automatically save your changes.</string>
     <string name="deleteBySwipe_exercise">- Exercises can be deleted via a left or right swipe.</string>
     <string name="dragSort_exercise">- Exercises can be rearranged by long pressing the dark
         gray area on the far left of the row and dragging the workout either up or down.</string>
+    <string name="onClick_exercise">- Clicking on an Exercise will bring you to its Set list.</string>
     <string name="deleteBySwipe_set">- Sets can be deleted via a left or right swipe.</string>
     <string name="dragSort_set">- Sets can be rearranged by long pressing the dark
         gray area on the far left of the row and dragging the workout either up or down.</string>
+    <string name="onClick_set">- Clicking on a Set will allow you to edit its properties.</string>
 
     <!-- AssignWorkoutDialog Strings -->
     <string name="assignWorkoutDialogHeaderMsg">Choose Workout(s) To Assign:</string>
