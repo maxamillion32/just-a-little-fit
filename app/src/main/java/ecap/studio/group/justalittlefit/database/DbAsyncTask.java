@@ -81,6 +81,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.updateSets((List<Set>) dfo.getDbObject());
                         case DbConstants.DELETE_SETS:
                             return QueryExecutor.deleteSets((List<Set>) dfo.getDbObject());
+                        case DbConstants.DELETE_ALL_SETS:
+                            return QueryExecutor.deleteAllSetsFromUI((List<Set>) dfo.getDbObject());
                     }
                 }
             case Constants.ASSIGN_DIALOG:

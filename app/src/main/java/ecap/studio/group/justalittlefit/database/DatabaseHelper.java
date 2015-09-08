@@ -50,7 +50,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             Log.i(DatabaseHelper.class.getName(), "onCreate executing");
-            //Create database tables for Workout, Exercise, Set, SuperSet
+            //Create database tables for Workout, Exercise, Set
             TableUtils.createTable(connectionSource, Workout.class);
             TableUtils.createTable(connectionSource, Exercise.class);
             TableUtils.createTable(connectionSource, Set.class);

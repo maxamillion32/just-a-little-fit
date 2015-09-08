@@ -74,14 +74,17 @@
     <!-- ConfirmDeleteDialog Strings -->
     <string name="confirmDeleteWorkoutsDialogTag">Confirm Delete Workouts Dialog Tag</string>
     <string name="confirmDeleteExercisesDialogTag">Confirm Delete Exercises Dialog Tag</string>
+    <string name="confirmDeleteSetsDialogTag">Confirm Delete Sets Dialog Tag</string>
     <string name="confirmDeleteWorkoutDialog_delete">Delete</string>
     <string name="confirmDeleteWorkoutDialog_error">An error occurred while trying to delete the workout(s). Please try again.</string>
     <string name="confirmDeleteWorkoutDialog_success">Workout(s) deleted successfully</string>
     <string name="confirmDeleteExerciseDialog_success">Exercise(s) deleted successfully</string>
+    <string name="confirmDeleteSetDialog_success">Set(s) deleted successfully</string>
     <string name="no_workouts_to_delete">There are no workouts to delete</string>
     <string name="confirmDeleteWorkoutDialog_selectAll_bool">Title Boolean</string>
     <string name="noImplementsConfirmDeletionListener">doesn\'t implement ConfirmWorkoutsDeletionListener.</string>
     <string name="noImplementsConfirmExerciseDeletionListener">doesn\'t implement ConfirmExercisesDeletionListener.</string>
+    <string name="noImplementsConfirmSetDeletionListener">doesn\'t implement ConfirmSetsDeletionListener.</string>
 
     <!-- InformationDialog Strings -->
     <string name="infoDialogTag">Information Dialog Tag</string>
@@ -123,6 +126,7 @@
     <string name="updating_workout_error">An error occurred in updating your workout(s) in the Workout list. Please try again.</string>
     <string name="deletion_workout_error">An error occurred in deleting your workout(s) from the Workout list. Please try again.</string>
     <string name="deletion_exercise_error">An error occurred in deleting your exercise(s) from the Exercise list. Please try again.</string>
+    <string name="deletion_set_error">An error occurred in deleting your set(s) from the Set list. Please try again.</string>
     <string name="assign_workout_error">An error occurred in assigning date/dates to your workout(s). Please try again.</string>
     <string name="data_load_error">An error occurred in loading workout data. Please try again.</string>
 

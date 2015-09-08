@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,19 +26,23 @@ import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.AbstractDataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.DataProviderFragment;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.MyDraggableSwipeableItemAdapter;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteSetsDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.listener.ConfirmSetsDeletionListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class CreateEditSet extends BaseNaviDrawerActivity {
+public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSetsDeletionListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -89,7 +94,9 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         hideProgressDialog();
-        if (event.getResult() instanceof List) {
+        if (event == null || event.getResult() == null) {
+            displayGeneralSetListError();
+        } else if (event.getResult() instanceof List) {
             List<Set> sets = (List<Set>) event.getResult();
             LinkedHashSet<Set> setsObj = new LinkedHashSet<>(sets);
             getSupportFragmentManager().beginTransaction()
@@ -116,6 +123,21 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder sets before leaving activity
             reorderSets();
+        } else if (event.getResult() instanceof Integer) {
+            final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+            MyDraggableSwipeableItemAdapter adapter =
+                    ((RecyclerListViewFragment) recyclerFrag).getAdapter();
+            DataProvider dataProvider =
+                    (DataProvider) getDataProvider();
+            if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
+                adapter.removeAllItems(dataProvider.getCount() - 1);
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteSetDialog_success));
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_set_error));
+            }
+        } else {
+            displayGeneralSetListError();
         }
     }
 
@@ -132,7 +154,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_delete_all:
-                // Display delete all set dialog
+                displayConfirmDeleteAllSetsDialog();
                 break;
             case R.id.action_info:
                 displayInfoDialog();
@@ -259,6 +281,12 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         dialog.show(fm, getString(R.string.infoDialogTagSet));
     }
 
+    private void displayConfirmDeleteAllSetsDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ConfirmDeleteSetsDialog dialog = new ConfirmDeleteSetsDialog();
+        dialog.show(fm, getString(R.string.confirmDeleteWorkoutsDialogTag));
+    }
+
     @Override
     protected void onDestroy() {
         unregisterBus();
@@ -285,5 +313,21 @@ public class CreateEditSet extends BaseNaviDrawerActivity {
         } else {
             reorderSets();
         }
+    }
+
+    @Override
+    public void onDeleteAllSetsClick(AppBaseDialog dialog) {
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        List<Set> sets = (List<Set>) (Object) dataProvider.getDataObjects();
+        DbFunctionObject deleteSets =
+                new DbFunctionObject(sets, DbConstants.DELETE_ALL_SETS);
+        new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSets);
+    }
+
+    void displayGeneralSetListError() {
+        String errorMsg = getString(R.string.set_list_error);
+        Log.e(LOG_TAG, errorMsg);
+        Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), errorMsg);
     }
 }

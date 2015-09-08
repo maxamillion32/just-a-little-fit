@@ -271,4 +271,13 @@ public class QueryExecutor {
         }
         return Boolean.TRUE.toString();
     }
+
+    public static Integer deleteAllSetsFromUI(List<ecap.studio.group.justalittlefit.model.Set> sets) {
+        if (deleteSets(sets) != null) {
+            return sets.size();
+        } else {
+            return null;
+        }
+    }
+
 }

@@ -4,8 +4,7 @@ package ecap.studio.group.justalittlefit.database;
  * Object that encapsulates either a single
  * {@link ecap.studio.group.justalittlefit.model.Workout},
  * {@link ecap.studio.group.justalittlefit.model.Exercise},
- * {@link ecap.studio.group.justalittlefit.model.Set},
- * {@link ecap.studio.group.justalittlefit.model.SuperSet} or
+ * {@link ecap.studio.group.justalittlefit.model.Set} or
  * list of these objects and an int that represents a CRUD database action.
  */
 public class DbFunctionObject {
