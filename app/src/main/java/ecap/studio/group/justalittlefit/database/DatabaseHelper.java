@@ -24,7 +24,7 @@ import ecap.studio.group.justalittlefit.model.Workout;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     /** Name of the database file */
-    private static final String DATABASE_NAME = "myFitCheckMate.db";
+    private static final String DATABASE_NAME = "justALittleFit.db";
     /** Version number of the database...increment this on any update to database schema */
     private static final int DATABASE_VERSION = 1;
     /** The DAO object for {@link Workout}*/
