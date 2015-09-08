@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
-import ecap.studio.group.justalittlefit.model.SuperSet;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -33,15 +32,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Exercise, Integer> exerciseDao = null;
     /** The DAO object for {@link Set}*/
     private Dao<Set, Integer> setDao = null;
-    /** The DAO object for {@link SuperSet}*/
-    private Dao<SuperSet, Integer> superSetDao = null;
     /** A helper class instance for DAO access*/
     private DaoHelper daoHelper;
 
     public DatabaseHelper(Context context) throws SQLException {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
         daoHelper = DaoHelper.getInstance();
-        daoHelper.setSuperSetDao(getSuperSetDao());
         daoHelper.setExerciseDao(getExerciseDao());
         daoHelper.setSetDao(getSetDao());
         daoHelper.setWorkoutDao(getWorkoutDao());
@@ -58,7 +54,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Workout.class);
             TableUtils.createTable(connectionSource, Exercise.class);
             TableUtils.createTable(connectionSource, Set.class);
-            TableUtils.createTable(connectionSource, SuperSet.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,18 +96,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     /**
-     * Returns the Database Access Object (DAO) for {@link SuperSet}.
-     * It will create it or return the cached DAO.
-     * @throws SQLException
-     */
-    public Dao<SuperSet, Integer> getSuperSetDao() throws SQLException {
-        if (superSetDao == null) {
-            superSetDao = getDao(SuperSet.class);
-        }
-        return superSetDao;
-    }
-
-    /**
      * Called when database is upgraded.
      */
     @Override
@@ -129,6 +112,5 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         workoutDao = null;
         exerciseDao = null;
         setDao = null;
-        superSetDao = null;
     }
 }

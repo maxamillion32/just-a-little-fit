@@ -4,7 +4,6 @@ import com.j256.ormlite.dao.Dao;
 
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
-import ecap.studio.group.justalittlefit.model.SuperSet;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -15,7 +14,6 @@ public class DaoHelper {
     private Dao<Workout, Integer> workoutDao;
     private Dao<Exercise, Integer> exerciseDao;
     private Dao<Set, Integer> setDao;
-    private Dao<SuperSet, Integer> superSetDao;
     private static DaoHelper instance;
 
     public DaoHelper() {
@@ -52,12 +50,5 @@ public class DaoHelper {
         this.getInstance().setDao = setDao;
     }
 
-    public Dao<SuperSet, Integer> getSuperSetDao() {
-        return this.getInstance().superSetDao;
-    }
-
-    public void setSuperSetDao(Dao<SuperSet, Integer> superSetDao) {
-        this.getInstance().superSetDao = superSetDao;
-    }
 }
 

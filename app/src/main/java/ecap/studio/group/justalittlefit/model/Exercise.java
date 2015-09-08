@@ -30,10 +30,6 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
     @DatabaseField(canBeNull = false, columnName = DbConstants.ORDER_NUMBER_COLUMN_NAME)
     private int orderNumber;
 
-    /** Whether or not this Exercise displays {@link Set} or {@link SuperSet} */
-    @DatabaseField(canBeNull = false, columnName = DbConstants.SUPERSET_SWITCH_COLUMN_NAME)
-    private boolean superSetSwitch;
-
     /** Whether or not this Exercise is shown as completed on UI */
     @DatabaseField(canBeNull = false, columnName = DbConstants.IS_COMPLETE_COLUMN_NAME)
     private boolean isComplete;
@@ -46,15 +42,10 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
     @ForeignCollectionField(columnName = DbConstants.SETS)
     ForeignCollection<Set> sets;
 
-    /** The collection of {@link SuperSet} that are associated to this Exercise in the database */
-    @ForeignCollectionField(columnName = DbConstants.SUPERSETS)
-    ForeignCollection<SuperSet> superSets;
-
     public Exercise() {}
 
-    public Exercise(String name, boolean superSetSwitch, int orderNumber) {
+    public Exercise(String name, int orderNumber) {
         this.name = name;
-        this.superSetSwitch = superSetSwitch;
         this.orderNumber = orderNumber;
     }
 
@@ -96,20 +87,8 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         this.orderNumber = orderNumber;
     }
 
-    public boolean isSuperSetSwitch() {
-        return superSetSwitch;
-    }
-
-    public void setSuperSetSwitch(boolean superSetSwitch) {
-        this.superSetSwitch = superSetSwitch;
-    }
-
     public ForeignCollection<Set> getSets() {
         return sets;
-    }
-
-    public ForeignCollection<SuperSet> getSuperSets() {
-        return superSets;
     }
 
     public boolean isSelected() {
@@ -132,10 +111,6 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         this.sets = sets;
     }
 
-    public void setSuperSets(ForeignCollection<SuperSet> superSets) {
-        this.superSets = superSets;
-    }
-
     @Override
     public int compareTo(Exercise exercise) {
         return this.orderNumber - exercise.orderNumber;
@@ -146,11 +121,9 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         name = in.readString();
         exerciseId = in.readInt();
         orderNumber = in.readInt();
-        superSetSwitch = in.readByte() != 0x00;
         isComplete = in.readByte() != 0x00;
         isSelected = in.readByte() != 0x00;
         sets = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
-        superSets = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
     }
 
     @Override
@@ -164,11 +137,9 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         dest.writeString(name);
         dest.writeInt(exerciseId);
         dest.writeInt(orderNumber);
-        dest.writeByte((byte) (superSetSwitch ? 0x01 : 0x00));
         dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
         dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
         dest.writeValue(sets);
-        dest.writeValue(superSets);
     }
 
     @SuppressWarnings("unused")

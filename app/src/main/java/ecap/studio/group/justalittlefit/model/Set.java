@@ -12,8 +12,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
  */
 public class Set implements Comparable<Set>, Parcelable {
 
-    /** The display name of the Set
-     * (will not be displayed unless Set is part of a {@link SuperSet}) */
+    /** The display name of the Set */
     @DatabaseField(index = true, columnName = DbConstants.NAME_COLUMN_NAME, canBeNull = false)
     private String name;
 
@@ -28,10 +27,6 @@ public class Set implements Comparable<Set>, Parcelable {
     /** The {@link Exercise) that this Set is a part of */
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = DbConstants.EXERCISE_ID_COLUMN_NAME)
     private Exercise exercise;
-
-    /** The {@link SuperSet) that this Set is a part of */
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = DbConstants.SUPERSET_ID_COLUMN_NAME)
-    private SuperSet superSet;
 
     /** The number of reps in the Set */
     @DatabaseField(canBeNull = false, columnName = DbConstants.REPS_COLUMN_NAME)
@@ -84,14 +79,6 @@ public class Set implements Comparable<Set>, Parcelable {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
-    }
-
-    public SuperSet getSuperSet() {
-        return superSet;
-    }
-
-    public void setSuperSet(SuperSet superSet) {
-        this.superSet = superSet;
     }
 
     public int getReps() {
@@ -168,7 +155,6 @@ public class Set implements Comparable<Set>, Parcelable {
         setId = in.readInt();
         isComplete = in.readByte() != 0x00;
         exercise = (Exercise) in.readValue(Exercise.class.getClassLoader());
-        superSet = (SuperSet) in.readValue(SuperSet.class.getClassLoader());
         reps = in.readInt();
         value = in.readLong();
         weightTypeCode = in.readString();
@@ -188,7 +174,6 @@ public class Set implements Comparable<Set>, Parcelable {
         dest.writeInt(setId);
         dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
         dest.writeValue(exercise);
-        dest.writeValue(superSet);
         dest.writeInt(reps);
         dest.writeLong(value);
         dest.writeString(weightTypeCode);

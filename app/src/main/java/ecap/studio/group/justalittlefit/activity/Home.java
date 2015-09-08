@@ -24,7 +24,6 @@ import ecap.studio.group.justalittlefit.database.DatabaseHelper;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
-import ecap.studio.group.justalittlefit.model.SuperSet;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -120,14 +119,14 @@ public class Home extends Activity {
     }
 
     void createExercisesForWorkouts() {
-        Exercise ex = new Exercise("Push Ups", false, 0);
-        Exercise ex1 = new Exercise("Curls", false, 1);
+        Exercise ex = new Exercise("Push Ups", 0);
+        Exercise ex1 = new Exercise("Curls", 1);
 
-        Exercise ex2 = new Exercise("Situps-Weighted Situps", true, 0);
-        Exercise ex3 = new Exercise("Gorilla ups-Captain raises", true, 1);
+        Exercise ex2 = new Exercise("Situps-Weighted Situps", 0);
+        Exercise ex3 = new Exercise("Gorilla ups-Captain raises", 1);
 
-        Exercise ex4 = new Exercise("Shoulder press-Dips", true, 0);
-        Exercise ex5 = new Exercise("Lat pull downs", false, 1);
+        Exercise ex4 = new Exercise("Shoulder press-Dips", 0);
+        Exercise ex5 = new Exercise("Lat pull downs", 1);
 
         ArrayList<Exercise> exerciseList = new ArrayList<>();
         exerciseList.add(ex);
@@ -148,27 +147,13 @@ public class Home extends Activity {
 
     void createSetsForWorkouts() {
         try {
-            int superSetOrderNumber = 0;
             Dao<Exercise, Integer> exerciseDao = getHelper().getExerciseDao();
-            Dao<SuperSet, Integer> superSetDao = getHelper().getSuperSetDao();
-
-            for (int i=1; i<exerciseDao.queryForAll().size() + 1; i++) {
+            for (int i = 1; i < exerciseDao.queryForAll().size() + 1; i++) {
                 Exercise ex = exerciseDao.queryForId(i);
                 ForeignCollection<Set> sets;
-                ForeignCollection<SuperSet> sSets;
+                sets = ex.getSets();
+                this.setSets(sets, this.getSetsForDb());
 
-                if (ex.isSuperSetSwitch()) {
-                    SuperSet superSet = this.getSuperSetForDb(superSetOrderNumber);
-                    sSets = ex.getSuperSets();
-                    sSets.add(superSet);
-                    superSetDao.assignEmptyForeignCollection(superSet, DbConstants.SETS);
-
-                    sets = superSet.getSets();
-                    this.setSets(sets, this.getSetsForDb());
-                } else {
-                    sets = ex.getSets();
-                    this.setSets(sets, this.getSetsForDb());
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -212,10 +197,6 @@ public class Home extends Activity {
         for (Set set : sets) {
             setCollect.add(set);
         }
-    }
-
-    SuperSet getSuperSetForDb(int orderNumber) {
-        return new SuperSet(orderNumber);
     }
 
     private void formatHomeTextViews() {

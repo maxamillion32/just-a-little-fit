@@ -1,5 +1,5 @@
 #
-# generated on 2015/06/22 07:04:30
+# generated on 2015/09/08 10:25:54
 #
 # --table-start--
 dataClass=ecap.studio.group.justalittlefit.model.Workout
@@ -67,11 +67,6 @@ columnName=order_num
 canBeNull=false
 # --field-end--
 # --field-start--
-fieldName=superSetSwitch
-columnName=superset_sw
-canBeNull=false
-# --field-end--
-# --field-start--
 fieldName=isComplete
 columnName=isComplete
 canBeNull=false
@@ -86,12 +81,6 @@ fieldName=sets
 columnName=sets
 foreignCollection=true
 foreignCollectionColumnName=sets
-# --field-end--
-# --field-start--
-fieldName=superSets
-columnName=superSets
-foreignCollection=true
-foreignCollectionColumnName=superSets
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -123,12 +112,6 @@ foreign=true
 foreignAutoRefresh=true
 # --field-end--
 # --field-start--
-fieldName=superSet
-columnName=superset_id
-foreign=true
-foreignAutoRefresh=true
-# --field-end--
-# --field-start--
 fieldName=reps
 columnName=rep_count
 canBeNull=false
@@ -151,45 +134,6 @@ canBeNull=false
 fieldName=orderNumber
 columnName=order_num
 canBeNull=false
-# --field-end--
-# --field-start--
-fieldName=isSelected
-columnName=isSelected
-canBeNull=false
-# --field-end--
-# --table-fields-end--
-# --table-end--
-#################################
-# --table-start--
-dataClass=ecap.studio.group.justalittlefit.model.SuperSet
-tableName=superset
-# --table-fields-start--
-# --field-start--
-fieldName=superSetId
-columnName=superset_id
-generatedId=true
-# --field-end--
-# --field-start--
-fieldName=orderNumber
-columnName=order_num
-canBeNull=false
-# --field-end--
-# --field-start--
-fieldName=isComplete
-columnName=isComplete
-canBeNull=false
-# --field-end--
-# --field-start--
-fieldName=sets
-columnName=sets
-foreignCollection=true
-foreignCollectionColumnName=sets
-# --field-end--
-# --field-start--
-fieldName=exercise
-columnName=exercise_id
-foreign=true
-foreignAutoRefresh=true
 # --field-end--
 # --field-start--
 fieldName=isSelected
