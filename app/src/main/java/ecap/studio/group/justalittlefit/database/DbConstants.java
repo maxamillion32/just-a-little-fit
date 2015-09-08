@@ -82,14 +82,17 @@ public class DbConstants {
     /** The column name for the isComplete field of a table */
     public static final String IS_COMPLETE_COLUMN_NAME = "isComplete";
 
-    /** The column name for the isSelected field of a table */
-    public static final String IS_SELECTED_COLUMN_NAME = "isSelected";
-
     /** The column name for the reps field of {@link ecap.studio.group.justalittlefit.model.Set} */
     public static final String REPS_COLUMN_NAME = "rep_count";
 
-    /** The column name for the reps field of {@link ecap.studio.group.justalittlefit.model.Set} */
-    public static final String SET_VALUE_COLUMN_NAME = "set_val";
+    /** The column name for the hour field of {@link ecap.studio.group.justalittlefit.model.Set} */
+    public static final String HOURS_COLUMN_NAME = "hrs";
+
+    /** The column name for the minutes field of {@link ecap.studio.group.justalittlefit.model.Set} */
+    public static final String MINUTES_COLUMN_NAME = "mins";
+
+    /** The column name for the seconds field of {@link ecap.studio.group.justalittlefit.model.Set} */
+    public static final String SECONDS_COLUMN_NAME = "secs";
 
     /** The column name for the weightTypeCode field of {@link ecap.studio.group.justalittlefit.model.Set} */
     public static final String WEIGHT_CODE_COLUMN_NAME = "wt_code";

@@ -34,10 +34,6 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
     @DatabaseField(canBeNull = false, columnName = DbConstants.IS_COMPLETE_COLUMN_NAME)
     private boolean isComplete;
 
-    /** Whether or not this Exercise is shown as selected on UI */
-    @DatabaseField(canBeNull = false, columnName = DbConstants.IS_SELECTED_COLUMN_NAME)
-    private boolean isSelected;
-
     /** The collection of {@link Set} that are associated to this Exercise in the database */
     @ForeignCollectionField(columnName = DbConstants.SETS)
     ForeignCollection<Set> sets;
@@ -91,14 +87,6 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         return sets;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
-    }
-
     public boolean isComplete() {
         return isComplete;
     }
@@ -122,7 +110,6 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         exerciseId = in.readInt();
         orderNumber = in.readInt();
         isComplete = in.readByte() != 0x00;
-        isSelected = in.readByte() != 0x00;
         sets = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
     }
 
@@ -138,7 +125,6 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         dest.writeInt(exerciseId);
         dest.writeInt(orderNumber);
         dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
-        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
         dest.writeValue(sets);
     }
 
@@ -154,4 +140,5 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
             return new Exercise[size];
         }
     };
+
 }

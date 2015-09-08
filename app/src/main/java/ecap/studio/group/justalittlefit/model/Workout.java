@@ -37,10 +37,6 @@ public class Workout implements Comparable<Workout>, Parcelable {
     @ForeignCollectionField(columnName = DbConstants.EXERCISES)
     private ForeignCollection<Exercise> exercises;
 
-    /** Whether or not this Set is shown as selected on UI */
-    @DatabaseField(canBeNull = false, columnName = DbConstants.IS_SELECTED_COLUMN_NAME)
-    private boolean isSelected;
-
     public Workout() {}
 
     public Workout(String name) {
@@ -103,55 +99,10 @@ public class Workout implements Comparable<Workout>, Parcelable {
         this.exercises = exercises;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
-    }
-
     @Override
     public int compareTo(Workout workout) {
         return this.orderNumber - workout.orderNumber;
     }
-
-/*
-    protected Workout(Parcel in) {
-        name = in.readString();
-        workoutId = in.readInt();
-        orderNumber = in.readInt();
-        workoutDate = (DateTime) in.readValue(DateTime.class.getClassLoader());
-        exercises = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeInt(workoutId);
-        dest.writeInt(orderNumber);
-        dest.writeValue(workoutDate);
-        dest.writeValue(exercises);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Workout> CREATOR = new Parcelable.Creator<Workout>() {
-        @Override
-        public Workout createFromParcel(Parcel in) {
-            return new Workout(in);
-        }
-
-        @Override
-        public Workout[] newArray(int size) {
-            return new Workout[size];
-        }
-    };
-*/
 
     @Override
     public boolean equals(Object o) {
@@ -179,7 +130,6 @@ public class Workout implements Comparable<Workout>, Parcelable {
         orderNumber = in.readInt();
         workoutDate = (DateTime) in.readValue(DateTime.class.getClassLoader());
         exercises = (ForeignCollection) in.readValue(ForeignCollection.class.getClassLoader());
-        isSelected = in.readByte() != 0x00;
     }
 
     @Override
@@ -194,7 +144,6 @@ public class Workout implements Comparable<Workout>, Parcelable {
         dest.writeInt(orderNumber);
         dest.writeValue(workoutDate);
         dest.writeValue(exercises);
-        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

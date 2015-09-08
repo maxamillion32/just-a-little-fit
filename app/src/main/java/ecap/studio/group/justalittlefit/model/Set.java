@@ -32,17 +32,23 @@ public class Set implements Comparable<Set>, Parcelable {
     @DatabaseField(canBeNull = false, columnName = DbConstants.REPS_COLUMN_NAME)
     private int reps;
 
-    /** The measured work of this Set
-     * (either timed value or rep count)
-     */
-    @DatabaseField(columnName = DbConstants.SET_VALUE_COLUMN_NAME)
-    private long value;
+    /** The measured work of this Set in hours */
+    @DatabaseField(columnName = DbConstants.HOURS_COLUMN_NAME)
+    private Integer hours;
+
+    /** The measured work of this Set in minutes */
+    @DatabaseField(columnName = DbConstants.MINUTES_COLUMN_NAME)
+    private Integer minutes;
+
+    /** The measured work of this Set in seconds */
+    @DatabaseField(columnName = DbConstants.SECONDS_COLUMN_NAME)
+    private Integer seconds;
 
     /** Either lbs, kgs, or none */
     @DatabaseField(canBeNull = false, columnName = DbConstants.WEIGHT_CODE_COLUMN_NAME)
     private String weightTypeCode;
 
-    /** Either reps, loggedTime, or timer based set */
+    /** Either reps or loggedTime based set */
     @DatabaseField(canBeNull = false, columnName = DbConstants.TYPE_CODE_COLUMN_NAME)
     private String exerciseTypeCode;
 
@@ -50,16 +56,11 @@ public class Set implements Comparable<Set>, Parcelable {
     @DatabaseField(canBeNull = false, columnName = DbConstants.ORDER_NUMBER_COLUMN_NAME)
     private int orderNumber;
 
-    /** Whether or not this Set is shown as selected on UI */
-    @DatabaseField(canBeNull = false, columnName = DbConstants.IS_SELECTED_COLUMN_NAME)
-    private boolean isSelected;
-
     public Set() {}
 
-    public Set(String name, int reps, long value, String weightTypeCode, String exerciseTypeCode, int orderNumber) {
+    public Set(String name, int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber) {
         this.name = name;
         this.reps = reps;
-        this.value = value;
         this.weightTypeCode = weightTypeCode;
         this.exerciseTypeCode = exerciseTypeCode;
         this.orderNumber = orderNumber;
@@ -87,14 +88,6 @@ public class Set implements Comparable<Set>, Parcelable {
 
     public void setReps(int reps) {
         this.reps = reps;
-    }
-
-    public long getValue() {
-        return value;
-    }
-
-    public void setValue(long value) {
-        this.value = value;
     }
 
     public String getWeightTypeCode() {
@@ -137,12 +130,28 @@ public class Set implements Comparable<Set>, Parcelable {
         this.isComplete = isComplete;
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    public Integer getHours() {
+        return hours;
     }
 
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
+    public void setHours(Integer hours) {
+        this.hours = hours;
+    }
+
+    public Integer getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(Integer minutes) {
+        this.minutes = minutes;
+    }
+
+    public Integer getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(Integer seconds) {
+        this.seconds = seconds;
     }
 
     @Override
@@ -156,11 +165,12 @@ public class Set implements Comparable<Set>, Parcelable {
         isComplete = in.readByte() != 0x00;
         exercise = (Exercise) in.readValue(Exercise.class.getClassLoader());
         reps = in.readInt();
-        value = in.readLong();
+        hours = in.readByte() == 0x00 ? null : in.readInt();
+        minutes = in.readByte() == 0x00 ? null : in.readInt();
+        seconds = in.readByte() == 0x00 ? null : in.readInt();
         weightTypeCode = in.readString();
         exerciseTypeCode = in.readString();
         orderNumber = in.readInt();
-        isSelected = in.readByte() != 0x00;
     }
 
     @Override
@@ -175,11 +185,27 @@ public class Set implements Comparable<Set>, Parcelable {
         dest.writeByte((byte) (isComplete ? 0x01 : 0x00));
         dest.writeValue(exercise);
         dest.writeInt(reps);
-        dest.writeLong(value);
+        if (hours == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(hours);
+        }
+        if (minutes == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(minutes);
+        }
+        if (seconds == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(seconds);
+        }
         dest.writeString(weightTypeCode);
         dest.writeString(exerciseTypeCode);
         dest.writeInt(orderNumber);
-        dest.writeByte((byte) (isSelected ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
