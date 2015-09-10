@@ -45,7 +45,7 @@ public class Set implements Comparable<Set>, Parcelable {
     private Integer seconds;
 
     /** Either lbs, kgs, or none */
-    @DatabaseField(canBeNull = false, columnName = DbConstants.WEIGHT_CODE_COLUMN_NAME)
+    @DatabaseField(columnName = DbConstants.WEIGHT_CODE_COLUMN_NAME)
     private String weightTypeCode;
 
     /** Either reps or loggedTime based set */
