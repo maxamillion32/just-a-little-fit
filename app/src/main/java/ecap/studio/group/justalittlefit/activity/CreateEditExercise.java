@@ -41,7 +41,6 @@ import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AddExerciseDialogListener;
 import ecap.studio.group.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
-import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
@@ -102,7 +101,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_exercise_error));
             }
-        } else if (event.getResult() instanceof Set) {
+        } else if (event.getResult() instanceof java.util.Set) {
             // Data order saved
             if (reorderTriggeredByAddExercise) {
                 // Call method to add exercise to view
