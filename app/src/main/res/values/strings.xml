@@ -59,6 +59,13 @@
     <string name="addExercise_success">Exercise successfully added</string>
     <string name="noImplementsAddExerciseDialogListener">doesn\'t implement AddExerciseDialogListener.</string>
 
+    <!-- AddSetDialog Strings -->
+    <string name="addSetDialog_Title">Create Set</string>
+    <string name="addSetDialog_add">Add Set</string>
+    <string name="addSetDialogTag">Create Set Dialog Tag</string>
+    <string name="addSet_success">Set successfully added</string>
+    <string name="noImplementsAddSetDialogListener">doesn\'t implement AddSetDialogListener.</string>
+
     <!-- RepositionWorkoutDialog Strings -->
     <string name="repositionWorkoutDialog_title">Select a position for the Workout:</string>
     <string name="repositionWorkoutDialog_reposition">Reposition</string>
@@ -120,6 +127,7 @@
     <string name="set_list_error">An error occurred in displaying your Set list. Please try again.</string>
     <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>
     <string name="add_exercise_error">An error occurred in adding your exercise to the Exercise list. Please try again.</string>
+    <string name="add_set_error">An error occurred in adding your exercise to the Set list. Please try again.</string>
     <string name="add_workout_error_already_exists">Workout not added. Please add only uniquely named workouts to the Workout list.</string>
     <string name="add_exercise_error_already_exists">Exercise not added. Please add only uniquely named exercises to the Exercise list.</string>
     <string name="reposition_workout_error">An error occurred in repositioning your workout to the Workout list. Please try again.</string>
@@ -146,8 +154,11 @@
     <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>
     <string name="emptySetViewText">Click the + button to add a Set</string>
     <string name="title_activity_create_edit_exercise">CreateEditExercise</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="weighted_reps">Weighted Reps</string>
+    <string name="timed_reps">Timed Reps</string>
+    <string name="in_kilograms">in kgs (kilograms)</string>
+    <string name="in_pounds">in lbs (pounds)</string>
+    <string name="no_weight">None (no weight)</string>
     <string name="title_activity_create_edit_set">CreateEditSet</string>
 
 </resources>

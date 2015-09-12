@@ -3,6 +3,7 @@ package ecap.studio.group.justalittlefit.util;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
@@ -97,5 +98,14 @@ public class Utils {
         Snackbar.make(view, msg, Snackbar.LENGTH_SHORT)
                 .setAction(actionText, listener)
                 .setActionTextColor(colorInt).show();
+    }
+
+    public static int returnValidNumberFromEditText(EditText editText) {
+        String text = editText.getText().toString();
+        if (Utils.ensureValidString(text) == Constants.EMPTY_STRING) {
+            return 0;
+        } else {
+            return Integer.parseInt(text.toString());
+        }
     }
 }

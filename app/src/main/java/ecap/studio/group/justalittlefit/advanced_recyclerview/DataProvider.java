@@ -211,7 +211,7 @@ public class DataProvider extends AbstractDataProvider {
 
     private String returnSetRowDisplayText(Set set) {
         switch (set.getExerciseTypeCode()) {
-            case Constants.REPS:
+            case Constants.WEIGHTS:
                 return set.getReps() + " rep(s) of " + set.getWeight() + Constants.SPACE + set.getWeightTypeCode().toLowerCase();
             case Constants.LOGGED_TIMED:
                 return set.getReps() + " rep(s) timed at " + forceTwoDigitTime(set.getHours()) + Constants.COLON

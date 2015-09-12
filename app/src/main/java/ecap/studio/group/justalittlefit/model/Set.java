@@ -58,7 +58,8 @@ public class Set implements Comparable<Set>, Parcelable {
 
     public Set() {}
 
-    public Set(int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber, Integer weight) {
+    public Set(int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber,
+               Integer weight) {
         this.reps = reps;
         this.weightTypeCode = weightTypeCode;
         this.exerciseTypeCode = exerciseTypeCode;
@@ -66,12 +67,27 @@ public class Set implements Comparable<Set>, Parcelable {
         this.weight = weight;
     }
 
-    public Set(int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber, Integer hours,
+    public Set(int reps, String exerciseTypeCode, int orderNumber, Integer hours,
                Integer minutes, Integer seconds) {
+        this.reps = reps;
+        this.exerciseTypeCode = exerciseTypeCode;
+        this.orderNumber = orderNumber;
+        this.minutes = minutes;
+        this.seconds = seconds;
+        this.hours = hours;
+    }
+
+    public Set(int reps, String weightTypeCode, String exerciseTypeCode, Integer weight) {
         this.reps = reps;
         this.weightTypeCode = weightTypeCode;
         this.exerciseTypeCode = exerciseTypeCode;
-        this.orderNumber = orderNumber;
+        this.weight = weight;
+    }
+
+    public Set(int reps, String exerciseTypeCode, Integer hours,
+               Integer minutes, Integer seconds) {
+        this.reps = reps;
+        this.exerciseTypeCode = exerciseTypeCode;
         this.minutes = minutes;
         this.seconds = seconds;
         this.hours = hours;

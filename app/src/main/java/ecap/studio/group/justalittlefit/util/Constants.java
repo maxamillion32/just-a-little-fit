@@ -19,10 +19,10 @@ public class Constants {
     /** String code for not applicable (N/A) */
     public static final String NA = "NA";
 
-    /** String code for reps */
-    public static final String REPS = "REPS";
+    /** String code for weighted reps */
+    public static final String WEIGHTS = "WEIGHTS";
 
-    /** String code for logged time */
+    /** String code for logged time reps */
     public static final String LOGGED_TIMED = "LT";
 
     public static final String TODAY = "Today";

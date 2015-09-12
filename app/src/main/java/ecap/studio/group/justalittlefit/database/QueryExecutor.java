@@ -280,4 +280,14 @@ public class QueryExecutor {
         }
     }
 
+    public static Boolean createSet(ecap.studio.group.justalittlefit.model.Set set) {
+        try {
+            Dao<ecap.studio.group.justalittlefit.model.Set, Integer> dao = DaoHelper.getInstance().getSetDao();
+            dao.create(set);
+            return true;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
 }

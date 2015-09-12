@@ -58,8 +58,8 @@ public class AddWorkoutDialog extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         if (addWorkoutText.getText().toString().trim().isEmpty()) {
-                            Utils.displayLongSimpleSnackbar(
-                                    getActivity().findViewById(R.id.fab),
+                            Utils.displayLongToast(
+                                    getActivity(),
                                     getString(R.string.addWorkout_requireName));
                         } else {
                             listener.onAddWorkoutClick(AddWorkoutDialog.this);

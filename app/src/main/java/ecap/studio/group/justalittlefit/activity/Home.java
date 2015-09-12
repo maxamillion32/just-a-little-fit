@@ -187,9 +187,9 @@ public class Home extends Activity {
 
     List<Set> getSetsForDb() {
         ArrayList<Set> sets = new ArrayList<>();
-        sets.add(new Set(10, Constants.LBS, Constants.REPS, 0, 50));
-        sets.add(new Set(8, Constants.LBS, Constants.REPS, 1, 30));
-        sets.add(new Set(6, Constants.NA, Constants.LOGGED_TIMED, 1, 0, 2, 30));
+        sets.add(new Set(10, Constants.LBS, Constants.WEIGHTS, 0, 50));
+        sets.add(new Set(8, Constants.LBS, Constants.WEIGHTS, 1, 30));
+        sets.add(new Set(6, Constants.LOGGED_TIMED, 1, 0, 2, 30));
         return sets;
     }
 
