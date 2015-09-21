@@ -6,42 +6,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/app_gray"
-        android:id="@+id/assignHeader">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/dark_app_gray" />
-
-        <TextView
-            android:id="@+id/assignHeaderText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="@string/assignHeaderText"
-            android:textColor="#ffffff"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:textStyle="bold"
-            android:textSize="16sp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/assignHeaderText"
-            android:background="@color/dark_app_gray" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/assignCalendarContainer"
-        android:layout_below="@id/assignHeader">
+        android:id="@+id/assignCalendarContainer">
 
         <com.squareup.timessquare.CalendarPickerView
             android:id="@+id/assignCalendar"

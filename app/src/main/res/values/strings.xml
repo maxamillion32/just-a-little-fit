@@ -149,7 +149,9 @@
     <string name="workout_removal_undone">Workout restored</string>
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
-    <string name="assignHeaderText">Select date(s) to assign to your Workout(s)</string>
+    <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
+    <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>
+    <string name="mulitple_dates_info">- You can select multiple dates to assign to your workout(s) by clicking multiple calendar positions.</string>
     <string name="emptyWorkoutViewText">Click the + button to add a Workout</string>
     <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>
     <string name="emptySetViewText">Click the + button to add a Set</string>

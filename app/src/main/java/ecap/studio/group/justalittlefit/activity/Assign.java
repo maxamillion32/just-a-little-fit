@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -31,6 +33,7 @@ import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.AssignWorkoutDialog;
+import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AssignWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
@@ -62,11 +65,39 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_info:
+                displayInfoDialog();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     void setupDrawerContent(NavigationView navigationView) {
         // Check menu item of currently displayed activity
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
         selectedItem.setChecked(true);
         super.setupDrawerContent(navigationView);
+    }
+
+
+    private void displayInfoDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = InformationDialog.newInstance(Constants.ASSIGN);
+        dialog.show(fm, getString(R.string.infoDialogTagExercise));
     }
 
     private void initCalendarPicker(final BaseNaviDrawerActivity activity) {
