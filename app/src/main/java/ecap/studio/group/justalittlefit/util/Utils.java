@@ -174,7 +174,6 @@ public class Utils {
     }
 
     public static void launchTodayActivity(AppCompatActivity activity) {
-        activity.getSupportFragmentManager().popBackStackImmediate(null,  activity.getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
         TodayLauncher launcher = (TodayLauncher) activity.getSupportFragmentManager()
                 .findFragmentByTag(Constants.TODAY_LAUNCHER_FRAG_TAG);
         if (launcher == null) {
@@ -182,6 +181,7 @@ public class Utils {
         } else {
             activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
         }
+        activity.getSupportFragmentManager().executePendingTransactions();
         activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.TODAY_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
     }
 }
