@@ -2,14 +2,18 @@ package ecap.studio.group.justalittlefit.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
@@ -135,6 +139,14 @@ public class Utils {
     }
 
     public static void setupDrawerContent(final AppCompatActivity activity, final DrawerLayout drawerLayout, NavigationView navigationView) {
+        TextView headerView = new TextView(activity);
+        headerView.setGravity(Gravity.CENTER);
+        headerView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 60);
+        Typeface face=Typeface.createFromAsset(activity.getAssets(), Constants.CUSTOM_FONT_TTF);
+        headerView.setText(activity.getString(R.string.title_name));
+        headerView.setTypeface(face);
+        navigationView.addHeaderView(headerView);
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
