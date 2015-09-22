@@ -3,6 +3,7 @@ package ecap.studio.group.justalittlefit.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +21,8 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
 public class ChooseWorkoutDate extends BaseNaviDrawerFablessActivity {
@@ -57,7 +60,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerFablessActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_info:
-                //todo, create info dialog
+                displayInfoDialog();
                 break;
             default:
                 break;
@@ -104,6 +107,12 @@ public class ChooseWorkoutDate extends BaseNaviDrawerFablessActivity {
 
             }
         });
+    }
+
+    private void displayInfoDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = InformationDialog.newInstance(Constants.CHOOSE);
+        dialog.show(fm, getString(R.string.infoDialogTagExercise));
     }
 
     @Override

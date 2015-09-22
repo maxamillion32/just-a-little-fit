@@ -2,6 +2,8 @@ package ecap.studio.group.justalittlefit.database;
 
 import android.os.AsyncTask;
 
+import org.joda.time.DateTime;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +13,7 @@ import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
+import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -99,6 +102,18 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
+            case Constants.TODAY_LAUNCHER:
+                for (DbFunctionObject dfo : params) {
+                    try {
+                        switch (dfo.getFunctionInt()) {
+                            case DbConstants.GET_WORKOUTS_BY_DATE:
+                                return QueryExecutor.getWorkoutsByDate(new DateTime());
+                        }
+                    } catch (SQLException e) {
+                        return null;
+                    }
+                }
+                break;
             case Constants.ASSIGN:
                 for (DbFunctionObject dfo : params) {
                     try {
@@ -138,6 +153,9 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 break;
             case Constants.ASSIGN:
                 AssignBus.getInstance().post(new DbTaskResult(result));
+                break;
+            case Constants.TODAY_LAUNCHER:
+                TodayLauncherBus.getInstance().post(new DbTaskResult(result));
                 break;
         }
     }

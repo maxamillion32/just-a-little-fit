@@ -1,6 +1,5 @@
 package ecap.studio.group.justalittlefit.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,40 +41,7 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
     }
 
     void setupDrawerContent(NavigationView navigationView) {
-        final BaseNaviDrawerActivity activity = this;
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        String activityTitle = activity.getTitle().toString().trim();
-                        String selectedTitle = menuItem.getTitle().toString().trim();
-
-                        if (selectedTitle.equals(activityTitle)) {
-                             /* do nothing, menu item will be checked and close out drawer after
-                             the completion of this if-else logic */
-                        } else if (selectedTitle.equals(activity.getString(R.string.today_string).trim())) {
-                            Utils.displayLongToast(activity, (activity.getString(R.string.today_string).trim()));
-                        } else if (selectedTitle.equals(activity.getString(R.string.create_edit_string).trim())) {
-                            Intent createEditWorkoutIntent =
-                                    new Intent(activity, CreateEditWorkout.class);
-                            createEditWorkoutIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(createEditWorkoutIntent);
-                        } else if (selectedTitle.equals(activity.getString(R.string.assign_string).trim())) {
-                            Intent assignIntent =
-                                    new Intent(activity, Assign.class);
-                            assignIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(assignIntent);
-                        } else if (selectedTitle.equals(activity.getString(R.string.view_string).trim())) {
-                            Utils.displayLongToast(activity, (activity.getString(R.string.view_string).trim()));
-                        } else {
-                            /* Shouldn't reach this but if so, doing nothing here
-                            is harmless as the drawer will close */
-                        }
-                        activity.mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
+        Utils.setupDrawerContent(this, mDrawerLayout, navigationView);
     }
 
     @Override

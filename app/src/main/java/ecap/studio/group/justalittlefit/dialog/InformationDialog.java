@@ -52,6 +52,10 @@ public class InformationDialog extends AppBaseDialog {
                         + Constants.NEWLINE + getString(R.string.select_dates_today_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.mulitple_dates_info));
                 break;
+            case Constants.CHOOSE:
+                setDialogMessage(getString(R.string.choose_date_info) + Constants.NEWLINE
+                        + Constants.NEWLINE + getString(R.string.select_dates_today_info));
+                break;
         }
         setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
             @Override

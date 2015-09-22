@@ -64,6 +64,9 @@ public class DbConstants {
     /** An int representation for for inserting an {@link ecap.studio.group.justalittlefit.model.Set} object to the db */
     public static final int INSERT_SET = 18;
 
+    /** An int representation for for obtaining a list of {@link ecap.studio.group.justalittlefit.model.Workout} objects from the db */
+    public static final int GET_WORKOUTS_BY_DATE = 19;
+
     /** The column name for the id field of {@link ecap.studio.group.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 

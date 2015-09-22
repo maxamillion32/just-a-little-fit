@@ -137,6 +137,9 @@
     <string name="deletion_set_error">An error occurred in deleting your set(s) from the Set list. Please try again.</string>
     <string name="assign_workout_error">An error occurred in assigning date/dates to your workout(s). Please try again.</string>
     <string name="data_load_error">An error occurred in loading workout data. Please try again.</string>
+    <string name="no_workouts_for_today">You have no workouts scheduled for today.</string>
+    <string name="today_workouts_error">An error occurred in searching for today\'s workout(s). Please try again.</string>
+
 
     <!-- General Messages -->
     <string name="workout_list_empty_for_create_edit">Your Workout list is empty. Click the \'+\' sign to add a Workout.</string>
@@ -149,6 +152,7 @@
     <string name="workout_removal_undone">Workout restored</string>
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
+    <string name="choose_date_info">- Select a date to view that day\'s workout(s).</string>
     <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
     <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>
     <string name="mulitple_dates_info">- You can select multiple dates to assign to your workout(s) by clicking multiple calendar positions.</string>

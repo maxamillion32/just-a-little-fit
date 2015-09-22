@@ -1,7 +1,13 @@
 package ecap.studio.group.justalittlefit.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,6 +20,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.activity.Assign;
+import ecap.studio.group.justalittlefit.activity.ChooseWorkoutDate;
+import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
+import ecap.studio.group.justalittlefit.fragment.TodayLauncher;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -107,5 +118,70 @@ public class Utils {
         } else {
             return Integer.parseInt(text.toString());
         }
+    }
+
+    public static void startViewWorkoutActivity(Context context, ArrayList<Workout> workouts,
+                                         boolean isViewOnly) {
+        //todo, change Assign.class to real activity
+        Intent intent = new Intent(context, Assign.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
+        bundle.putBoolean(Constants.VIEW_ONLY, isViewOnly);
+
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+    public static void setupDrawerContent(final AppCompatActivity activity, final DrawerLayout drawerLayout, NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        String activityTitle = activity.getTitle().toString().trim();
+                        String selectedTitle = menuItem.getTitle().toString().trim();
+
+                        if (selectedTitle.equals(activityTitle)) {
+                             /* do nothing, menu item will be checked and close out drawer after
+                             the completion of this if-else logic */
+                        } else if (selectedTitle.equals(activity.getString(R.string.today_string).trim())) {
+                            launchTodayActivity(activity);
+                        } else if (selectedTitle.equals(activity.getString(R.string.create_edit_string).trim())) {
+                            Intent createEditWorkoutIntent =
+                                    new Intent(activity, CreateEditWorkout.class);
+                            createEditWorkoutIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            activity.startActivity(createEditWorkoutIntent);
+                        } else if (selectedTitle.equals(activity.getString(R.string.assign_string).trim())) {
+                            Intent assignIntent =
+                                    new Intent(activity, Assign.class);
+                            assignIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            activity.startActivity(assignIntent);
+                        } else if (selectedTitle.equals(activity.getString(R.string.view_string).trim())) {
+                            Intent chooseWorkoutDateIntent =
+                                    new Intent(activity, ChooseWorkoutDate.class);
+                            chooseWorkoutDateIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            activity.startActivity(chooseWorkoutDateIntent);
+                        } else {
+                            /* Shouldn't reach this but if so, doing nothing here
+                            is harmless as the drawer will close */
+                        }
+                        drawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
+    public static void launchTodayActivity(AppCompatActivity activity) {
+        activity.getSupportFragmentManager().popBackStackImmediate(null,  activity.getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE);
+        TodayLauncher launcher = (TodayLauncher) activity.getSupportFragmentManager()
+                .findFragmentByTag(Constants.TODAY_LAUNCHER_FRAG_TAG);
+        if (launcher == null) {
+            launcher = TodayLauncher.getNewInstance();
+        } else {
+            activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
+        }
+        activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.TODAY_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
     }
 }

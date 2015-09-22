@@ -31,6 +31,8 @@ public class Constants {
 
     public static final String ASSIGN = "Assign";
 
+    public static final String CHOOSE = "Choose";
+
     public static final String VIEW_TEXT = "View";
 
     public static final String CREATE_EDIT_NO_SPACE = "CreateEdit";
@@ -112,5 +114,13 @@ public class Constants {
     public static final String DIALOG_TYPE = "DialogType";
 
     public static final String COLON = ":";
+
+    public static final String VIEW_ONLY = "viewOnly";
+
+    public static final String TODAY_LAUNCHER = "todayLauncher";
+
+    public static final String WORKOUTS = "workouts";
+
+    public static final String TODAY_LAUNCHER_FRAG_TAG = "todayLauncherTag";
 }
 

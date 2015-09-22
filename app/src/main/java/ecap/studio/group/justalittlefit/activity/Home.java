@@ -1,12 +1,11 @@
 package ecap.studio.group.justalittlefit.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -26,9 +25,10 @@ import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 
-public class Home extends Activity {
+public class Home extends AppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
     @InjectViews({R.id.todayHomeText, R.id.createEditHomeText,
@@ -208,9 +208,7 @@ public class Home extends Activity {
 
     @OnClick(R.id.todayHomeOption)
     void startTodayActivity() {
-        Toast.makeText(this,
-                getString(R.string.today_string), Toast.LENGTH_SHORT)
-                .show();
+        Utils.launchTodayActivity(this);
     }
 
     @OnClick(R.id.createEditHomeOption)

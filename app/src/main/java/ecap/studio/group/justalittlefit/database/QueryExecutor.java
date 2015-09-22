@@ -290,4 +290,17 @@ public class QueryExecutor {
         }
     }
 
+    public static List<Workout> getWorkoutsByDate(DateTime dateTime) throws SQLException {
+        DateTime startOfDay = dateTime.withTimeAtStartOfDay();
+        DateTime endOfDay = dateTime.withTime(23, 59, 59, 999);
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        QueryBuilder<Workout, Integer> queryBuilder = dao.queryBuilder();
+        Where where = queryBuilder.where();
+        where.between(DbConstants.WORKOUT_DATE_COLUMN_NAME, startOfDay, endOfDay);
+        queryBuilder.setWhere(where);
+        queryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
+        List<Workout> workouts = queryBuilder.query();
+        return workouts;
+    }
+
 }
