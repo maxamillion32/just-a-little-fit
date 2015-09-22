@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Just A Little Fit</string>
+    <string name="title_name">Just A\nLittle\nFit</string>
     <string name="workoutNavigation">Workout Navigation</string>
     <string name="title_activity_create_workout">CreateWorkout</string>
     <string name="action_settings">Settings</string>

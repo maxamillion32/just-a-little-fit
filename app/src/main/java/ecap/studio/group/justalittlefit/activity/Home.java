@@ -32,7 +32,7 @@ public class Home extends AppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
     @InjectViews({R.id.todayHomeText, R.id.createEditHomeText,
-            R.id.assignHomeText, R.id.viewHomeText})
+            R.id.assignHomeText, R.id.viewHomeText, R.id.homeLogoText})
     List<TextView> homeTextViews;
 
     @Override
