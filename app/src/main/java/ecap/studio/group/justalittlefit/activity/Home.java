@@ -229,8 +229,8 @@ public class Home extends Activity {
 
     @OnClick(R.id.viewHomeOption)
     void startViewWorkoutActivity() {
-        Toast.makeText(this,
-                getString(R.string.view_string), Toast.LENGTH_SHORT)
-                .show();
+        Intent intent = new Intent(this, ChooseWorkoutDate.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        this.startActivity(intent);
     }
 }

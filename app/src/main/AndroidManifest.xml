@@ -35,7 +35,12 @@
         <activity
             android:name=".activity.CreateEditSet"
             android:label="@string/title_activity_create_edit_set"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.ChooseWorkoutDate"
+            android:label="@string/view_title_string"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

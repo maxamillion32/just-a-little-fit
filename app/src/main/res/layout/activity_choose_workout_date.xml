@@ -1,16 +1,16 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/assignLayout"
+    android:id="@+id/chooseCalendarLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/assignCalendarContainer">
+        android:id="@+id/chooseCalendarContainer">
 
         <com.squareup.timessquare.CalendarPickerView
-            android:id="@+id/assignCalendar"
+            android:id="@+id/chooseCalendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />

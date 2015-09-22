@@ -9,7 +9,7 @@
     <string name="help_title_string">Help</string>
     <string name="today_title_string">Today\'s Workout(s)</string>
     <string name="assign_title_string">Assign Workout(s)</string>
-    <string name="view_title_string">View Workout(s)</string>
+    <string name="view_title_string">View Workout</string>
     <string name="create_edit_title_string">Create/Edit Workout(s)</string>
     <string name="create_edit_exercise_title_string">Create/Edit Exercise(s)</string>
     <string name="create_edit_set_title_string">Create/Edit Set(s)</string>

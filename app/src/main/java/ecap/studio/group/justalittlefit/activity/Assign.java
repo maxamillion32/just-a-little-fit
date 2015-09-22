@@ -18,7 +18,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -101,11 +100,10 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     }
 
     private void initCalendarPicker(final BaseNaviDrawerActivity activity) {
-        Calendar nextYear = Calendar.getInstance();
-        nextYear.add(Calendar.YEAR, 1);
+        DateTime now = new DateTime();
+        DateTime maxDate = now.plusYears(1);
 
-        Date today = new Date();
-        assignCalendar.init(today, nextYear.getTime()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
+        assignCalendar.init(now.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
 
         assignCalendar.setOnInvalidDateSelectedListener(new CalendarPickerView.OnInvalidDateSelectedListener() {
             @Override
