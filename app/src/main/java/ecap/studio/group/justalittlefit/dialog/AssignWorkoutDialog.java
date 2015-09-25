@@ -32,6 +32,7 @@ import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.listener.AssignWorkoutDialogListener;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 /**
  * Dialog to display when assigning a workout.
@@ -79,9 +80,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                     @Override
                     public void onClick(View view) {
                         if (selectedWorkoutNames.isEmpty()) {
-                            Snackbar.make(getActivity().findViewById(R.id.fab),
-                                    getString(R.string.enforceWorkoutsForAssignment), Snackbar.LENGTH_LONG)
-                                    .show();
+                            Utils.displayLongToast(getActivity(), getString(R.string.enforceWorkoutsForAssignment));
                         } else {
                             listener.onAssignWorkoutClick(AssignWorkoutDialog.this);
                             assignWorkoutDialog.dismiss();
