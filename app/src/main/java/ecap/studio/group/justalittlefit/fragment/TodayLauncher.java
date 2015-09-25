@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,6 +25,8 @@ import ecap.studio.group.justalittlefit.util.Utils;
 
 public class TodayLauncher extends Fragment {
 
+    private ProgressDialog progressDialog = null;
+
     public static final TodayLauncher getNewInstance() {
         TodayLauncher todayLauncher = new TodayLauncher();
         return todayLauncher;
@@ -34,6 +37,7 @@ public class TodayLauncher extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         TodayLauncherBus.getInstance().register(this);
+        progressDialog = Utils.showProgressDialog(getActivity());
         getTodaysWorkouts();
     }
 
@@ -45,6 +49,7 @@ public class TodayLauncher extends Fragment {
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
+        dismissProgressDialog();
         if (event == null || event.getResult() == null) {
             displayTodayWorkoutsError();
         } else if (event.getResult() instanceof List) {
@@ -68,6 +73,12 @@ public class TodayLauncher extends Fragment {
     public void onDestroy() {
         TodayLauncherBus.getInstance().unregister(this);
         super.onDestroy();
+    }
+
+    void dismissProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }
 

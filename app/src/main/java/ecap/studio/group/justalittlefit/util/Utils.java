@@ -1,5 +1,6 @@
 package ecap.studio.group.justalittlefit.util;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -195,5 +196,11 @@ public class Utils {
         }
         activity.getSupportFragmentManager().executePendingTransactions();
         activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.TODAY_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
+    }
+
+    public static ProgressDialog showProgressDialog(Context context) {
+        ProgressDialog progressDialog = ProgressDialog.show(context, Constants.EMPTY_STRING, Constants.LOADING);
+        progressDialog.setCancelable(true);
+        return progressDialog;
     }
 }

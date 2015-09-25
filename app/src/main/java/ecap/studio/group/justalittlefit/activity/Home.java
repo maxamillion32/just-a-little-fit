@@ -1,5 +1,6 @@
 package ecap.studio.group.justalittlefit.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import ecap.studio.group.justalittlefit.util.Utils;
 public class Home extends AppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
+    private ProgressDialog progressDialog;
     @InjectViews({R.id.todayHomeText, R.id.createEditHomeText,
             R.id.assignHomeText, R.id.viewHomeText, R.id.homeLogoText})
     List<TextView> homeTextViews;
@@ -53,6 +55,18 @@ public class Home extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.closeAndReleaseDbHelper();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        dismissProgressDialog();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dismissProgressDialog();
     }
 
     /**
@@ -213,6 +227,7 @@ public class Home extends AppCompatActivity {
 
     @OnClick(R.id.createEditHomeOption)
     void startCreateEditActivity() {
+        progressDialog = Utils.showProgressDialog(this);
         Intent intent = new Intent(this, CreateEditWorkout.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
@@ -220,6 +235,7 @@ public class Home extends AppCompatActivity {
 
     @OnClick(R.id.assignHomeOption)
     void startAssignActivity() {
+        progressDialog = Utils.showProgressDialog(this);
         Intent intent = new Intent(this, Assign.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
@@ -227,8 +243,15 @@ public class Home extends AppCompatActivity {
 
     @OnClick(R.id.viewHomeOption)
     void startViewWorkoutActivity() {
+        progressDialog = Utils.showProgressDialog(this);
         Intent intent = new Intent(this, ChooseWorkoutDate.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
+    }
+
+    void dismissProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }
