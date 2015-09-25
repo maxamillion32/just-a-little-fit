@@ -3,6 +3,7 @@ package ecap.studio.group.justalittlefit.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -53,6 +54,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private static final String FRAGMENT_LIST_VIEW = "list view";
     private HashSet<Workout> workoutsToDelete;
     FloatingActionButton fab;
+    CoordinatorLayout clFab;
     boolean busRegistered;
     boolean reorderTriggeredByAddWorkout;
     String addedWorkoutName;
@@ -89,6 +91,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

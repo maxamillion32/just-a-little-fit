@@ -2,6 +2,7 @@ package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +47,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     @InjectView(R.id.assignCalendar)
     CalendarPickerView assignCalendar;
     FloatingActionButton fab;
+    CoordinatorLayout clFab;
     private List<DateTime> dateTimes;
 
     @Override
@@ -121,6 +123,8 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

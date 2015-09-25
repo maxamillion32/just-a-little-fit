@@ -25,7 +25,7 @@ import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class ChooseWorkoutDate extends BaseNaviDrawerFablessActivity {
+public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
@@ -36,7 +36,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerFablessActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final BaseNaviDrawerFablessActivity activity = this;
+        final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,7 +76,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerFablessActivity {
         super.setupDrawerContent(navigationView);
     }
 
-    private void initCalendarPicker(final BaseNaviDrawerFablessActivity activity) {
+    private void initCalendarPicker(final BaseNaviDrawerActivity activity) {
         DateTime now = new DateTime();
         DateTime minDate = now.minusYears(5);
         DateTime maxDate = now.plusYears(5);

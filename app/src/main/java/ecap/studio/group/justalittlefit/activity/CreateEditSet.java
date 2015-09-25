@@ -2,6 +2,7 @@ package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -49,6 +50,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
     FloatingActionButton fab;
+    CoordinatorLayout clFab;
     Exercise parentExercise;
     boolean busRegistered;
     boolean reorderTriggeredByAddSet;
@@ -84,6 +86,8 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
