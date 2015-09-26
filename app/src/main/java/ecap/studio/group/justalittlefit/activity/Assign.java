@@ -170,14 +170,15 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         if (event != null) {
             eventResult = event.getResult();
         }
-
         if (eventResult != null && eventResult instanceof List) {
             List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
             Utils.displayLongActionSnackbar(fab, getString(R.string.workouts_assigned_successfully),
                     Constants.UNDO, undoAssignListener(assignedWorkouts),
                     getResources().getColor(R.color.app_blue_gray));
+            resetCalendarView();
         } else if (eventResult != null && eventResult instanceof Set) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.removed_assigned_workouts_successfully));
+            resetCalendarView();
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.assign_workout_error));
         }
@@ -191,5 +192,11 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                 new DbAsyncTask(Constants.ASSIGN).execute(removeAssignedWorkouts);
             }
         };
+    }
+
+    private void resetCalendarView() {
+        DateTime now = new DateTime();
+        DateTime maxDate = now.plusYears(1);
+        assignCalendar.init(now.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
     }
 }
