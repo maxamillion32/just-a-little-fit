@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -8,6 +9,7 @@ import org.joda.time.DateTime;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
+import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
  * Helper class that will handle database functionality on objects of type
@@ -136,13 +139,72 @@ public class QueryExecutor {
         List<String> workoutNames = (List<String>) list.get(1);
         List<Workout> workoutsToAssign = new ArrayList<>();
 
+        List<Workout> workouts = getWorkoutsByName(workoutNames);
+
         for (DateTime dateTime : dateTimes) {
-            for (String name : workoutNames) {
-                workoutsToAssign.add(new Workout(name, dateTime));
+            for (Workout workout : workouts) {
+                workout.setWorkoutDate(dateTime);
+                workoutsToAssign.add(workout);
             }
         }
 
-        return createWorkouts(workoutsToAssign);
+        List<Workout> assignedWorkouts = createWorkouts(workoutsToAssign);
+        List<Workout> completeDbWorkouts = addExercisesToWorkouts(assignedWorkouts);
+
+        HashMap<Integer, List<ecap.studio.group.justalittlefit.model.Set>> mapOfSets =
+                new HashMap<>();
+
+        int count = 0;
+
+        for (Workout assignedWorkout : assignedWorkouts) {
+            for (Exercise exercise : assignedWorkout.getExercises()) {
+                mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
+                count++;
+            }
+        }
+
+        count = 0;
+        for (Workout completeDbWorkout : completeDbWorkouts) {
+            for (Exercise exercise : completeDbWorkout.getExercises()) {
+                addSetsToExercises(exercise.getExerciseId(), mapOfSets.get(count));
+                mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
+                count++;
+            }
+        }
+
+        return assignedWorkouts;
+    }
+
+    public static Workout getWorkoutByName(String name) {
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        try {
+            QueryBuilder<Workout, Integer> queryBuilder = dao.queryBuilder();
+            Where where = queryBuilder.where();
+            where.eq(DbConstants.NAME_COLUMN_NAME, name);
+            queryBuilder.setWhere(where);
+            List<Workout> workouts = queryBuilder.query();
+            return workouts.get(0);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static List<Workout> getWorkoutsByName(final List<String> names) {
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        final List<Workout> workouts = new ArrayList<>();
+        try {
+            dao.callBatchTasks(new Callable<Void>() {
+                public Void call() throws SQLException {
+                    for (String name : names) {
+                        workouts.add(getWorkoutByName(name));
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            return null;
+        }
+        return workouts;
     }
 
     public static Integer deleteAllExercisesFromUI(List<Exercise> exercises) {
@@ -303,4 +365,46 @@ public class QueryExecutor {
         return workouts;
     }
 
+
+    public static List<Workout> addExercisesToWorkouts(List<Workout> workouts) {
+        List<Workout> workoutsWithExercises = new ArrayList<>(workouts.size());
+        Dao<Workout, Integer> workoutDao  = DaoHelper.getInstance().getWorkoutDao();
+        for (Workout workout : workouts) {
+            try {
+                Workout wo = workoutDao.queryForId(workout.getWorkoutId());
+                ForeignCollection<Exercise> exercises = wo.getExercises();
+                List<Exercise> exerciseList = new ArrayList<>(workout.getExercises());
+                for (Exercise exercise : exerciseList) {
+                    exercises.add(exercise);
+                }
+                workoutsWithExercises.add(wo);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return workoutsWithExercises;
+    }
+
+    public static void addSetsToExercises(int exerciseId,
+                                          List<ecap.studio.group.justalittlefit.model.Set> sets) {
+        Dao<Exercise, Integer> exerciseDao = DaoHelper.getInstance().getExerciseDao();
+        try {
+            Exercise ex = exerciseDao.queryForId(exerciseId);
+            ForeignCollection<ecap.studio.group.justalittlefit.model.Set> setFc = ex.getSets();
+            addSetsToFc(setFc, sets);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void addSetsToFc(ForeignCollection<ecap.studio.group.justalittlefit.model.Set> setCollect,
+                                List<ecap.studio.group.justalittlefit.model.Set> sets) {
+        for (ecap.studio.group.justalittlefit.model.Set set : sets) {
+            ecap.studio.group.justalittlefit.model.Set newSet =
+                    new ecap.studio.group.justalittlefit.model.Set(set.isComplete(), set.getReps(),
+                    set.getWeight(), set.getHours(), set.getMinutes(), set.getSeconds(), set.getWeightTypeCode(),
+                    set.getExerciseTypeCode(), set.getOrderNumber());
+            setCollect.add(newSet);
+        }
+    }
 }
