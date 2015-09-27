@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -99,7 +100,9 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         chooseCalendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
-                //todo implement going to ViewActivity.class
+                Intent intent = new Intent(activity, ViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                activity.startActivity(intent);
             }
 
             @Override
@@ -115,9 +118,23 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         dialog.show(fm, getString(R.string.infoDialogTagExercise));
     }
 
+    private void resetCalendarView() {
+        DateTime now = new DateTime();
+        DateTime minDate = now.minusYears(5);
+        DateTime maxDate = now.plusYears(5);
+        chooseCalendar.init(minDate.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
+        chooseCalendar.scrollToDate(now.toDate());
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetCalendarView();
     }
 
 }

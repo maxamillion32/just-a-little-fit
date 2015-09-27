@@ -10,7 +10,7 @@
     <string name="help_title_string">Help</string>
     <string name="today_title_string">Today\'s Workout(s)</string>
     <string name="assign_title_string">Assign Workout(s)</string>
-    <string name="view_title_string">View Workout</string>
+    <string name="view_title_string">View Workout(s)</string>
     <string name="create_edit_title_string">Create/Edit Workout(s)</string>
     <string name="create_edit_exercise_title_string">Create/Edit Exercise(s)</string>
     <string name="create_edit_set_title_string">Create/Edit Set(s)</string>
@@ -141,7 +141,6 @@
     <string name="no_workouts_for_today">You have no workouts scheduled for today.</string>
     <string name="today_workouts_error">An error occurred in searching for today\'s workout(s). Please try again.</string>
 
-
     <!-- General Messages -->
     <string name="workout_list_empty_for_create_edit">Your Workout list is empty. Click the \'+\' sign to add a Workout.</string>
     <string name="workout_list_empty_for_assign">Your Workout list is empty. Please create one to continue.</string>
@@ -153,6 +152,8 @@
     <string name="workout_removal_undone">Workout restored</string>
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
+    <string name="view_workout_info">- View your this date\'s workout(s) (but they can\'t be edited here).</string>
+    <string name="view_multiple_workout_info">- If there are multiple workouts set to this day, you can navigate to them via swiping using the circle indicators that will be displayed.</string>
     <string name="choose_date_info">- Select a date to view that day\'s workout(s).</string>
     <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
     <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>
@@ -167,5 +168,7 @@
     <string name="in_pounds">in lbs (pounds)</string>
     <string name="no_weight">None (no weight)</string>
     <string name="title_activity_create_edit_set">CreateEditSet</string>
+    <string name="title_activity_view">ViewActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
