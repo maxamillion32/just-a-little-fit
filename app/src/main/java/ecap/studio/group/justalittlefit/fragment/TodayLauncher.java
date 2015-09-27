@@ -57,7 +57,8 @@ public class TodayLauncher extends Fragment {
             if (workouts.isEmpty()) {
                 Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
             } else {
-                Utils.startViewWorkoutActivity(getActivity(), workouts, false);
+                //Todo change this to todayActivity
+                Utils.displayLongToast(getActivity(), "Today there are workout(s)");
             }
         }
     }

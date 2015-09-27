@@ -125,20 +125,6 @@ public class Utils {
         }
     }
 
-    public static void startViewWorkoutActivity(Context context, ArrayList<Workout> workouts,
-                                         boolean isViewOnly) {
-        //todo, change Assign.class to real activity
-        Intent intent = new Intent(context, Assign.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
-        bundle.putBoolean(Constants.VIEW_ONLY, isViewOnly);
-
-        intent.putExtras(bundle);
-        context.startActivity(intent);
-    }
-
     public static void setupDrawerContent(final AppCompatActivity activity, final DrawerLayout drawerLayout, NavigationView navigationView) {
         TextView headerView = new TextView(activity);
         headerView.setGravity(Gravity.CENTER);

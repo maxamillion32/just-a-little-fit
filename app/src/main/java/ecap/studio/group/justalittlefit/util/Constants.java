@@ -115,8 +115,6 @@ public class Constants {
 
     public static final String COLON = ":";
 
-    public static final String VIEW_ONLY = "viewOnly";
-
     public static final String TODAY_LAUNCHER = "todayLauncher";
 
     public static final String WORKOUTS = "workouts";
