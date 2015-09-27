@@ -176,7 +176,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                     Constants.UNDO, undoAssignListener(assignedWorkouts),
                     getResources().getColor(R.color.app_blue_gray));
             resetCalendarView();
-        } else if (eventResult != null && eventResult instanceof Set) {
+        } else if (eventResult != null && eventResult instanceof String) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.removed_assigned_workouts_successfully));
             resetCalendarView();
         } else {
