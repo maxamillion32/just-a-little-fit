@@ -2,8 +2,10 @@ package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,12 +13,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.fragment.ViewWorkoutFragment;
+import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.ViewWorkoutPagerAdapter;
+import me.relex.circleindicator.CircleIndicator;
 
 public class ViewActivity extends BaseNaviDrawerActivity {
+
+    @InjectView(R.id.vpWorkouts)
+    ViewPager vpWorkouts;
+    @InjectView(R.id.circleIndicator)
+    CircleIndicator circleIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +43,27 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         frameLayout.addView(contentView, 0);
         ButterKnife.inject(this, frameLayout);
         setTitle(R.string.view_title_string);
+        setViewPager();
+    }
+
+    void setViewPager() {
+        List<Fragment> workoutFragments = createFrags();
+        ViewWorkoutPagerAdapter viewWorkoutPagerAdapter = new ViewWorkoutPagerAdapter(getSupportFragmentManager(), createFrags());
+        vpWorkouts.setAdapter(viewWorkoutPagerAdapter);
+        circleIndicator.setViewPager(vpWorkouts);
+        if (viewWorkoutPagerAdapter.getCount() <= Constants.INT_ONE) {
+            circleIndicator.setVisibility(View.GONE);
+        }
+    }
+
+    private List<Fragment> createFrags() {
+        List<Fragment> workoutFrags = new ArrayList<>();
+        Workout workout = new Workout("Test");
+        Workout workout1 = new Workout("Test1");
+        ViewWorkoutFragment frag = ViewWorkoutFragment.getNewInstance(workout);
+        ViewWorkoutFragment frag1 = ViewWorkoutFragment.getNewInstance(workout1);
+        workoutFrags.add(frag); workoutFrags.add(frag1);
+        return workoutFrags;
     }
 
     @Override

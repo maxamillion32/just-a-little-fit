@@ -153,7 +153,9 @@
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
     <string name="view_workout_info">- View your this date\'s workout(s) (but they can\'t be edited here).</string>
-    <string name="view_multiple_workout_info">- If there are multiple workouts set to this day, you can navigate to them via swiping using the circle indicators that will be displayed.</string>
+    <string name="view_multiple_workout_info">- You can swipe left or right to see different workouts
+        (if there are multiple workouts set to this date there will be page indicators on display near the bottom
+        of the screen).</string>
     <string name="choose_date_info">- Select a date to view that day\'s workout(s).</string>
     <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
     <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>
