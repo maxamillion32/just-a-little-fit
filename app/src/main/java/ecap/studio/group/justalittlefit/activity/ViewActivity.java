@@ -1,13 +1,12 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +18,11 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.adapter.ViewWorkoutPagerAdapter;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.fragment.ViewWorkoutFragment;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.ViewWorkoutPagerAdapter;
 import me.relex.circleindicator.CircleIndicator;
 
 public class ViewActivity extends BaseNaviDrawerActivity {

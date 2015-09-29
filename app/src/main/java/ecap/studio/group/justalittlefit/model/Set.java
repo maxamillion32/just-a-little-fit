@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.j256.ormlite.field.DatabaseField;
 
 import ecap.studio.group.justalittlefit.database.DbConstants;
+import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
  * Class that represents a single set within an {@link Exercise)
@@ -103,6 +104,25 @@ public class Set implements Comparable<Set>, Parcelable {
         this.weightTypeCode = weightTypeCode;
         this.exerciseTypeCode = exerciseTypeCode;
         this.orderNumber = orderNumber;
+    }
+
+    @Override
+    public String toString() {
+        if (exerciseTypeCode == Constants.WEIGHTS) {
+            return reps + " rep(s) of " + weight + Constants.SPACE + weightTypeCode.toLowerCase();
+        } else {
+            return reps + " rep(s) timed at " + forceTwoDigitTime(hours) + Constants.COLON
+                    + forceTwoDigitTime(minutes) + Constants.COLON + forceTwoDigitTime(seconds);
+        }
+    }
+
+    private String forceTwoDigitTime(int timeVal) {
+        String timeString = String.valueOf(timeVal);
+        if (timeString.length() == 1) {
+            return "0" + timeString;
+        } else {
+            return timeString;
+        }
     }
 
     public Exercise getExercise() {

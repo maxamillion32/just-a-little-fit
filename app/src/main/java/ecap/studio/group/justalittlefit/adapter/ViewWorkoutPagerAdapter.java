@@ -1,4 +1,4 @@
-package ecap.studio.group.justalittlefit.util;
+package ecap.studio.group.justalittlefit.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

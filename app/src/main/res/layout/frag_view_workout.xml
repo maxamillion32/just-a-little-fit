@@ -5,7 +5,18 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvTest"
+        android:id="@+id/tvWorkoutName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textSize="26sp"
+        android:textColor="@color/dark_app_gray" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvWorkoutInfo"
+        android:layout_below="@id/tvWorkoutName"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

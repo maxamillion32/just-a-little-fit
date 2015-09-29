@@ -2,6 +2,9 @@ package ecap.studio.group.justalittlefit.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +18,10 @@ import ecap.studio.group.justalittlefit.util.Constants;
 
 public class ViewWorkoutFragment extends Fragment {
 
-    @InjectView(R.id.tvTest)
-    TextView tvTest;
+    @InjectView(R.id.tvWorkoutName)
+    TextView tvWorkoutName;
+    @InjectView(R.id.rvWorkoutInfo)
+    RecyclerView rvWorkoutInfo;
 
     public ViewWorkoutFragment() {}
 
@@ -33,7 +38,13 @@ public class ViewWorkoutFragment extends Fragment {
         Workout workout = (Workout)getArguments().getParcelable(Constants.WORKOUT);
         View v = inflater.inflate(R.layout.frag_view_workout, container, false);
         ButterKnife.inject(this, v);
-        tvTest.setText(workout.getName());
+        tvWorkoutName.setText(workout.getName());
+        setupRecyclerView();
         return v;
+    }
+
+    private void setupRecyclerView() {
+        rvWorkoutInfo.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvWorkoutInfo.setItemAnimator(new DefaultItemAnimator());
     }
 }
