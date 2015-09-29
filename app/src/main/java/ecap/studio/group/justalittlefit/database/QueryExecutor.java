@@ -18,7 +18,6 @@ import java.util.concurrent.Callable;
 
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
-import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
  * Helper class that will handle database functionality on objects of type
@@ -135,44 +134,48 @@ public class QueryExecutor {
     }
 
     public static List<Workout> assignDatesToWorkouts(LinkedList<Object> list) throws SQLException {
-        List<DateTime> dateTimes = (List<DateTime>) list.get(0);
-        List<String> workoutNames = (List<String>) list.get(1);
-        List<Workout> workoutsToAssign = new ArrayList<>();
+        try {
+            List<DateTime> dateTimes = (List<DateTime>) list.get(0);
+            List<String> workoutNames = (List<String>) list.get(1);
+            List<Workout> workoutsToAssign = new ArrayList<>();
 
-        List<Workout> workouts = getWorkoutsByName(workoutNames);
+            List<Workout> workouts = getWorkoutsByName(workoutNames);
 
-        for (DateTime dateTime : dateTimes) {
-            for (Workout workout : workouts) {
-                workout.setWorkoutDate(dateTime);
-                workoutsToAssign.add(workout);
+            for (DateTime dateTime : dateTimes) {
+                for (Workout workout : workouts) {
+                    workout.setWorkoutDate(dateTime);
+                    workoutsToAssign.add(workout);
+                }
             }
-        }
 
-        List<Workout> assignedWorkouts = createWorkouts(workoutsToAssign);
-        List<Workout> completeDbWorkouts = addExercisesToWorkouts(assignedWorkouts);
+            List<Workout> assignedWorkouts = createWorkouts(workoutsToAssign);
+            List<Workout> completeDbWorkouts = addExercisesToWorkouts(assignedWorkouts);
 
-        HashMap<Integer, List<ecap.studio.group.justalittlefit.model.Set>> mapOfSets =
-                new HashMap<>();
+            HashMap<Integer, List<ecap.studio.group.justalittlefit.model.Set>> mapOfSets =
+                    new HashMap<>();
 
-        int count = 0;
+            int count = 0;
 
-        for (Workout assignedWorkout : assignedWorkouts) {
-            for (Exercise exercise : assignedWorkout.getExercises()) {
-                mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
-                count++;
+            for (Workout assignedWorkout : assignedWorkouts) {
+                for (Exercise exercise : assignedWorkout.getExercises()) {
+                    mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
+                    count++;
+                }
             }
-        }
 
-        count = 0;
-        for (Workout completeDbWorkout : completeDbWorkouts) {
-            for (Exercise exercise : completeDbWorkout.getExercises()) {
-                addSetsToExercises(exercise.getExerciseId(), mapOfSets.get(count));
-                mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
-                count++;
+            count = 0;
+            for (Workout completeDbWorkout : completeDbWorkouts) {
+                for (Exercise exercise : completeDbWorkout.getExercises()) {
+                    addSetsToExercises(exercise.getExerciseId(), mapOfSets.get(count));
+                    mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
+                    count++;
+                }
             }
-        }
 
-        return assignedWorkouts;
+            return assignedWorkouts;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public static Workout getWorkoutByName(String name) {
@@ -366,7 +369,7 @@ public class QueryExecutor {
     }
 
 
-    public static List<Workout> addExercisesToWorkouts(List<Workout> workouts) {
+    public static List<Workout> addExercisesToWorkouts(List<Workout> workouts) throws SQLException {
         List<Workout> workoutsWithExercises = new ArrayList<>(workouts.size());
         Dao<Workout, Integer> workoutDao  = DaoHelper.getInstance().getWorkoutDao();
         for (Workout workout : workouts) {
@@ -379,21 +382,21 @@ public class QueryExecutor {
                 }
                 workoutsWithExercises.add(wo);
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new SQLException(e);
             }
         }
         return workoutsWithExercises;
     }
 
     public static void addSetsToExercises(int exerciseId,
-                                          List<ecap.studio.group.justalittlefit.model.Set> sets) {
+                                          List<ecap.studio.group.justalittlefit.model.Set> sets) throws SQLException {
         Dao<Exercise, Integer> exerciseDao = DaoHelper.getInstance().getExerciseDao();
         try {
             Exercise ex = exerciseDao.queryForId(exerciseId);
             ForeignCollection<ecap.studio.group.justalittlefit.model.Set> setFc = ex.getSets();
             addSetsToFc(setFc, sets);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SQLException(e);
         }
     }
 
