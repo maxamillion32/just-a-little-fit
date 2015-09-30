@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.adapter.WorkoutRvAdapter;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -22,6 +25,8 @@ public class ViewWorkoutFragment extends Fragment {
     TextView tvWorkoutName;
     @InjectView(R.id.rvWorkoutInfo)
     RecyclerView rvWorkoutInfo;
+    WorkoutRvAdapter workoutRvAdapter;
+    Workout workout;
 
     public ViewWorkoutFragment() {}
 
@@ -35,7 +40,7 @@ public class ViewWorkoutFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Workout workout = (Workout)getArguments().getParcelable(Constants.WORKOUT);
+        workout = getArguments().getParcelable(Constants.WORKOUT);
         View v = inflater.inflate(R.layout.frag_view_workout, container, false);
         ButterKnife.inject(this, v);
         tvWorkoutName.setText(workout.getName());
@@ -46,5 +51,9 @@ public class ViewWorkoutFragment extends Fragment {
     private void setupRecyclerView() {
         rvWorkoutInfo.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvWorkoutInfo.setItemAnimator(new DefaultItemAnimator());
+
+        workoutRvAdapter = new WorkoutRvAdapter(
+                new ArrayList<>(workout.getExercises()), getActivity());
+        rvWorkoutInfo.setAdapter(workoutRvAdapter);
     }
 }

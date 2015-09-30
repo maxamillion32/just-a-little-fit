@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.adapter.ViewWorkoutPagerAdapter;
+import ecap.studio.group.justalittlefit.database.QueryExecutor;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.fragment.ViewWorkoutFragment;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -56,13 +58,18 @@ public class ViewActivity extends BaseNaviDrawerActivity {
     }
 
     private List<Fragment> createFrags() {
-        List<Fragment> workoutFrags = new ArrayList<>();
-        Workout workout = new Workout("Test");
-        Workout workout1 = new Workout("Test1");
-        ViewWorkoutFragment frag = ViewWorkoutFragment.getNewInstance(workout);
-        ViewWorkoutFragment frag1 = ViewWorkoutFragment.getNewInstance(workout1);
-        workoutFrags.add(frag); workoutFrags.add(frag1);
-        return workoutFrags;
+        try {
+            List<Fragment> workoutFrags = new ArrayList<>();
+            Workout workout = QueryExecutor.getWorkoutById(1);
+            Workout workout1 = QueryExecutor.getWorkoutById(2);
+            ViewWorkoutFragment frag = ViewWorkoutFragment.getNewInstance(workout);
+            ViewWorkoutFragment frag1 = ViewWorkoutFragment.getNewInstance(workout1);
+            workoutFrags.add(frag);
+            workoutFrags.add(frag1);
+            return workoutFrags;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     @Override

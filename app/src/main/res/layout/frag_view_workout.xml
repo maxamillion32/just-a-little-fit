@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:textSize="26sp"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:textColor="@color/dark_app_gray" />
 
     <android.support.v7.widget.RecyclerView

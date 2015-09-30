@@ -108,7 +108,7 @@ public class Set implements Comparable<Set>, Parcelable {
 
     @Override
     public String toString() {
-        if (exerciseTypeCode == Constants.WEIGHTS) {
+        if (exerciseTypeCode.equals(Constants.WEIGHTS)) {
             return reps + " rep(s) of " + weight + Constants.SPACE + weightTypeCode.toLowerCase();
         } else {
             return reps + " rep(s) timed at " + forceTwoDigitTime(hours) + Constants.COLON

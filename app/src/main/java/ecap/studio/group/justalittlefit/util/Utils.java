@@ -30,6 +30,7 @@ import ecap.studio.group.justalittlefit.activity.Assign;
 import ecap.studio.group.justalittlefit.activity.ChooseWorkoutDate;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 import ecap.studio.group.justalittlefit.fragment.TodayLauncher;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**

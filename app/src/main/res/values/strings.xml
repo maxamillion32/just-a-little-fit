@@ -152,7 +152,7 @@
     <string name="workout_removal_undone">Workout restored</string>
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
-    <string name="view_workout_info">- View your this date\'s workout(s) (but they can\'t be edited here).</string>
+    <string name="view_workout_info">- View this date\'s workout(s) (the workout(s) can\'t be edited here).</string>
     <string name="view_multiple_workout_info">- You can swipe left or right to see different workouts
         (if there are multiple workouts set to this date there will be page indicators on display near the bottom
         of the screen).</string>
