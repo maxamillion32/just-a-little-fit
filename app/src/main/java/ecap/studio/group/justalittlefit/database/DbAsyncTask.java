@@ -14,6 +14,7 @@ import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
 import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
+import ecap.studio.group.justalittlefit.bus.ViewBus;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -133,6 +134,18 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
+            case Constants.VIEW_TEXT:
+                for (DbFunctionObject dfo : params) {
+                    try {
+                        switch (dfo.getFunctionInt()) {
+                            case DbConstants.GET_WORKOUTS_BY_DATE:
+                                return QueryExecutor.getWorkoutsByDate((DateTime) dfo.getDbObject());
+                        }
+                    } catch (SQLException e) {
+                        return null;
+                    }
+                }
+                break;
         }
         return null;
     }
@@ -157,6 +170,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
             case Constants.TODAY_LAUNCHER:
                 TodayLauncherBus.getInstance().post(new DbTaskResult(result));
                 break;
+            case Constants.VIEW_TEXT:
+                ViewBus.getInstance().post(new DbTaskResult(result));
         }
     }
 }

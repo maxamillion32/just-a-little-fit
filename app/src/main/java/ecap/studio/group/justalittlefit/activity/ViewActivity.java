@@ -7,10 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.squareup.otto.Subscribe;
+
+import org.joda.time.DateTime;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,19 +25,27 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.adapter.ViewWorkoutPagerAdapter;
+import ecap.studio.group.justalittlefit.bus.ViewBus;
+import ecap.studio.group.justalittlefit.database.DbAsyncTask;
+import ecap.studio.group.justalittlefit.database.DbConstants;
+import ecap.studio.group.justalittlefit.database.DbFunctionObject;
+import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.database.QueryExecutor;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.fragment.ViewWorkoutFragment;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 import me.relex.circleindicator.CircleIndicator;
 
 public class ViewActivity extends BaseNaviDrawerActivity {
 
+    private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.vpWorkouts)
     ViewPager vpWorkouts;
     @InjectView(R.id.circleIndicator)
     CircleIndicator circleIndicator;
+    boolean busRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +57,48 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         frameLayout.addView(contentView, 0);
         ButterKnife.inject(this, frameLayout);
         setTitle(R.string.view_title_string);
-        setViewPager();
+        displayWorkoutViews();
     }
 
-    void setViewPager() {
-        List<Fragment> workoutFragments = createFrags();
-        ViewWorkoutPagerAdapter viewWorkoutPagerAdapter = new ViewWorkoutPagerAdapter(getSupportFragmentManager(), createFrags());
+    private void displayWorkoutViews() {
+        DateTime dateTime;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.DATE)) {
+            dateTime = new DateTime(extras.getSerializable(Constants.DATE));
+            DbFunctionObject getDatesWorkouts = new DbFunctionObject(dateTime, DbConstants.GET_WORKOUTS_BY_DATE);
+            new DbAsyncTask(Constants.VIEW_TEXT)
+                    .execute(getDatesWorkouts);
+        } else {
+            displayError();
+        }
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(DbTaskResult event) {
+        if (event == null || event.getResult() == null) {
+            displayError();
+        } else if (event.getResult() instanceof List) {
+            if (Utils.collectionIsNullOrEmpty((List<Workout>)event.getResult())) {
+                this.finish();
+                Utils.displayLongToast(this, getString(R.string.no_workouts_to_view));
+            } else {
+                setViewPager((List<Workout>) event.getResult());
+            }
+        } else {
+            displayError();
+        }
+    }
+
+    void displayError() {
+        String errorMsg = getString(R.string.workout_view_error);
+        Log.e(LOG_TAG, errorMsg);
+        Utils.displayLongToast(this, errorMsg);
+    }
+
+
+    void setViewPager(List<Workout> workouts) {
+        List<Fragment> workoutFragments = createFrags(workouts);
+        ViewWorkoutPagerAdapter viewWorkoutPagerAdapter = new ViewWorkoutPagerAdapter(getSupportFragmentManager(), workoutFragments);
         vpWorkouts.setAdapter(viewWorkoutPagerAdapter);
         circleIndicator.setViewPager(vpWorkouts);
         if (viewWorkoutPagerAdapter.getCount() <= Constants.INT_ONE) {
@@ -57,19 +106,13 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         }
     }
 
-    private List<Fragment> createFrags() {
-        try {
-            List<Fragment> workoutFrags = new ArrayList<>();
-            Workout workout = QueryExecutor.getWorkoutById(1);
-            Workout workout1 = QueryExecutor.getWorkoutById(2);
+    private List<Fragment> createFrags(List<Workout> workouts) {
+        List<Fragment> workoutFrags = new ArrayList<>();
+        for (Workout workout : workouts) {
             ViewWorkoutFragment frag = ViewWorkoutFragment.getNewInstance(workout);
-            ViewWorkoutFragment frag1 = ViewWorkoutFragment.getNewInstance(workout1);
             workoutFrags.add(frag);
-            workoutFrags.add(frag1);
-            return workoutFrags;
-        } catch (SQLException e) {
-            return null;
         }
+        return workoutFrags;
     }
 
     @Override
@@ -105,5 +148,39 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.VIEW_TEXT);
         dialog.show(fm, getString(R.string.infoDialogTagExercise));
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            ViewBus.getInstance().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            ViewBus.getInstance().unregister(this);
+            busRegistered = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterBus();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!busRegistered) {
+            registerBus();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterBus();
     }
 }

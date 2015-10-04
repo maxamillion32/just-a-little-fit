@@ -123,6 +123,7 @@
 
     <!-- Error Messages -->
     <string name="db_error">An error occurred. Please try again.</string>
+    <string name="workout_view_error">An error occurred while you were trying to view your workout(s). Please try again.</string>
     <string name="workout_list_error">An error occurred in displaying your Workout list. Please try again.</string>
     <string name="exercise_list_error">An error occurred in displaying your Exercise list. Please try again.</string>
     <string name="set_list_error">An error occurred in displaying your Set list. Please try again.</string>
@@ -145,6 +146,7 @@
     <string name="workout_list_empty_for_create_edit">Your Workout list is empty. Click the \'+\' sign to add a Workout.</string>
     <string name="workout_list_empty_for_assign">Your Workout list is empty. Please create one to continue.</string>
     <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
+    <string name="no_workouts_to_view">You have no workouts scheduled for this date.</string>
     <string name="workout_deleted">Workout deleted</string>
     <string name="exercise_deleted">Exercise deleted</string>
     <string name="set_deleted">Set deleted</string>

@@ -100,7 +100,11 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         chooseCalendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.DATE, date);
+
                 Intent intent = new Intent(activity, ViewActivity.class);
+                intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 activity.startActivity(intent);
             }

@@ -42,7 +42,7 @@ public class TodayLauncher extends Fragment {
     }
 
     private void getTodaysWorkouts() {
-        DbFunctionObject getTodaysWorkouts = new DbFunctionObject(new DateTime(), DbConstants.GET_WORKOUTS_BY_DATE);
+        DbFunctionObject getTodaysWorkouts = new DbFunctionObject(null, DbConstants.GET_WORKOUTS_BY_DATE);
         new DbAsyncTask(Constants.TODAY_LAUNCHER)
                 .execute(getTodaysWorkouts);
     }

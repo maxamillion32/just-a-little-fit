@@ -122,5 +122,7 @@ public class Constants {
     public static final String TODAY_LAUNCHER_FRAG_TAG = "todayLauncherTag";
 
     public static final String LOADING = "Loading...";
+
+    public static final String DATE = "Date";
 }
 
