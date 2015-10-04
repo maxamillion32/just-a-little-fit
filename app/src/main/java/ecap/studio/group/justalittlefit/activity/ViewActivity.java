@@ -1,5 +1,6 @@
 package ecap.studio.group.justalittlefit.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -17,7 +18,6 @@ import com.squareup.otto.Subscribe;
 
 import org.joda.time.DateTime;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,6 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
-import ecap.studio.group.justalittlefit.database.QueryExecutor;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.fragment.ViewWorkoutFragment;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -46,6 +45,8 @@ public class ViewActivity extends BaseNaviDrawerActivity {
     @InjectView(R.id.circleIndicator)
     CircleIndicator circleIndicator;
     boolean busRegistered;
+    ProgressDialog progressDialog;
+    DateTime dateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +58,11 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         frameLayout.addView(contentView, 0);
         ButterKnife.inject(this, frameLayout);
         setTitle(R.string.view_title_string);
+        progressDialog = Utils.showProgressDialog(this);
         displayWorkoutViews();
     }
 
     private void displayWorkoutViews() {
-        DateTime dateTime;
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(Constants.DATE)) {
             dateTime = new DateTime(extras.getSerializable(Constants.DATE));
@@ -75,6 +76,7 @@ public class ViewActivity extends BaseNaviDrawerActivity {
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
+        dismissProgressDialog();
         if (event == null || event.getResult() == null) {
             displayError();
         } else if (event.getResult() instanceof List) {
@@ -82,6 +84,7 @@ public class ViewActivity extends BaseNaviDrawerActivity {
                 this.finish();
                 Utils.displayLongToast(this, getString(R.string.no_workouts_to_view));
             } else {
+                setTitle(Utils.returnStandardDateString(dateTime));
                 setViewPager((List<Workout>) event.getResult());
             }
         } else {
@@ -182,5 +185,11 @@ public class ViewActivity extends BaseNaviDrawerActivity {
     protected void onPause() {
         super.onPause();
         unregisterBus();
+    }
+
+    void dismissProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }

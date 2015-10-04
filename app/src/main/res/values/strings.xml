@@ -173,6 +173,5 @@
     <string name="no_weight">None (no weight)</string>
     <string name="title_activity_create_edit_set">CreateEditSet</string>
     <string name="title_activity_view">ViewActivity</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>

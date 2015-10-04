@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -189,5 +191,10 @@ public class Utils {
         ProgressDialog progressDialog = ProgressDialog.show(context, Constants.EMPTY_STRING, Constants.LOADING);
         progressDialog.setCancelable(true);
         return progressDialog;
+    }
+
+    public static String returnStandardDateString(DateTime dateTime) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(Constants.STANDARD_DATE_PATTERN);
+        return dateTimeFormatter.print(dateTime);
     }
 }

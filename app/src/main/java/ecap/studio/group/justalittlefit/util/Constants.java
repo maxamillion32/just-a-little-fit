@@ -124,5 +124,7 @@ public class Constants {
     public static final String LOADING = "Loading...";
 
     public static final String DATE = "Date";
+
+    public static final String STANDARD_DATE_PATTERN = "MM/dd/yyyy";
 }
 
