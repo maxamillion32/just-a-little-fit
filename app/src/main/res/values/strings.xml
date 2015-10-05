@@ -98,6 +98,10 @@
     <string name="infoDialogTag">Information Dialog Tag</string>
     <string name="infoDialogTagExercise">Information Dialog Tag Exercise</string>
     <string name="infoDialogTagSet">Information Dialog Tag Set</string>
+    <string name="infoDialogTagAssign">Information Dialog Tag Assign</string>
+    <string name="infoDialogTagChooseWorkoutDate">Information Dialog Tag Choose Workout Date</string>
+    <string name="infoDialogTagToday">Information Dialog Tag Today</string>
+    <string name="infoDialogTagView">Information Dialog Tag View Workout</string>
     <string name="deleteBySwipe">- Workouts can be deleted via a left or right swipe.</string>
     <string name="dragSort">- Workouts can be rearranged by long pressing the dark
         gray area on the far left of the row and dragging the workout either up or down.</string>
@@ -173,5 +177,6 @@
     <string name="no_weight">None (no weight)</string>
     <string name="title_activity_create_edit_set">CreateEditSet</string>
     <string name="title_activity_view">ViewActivity</string>
+    <string name="title_activity_today">TodayActivity</string>
 
 </resources>

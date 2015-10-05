@@ -98,7 +98,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.ASSIGN);
-        dialog.show(fm, getString(R.string.infoDialogTagExercise));
+        dialog.show(fm, getString(R.string.infoDialogTagAssign));
     }
 
     private void initCalendarPicker(final BaseNaviDrawerActivity activity) {

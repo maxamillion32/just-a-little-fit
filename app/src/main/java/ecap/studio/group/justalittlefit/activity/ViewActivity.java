@@ -150,7 +150,7 @@ public class ViewActivity extends BaseNaviDrawerActivity {
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.VIEW_TEXT);
-        dialog.show(fm, getString(R.string.infoDialogTagExercise));
+        dialog.show(fm, getString(R.string.infoDialogTagView));
     }
 
     private void registerBus() {

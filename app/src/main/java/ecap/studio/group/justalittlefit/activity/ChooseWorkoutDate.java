@@ -119,7 +119,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.CHOOSE);
-        dialog.show(fm, getString(R.string.infoDialogTagExercise));
+        dialog.show(fm, getString(R.string.infoDialogTagChooseWorkoutDate));
     }
 
     private void resetCalendarView() {
