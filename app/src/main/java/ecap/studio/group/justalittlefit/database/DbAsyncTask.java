@@ -13,6 +13,7 @@ import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
+import ecap.studio.group.justalittlefit.bus.TodayBus;
 import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
 import ecap.studio.group.justalittlefit.bus.ViewBus;
 import ecap.studio.group.justalittlefit.model.Exercise;
@@ -172,6 +173,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 break;
             case Constants.VIEW_TEXT:
                 ViewBus.getInstance().post(new DbTaskResult(result));
+            case Constants.TODAY:
+                TodayBus.getInstance().post(new DbTaskResult(result));
         }
     }
 }
