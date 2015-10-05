@@ -2,6 +2,7 @@ package ecap.studio.group.justalittlefit.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.activity.TodayActivity;
 import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
 import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
@@ -57,8 +59,9 @@ public class TodayLauncher extends Fragment {
             if (workouts.isEmpty()) {
                 Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
             } else {
-                //Todo change this to todayActivity
-                Utils.displayLongToast(getActivity(), "Today there are workout(s)");
+                Intent intent = new Intent(getActivity(), TodayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                getActivity().startActivity(intent);
             }
         }
     }

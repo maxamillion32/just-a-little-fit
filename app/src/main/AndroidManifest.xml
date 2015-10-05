@@ -47,6 +47,11 @@
             android:label="@string/title_activity_view"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".activity.TodayActivity"
+            android:label="@string/title_activity_today"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
