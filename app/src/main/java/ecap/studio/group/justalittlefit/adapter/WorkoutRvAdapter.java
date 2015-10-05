@@ -16,8 +16,6 @@ import java.util.List;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
-import ecap.studio.group.justalittlefit.model.Workout;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 public class WorkoutRvAdapter extends RecyclerView.Adapter<WorkoutRvAdapter.ViewHolder> {
 

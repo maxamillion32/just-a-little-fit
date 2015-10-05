@@ -22,7 +22,6 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

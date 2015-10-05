@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +31,6 @@ import ecap.studio.group.justalittlefit.activity.Assign;
 import ecap.studio.group.justalittlefit.activity.ChooseWorkoutDate;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 import ecap.studio.group.justalittlefit.fragment.TodayLauncher;
-import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
