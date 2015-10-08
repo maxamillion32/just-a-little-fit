@@ -3,6 +3,6 @@
         <color android:color="@color/rv_blue_gray"/>
     </item>
     <item>
-        <color android:color="@color/fallback_blue_gray"/>
+        <color android:color="@color/neutral_white"/>
     </item>
 </selector>

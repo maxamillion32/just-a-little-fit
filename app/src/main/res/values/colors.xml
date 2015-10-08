@@ -29,13 +29,8 @@
 
     <!--RecyclerView Related Colors-->
     <color name="rv_blue_gray">#93B8C3</color>
-    <color name="expanded_rv_blue_gray">#85A3AB</color>
-    <color name="expanded2_rv_blue_gray">#8CAAB2</color>
-    <color name="expand_swipe_rv_blue_gray">#A5D3EE</color>
-    <color name="expand_swipe_active_rv_blue_gray">#B2D6EC</color>
-    <color name="expand_drag_active">#CAD4DB</color>
-    <color name="expand_drag">#E3E5E5</color>
-
+    <color name="rv_light_gray">#F4F4F4</color>
+    <color name="rv_gray">#6B6B6B</color>
 
     <!--Common Neutral Colors-->
     <color name="neutral_white">#ffffff</color>

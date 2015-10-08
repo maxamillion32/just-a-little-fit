@@ -1,5 +1,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <color android:color="@color/expand_swipe_active_rv_blue_gray"/>
+        <color android:color="@color/rv_light_gray"/>
     </item>
 </layer-list>
