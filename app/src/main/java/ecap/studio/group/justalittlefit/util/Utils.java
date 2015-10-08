@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -194,5 +195,16 @@ public class Utils {
     public static String returnStandardDateString(DateTime dateTime) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(Constants.STANDARD_DATE_PATTERN);
         return dateTimeFormatter.print(dateTime);
+    }
+
+    public static boolean hitTest(View v, int x, int y) {
+        final int tx = (int) (ViewCompat.getTranslationX(v) + 0.5f);
+        final int ty = (int) (ViewCompat.getTranslationY(v) + 0.5f);
+        final int left = v.getLeft() + tx;
+        final int right = v.getRight() + tx;
+        final int top = v.getTop() + ty;
+        final int bottom = v.getBottom() + ty;
+
+        return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
     }
 }

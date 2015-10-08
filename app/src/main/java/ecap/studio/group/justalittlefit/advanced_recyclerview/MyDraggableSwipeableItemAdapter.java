@@ -19,6 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeabl
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class MyDraggableSwipeableItemAdapter
         extends RecyclerView.Adapter<MyDraggableSwipeableItemAdapter.MyViewHolder>
@@ -131,7 +132,6 @@ public class MyDraggableSwipeableItemAdapter
 
             if ((dragState & RecyclerViewDragDropManager.STATE_FLAG_IS_ACTIVE) != 0) {
                 bgResId = R.drawable.drag_bg_active;
-
                 // need to clear drawable state here to get correct appearance of the dragging item.
                 clearState(holder.mContainer.getForeground());
             } else if ((dragState & RecyclerViewDragDropManager.STATE_FLAG_DRAGGING) != 0) {
@@ -179,7 +179,7 @@ public class MyDraggableSwipeableItemAdapter
         final int offsetX = containerView.getLeft() + (int) (ViewCompat.getTranslationX(containerView) + 0.5f);
         final int offsetY = containerView.getTop() + (int) (ViewCompat.getTranslationY(containerView) + 0.5f);
 
-        return hitTest(dragHandleView, x - offsetX, y - offsetY);
+        return Utils.hitTest(dragHandleView, x - offsetX, y - offsetY);
     }
 
     @Override
@@ -264,17 +264,6 @@ public class MyDraggableSwipeableItemAdapter
 
     public void setEventListener(EventListener eventListener) {
         mEventListener = eventListener;
-    }
-
-    public static boolean hitTest(View v, int x, int y) {
-        final int tx = (int) (ViewCompat.getTranslationX(v) + 0.5f);
-        final int ty = (int) (ViewCompat.getTranslationY(v) + 0.5f);
-        final int left = v.getLeft() + tx;
-        final int right = v.getRight() + tx;
-        final int top = v.getTop() + ty;
-        final int bottom = v.getBottom() + ty;
-
-        return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
     }
 
     public static void clearState(Drawable drawable) {
