@@ -1,4 +1,4 @@
-package ecap.studio.group.justalittlefit.advanced_recyclerview;
+package ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view;
 
 import android.app.Activity;
 import android.graphics.drawable.NinePatchDrawable;
@@ -27,6 +27,8 @@ import ecap.studio.group.justalittlefit.activity.BaseNaviDrawerActivity;
 import ecap.studio.group.justalittlefit.activity.CreateEditExercise;
 import ecap.studio.group.justalittlefit.activity.CreateEditSet;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
+import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view.MyDraggableSwipeableItemAdapter;
 
 public class RecyclerListViewFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
