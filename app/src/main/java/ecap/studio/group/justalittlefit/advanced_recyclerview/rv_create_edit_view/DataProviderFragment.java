@@ -1,4 +1,4 @@
-package ecap.studio.group.justalittlefit.advanced_recyclerview;
+package ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

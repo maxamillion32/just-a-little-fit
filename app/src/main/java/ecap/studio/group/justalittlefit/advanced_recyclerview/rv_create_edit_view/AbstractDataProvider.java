@@ -1,4 +1,4 @@
-package ecap.studio.group.justalittlefit.advanced_recyclerview;
+package ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view;
 
 public abstract class AbstractDataProvider {
 
