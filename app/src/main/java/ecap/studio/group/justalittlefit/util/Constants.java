@@ -126,5 +126,9 @@ public class Constants {
     public static final String DATE = "Date";
 
     public static final String STANDARD_DATE_PATTERN = "MM/dd/yyyy";
+
+    public static final String EXPAND_ICON = "[ + ]";
+
+    public static final String COLLAPSE_ICON = "[ - ]";
 }
 
