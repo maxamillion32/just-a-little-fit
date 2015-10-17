@@ -1,10 +1,11 @@
-package ecap.studio.group.justalittlefit.advanced_recyclerview;
+package ecap.studio.group.justalittlefit.advanced_recyclerview.rv_today;
 
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
@@ -19,6 +20,8 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractExpandableItemAda
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.util.Utils;
 
 public class MyExpandableDraggableSwipeableItemAdapter
@@ -34,9 +37,9 @@ public class MyExpandableDraggableSwipeableItemAdapter
     private View.OnClickListener mSwipeableViewContainerOnClickListener;
 
     public interface EventListener {
-        void onGroupItemRemoved(int groupPosition);
+        void onGroupItemRemoved(int groupPosition, Exercise exercise);
 
-        void onChildItemRemoved(int groupPosition, int childPosition);
+        void onChildItemRemoved(int groupPosition, int childPosition, Set set);
 
         void onGroupItemPinned(int groupPosition);
 
@@ -49,6 +52,8 @@ public class MyExpandableDraggableSwipeableItemAdapter
         public ViewGroup mContainer;
         public View mDragHandle;
         public TextView mTextView;
+        public TextView mTvExpand;
+        public CheckBox itemCb;
         private int mExpandStateFlags;
 
         public MyBaseViewHolder(View v) {
@@ -56,6 +61,8 @@ public class MyExpandableDraggableSwipeableItemAdapter
             mContainer = (ViewGroup) v.findViewById(R.id.container);
             mDragHandle = v.findViewById(R.id.drag_handle);
             mTextView = (TextView) v.findViewById(android.R.id.text1);
+            mTvExpand = (TextView) v.findViewById(R.id.tvExpand);
+            itemCb = (CheckBox) v.findViewById(R.id.itemCb);
         }
 
         @Override
@@ -194,7 +201,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
             if ((dragState & RecyclerViewDragDropManager.STATE_FLAG_IS_ACTIVE) != 0) {
                 bgResId = R.drawable.group_drag_active;
             } else if ((dragState & RecyclerViewDragDropManager.STATE_FLAG_DRAGGING) != 0) {
-                bgResId = R.drawable.group_drag_active;
+                bgResId = R.drawable.group_drag;
             } else if ((swipeState & RecyclerViewSwipeManager.STATE_FLAG_IS_ACTIVE) != 0) {
                 bgResId = R.drawable.group_swipe_active;
             } else if ((swipeState & RecyclerViewSwipeManager.STATE_FLAG_SWIPING) != 0) {
@@ -245,15 +252,15 @@ public class MyExpandableDraggableSwipeableItemAdapter
             int bgResId;
 
             if ((dragState & RecyclerViewDragDropManager.STATE_FLAG_IS_ACTIVE) != 0) {
-                bgResId = R.drawable.drag_bg_active;
+                bgResId = R.drawable.drag_group_item_bg_active;
             } else if ((dragState & RecyclerViewDragDropManager.STATE_FLAG_DRAGGING) != 0) {
-                bgResId = R.drawable.drag_bg;
+                bgResId = R.drawable.drag_group_item_bg;
             } else if ((swipeState & RecyclerViewSwipeManager.STATE_FLAG_IS_ACTIVE) != 0) {
                 bgResId = R.drawable.swiping_bg_active;
             } else if ((swipeState & RecyclerViewSwipeManager.STATE_FLAG_SWIPING) != 0) {
                 bgResId = R.drawable.swiping_bg;
             } else {
-                bgResId = R.drawable.swipe_neutral;
+                bgResId = R.drawable.swipe_group_item_neutral;
             }
 
             holder.mContainer.setBackgroundResource(bgResId);
@@ -373,13 +380,13 @@ public class MyExpandableDraggableSwipeableItemAdapter
         int bgResId = 0;
         switch (type) {
             case RecyclerViewSwipeManager.DRAWABLE_SWIPE_NEUTRAL_BACKGROUND:
-                bgResId = R.drawable.swipe_neutral;
+                bgResId = R.drawable.swipe_group_item_neutral;
                 break;
             case RecyclerViewSwipeManager.DRAWABLE_SWIPE_LEFT_BACKGROUND:
-                bgResId = R.drawable.swipe_bg_left;
+                bgResId = R.drawable.swipe_group_item_bg_left;
                 break;
             case RecyclerViewSwipeManager.DRAWABLE_SWIPE_RIGHT_BACKGROUND:
-                bgResId = R.drawable.swipe_bg_right;
+                bgResId = R.drawable.swipe_group_item_bg_right;
                 break;
         }
 
@@ -447,7 +454,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
             notifyItemRemoved(flatPosition);
 
             if (mEventListener != null) {
-                mEventListener.onGroupItemRemoved(groupPosition);
+                mEventListener.onGroupItemRemoved(groupPosition, item.getExercise());
             }
         } else if (reaction == RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_MOVE_TO_SWIPED_DIRECTION) {
             item.setPinnedToSwipeLeft(true);
@@ -475,7 +482,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
             notifyItemRemoved(flatPosition);
 
             if (mEventListener != null) {
-                mEventListener.onChildItemRemoved(groupPosition, childPosition);
+                mEventListener.onChildItemRemoved(groupPosition, childPosition, item.getSet());
             }
         } else if (reaction == RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_MOVE_TO_SWIPED_DIRECTION) {
             item.setPinnedToSwipeLeft(true);

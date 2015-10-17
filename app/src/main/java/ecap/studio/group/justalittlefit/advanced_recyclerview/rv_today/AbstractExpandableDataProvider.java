@@ -1,4 +1,7 @@
-package ecap.studio.group.justalittlefit.advanced_recyclerview;
+package ecap.studio.group.justalittlefit.advanced_recyclerview.rv_today;
+
+import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Set;
 
 public abstract class AbstractExpandableDataProvider {
     public static abstract class BaseData {
@@ -15,10 +18,12 @@ public abstract class AbstractExpandableDataProvider {
     public static abstract class GroupData extends BaseData {
         public abstract boolean isSectionHeader();
         public abstract long getGroupId();
+        public abstract Exercise getExercise();
     }
 
     public static abstract class ChildData extends BaseData {
         public abstract long getChildId();
+        public abstract Set getSet();
     }
 
     public abstract int getGroupCount();

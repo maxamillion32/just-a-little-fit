@@ -14,6 +14,8 @@ import butterknife.ButterKnife;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.bus.TodayBus;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
@@ -76,6 +78,14 @@ public class TodayActivity extends BaseNaviDrawerActivity {
         if (extras != null && extras.containsKey(Constants.WORKOUT)) {
             todayWorkout = extras.getParcelable(Constants.WORKOUT);
         }
+    }
+
+    public void onGroupItemRemoved(Exercise exercise) {
+
+    }
+
+    public void onChildItemRemoved(Set set) {
+
     }
 
     private void registerBus() {
