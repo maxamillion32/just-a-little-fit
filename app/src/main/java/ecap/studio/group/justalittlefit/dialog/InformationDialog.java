@@ -64,6 +64,9 @@ public class InformationDialog extends AppBaseDialog {
                 setDialogMessage(getString(R.string.view_today_workout_info) + Constants.NEWLINE
                         + Constants.NEWLINE + getString(R.string.view_multiple_workout_info));
                 break;
+            case Constants.CHOOSER:
+                setDialogMessage(getString(R.string.choose_today_workout));
+                break;
         }
         setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
             @Override

@@ -33,6 +33,8 @@ public class Constants {
 
     public static final String CHOOSE = "Choose";
 
+    public static final String CHOOSER = "Chooser";
+
     public static final String VIEW_TEXT = "View";
 
     public static final String CREATE_EDIT_NO_SPACE = "CreateEdit";
