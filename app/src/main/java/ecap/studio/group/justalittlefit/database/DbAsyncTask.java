@@ -147,6 +147,15 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
+            case Constants.TODAY:
+                for (DbFunctionObject dfo : params) {
+                    switch (dfo.getFunctionInt()) {
+                        case DbConstants.GET_FULL_WORKOUT:
+                            return QueryExecutor.getWorkoutByNameAndDate(((Workout) dfo.getDbObject()).getName(),
+                                    ((Workout) dfo.getDbObject()).getWorkoutDate());
+                    }
+                }
+                break;
         }
         return null;
     }

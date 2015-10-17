@@ -165,6 +165,9 @@
     <string name="view_multiple_workout_info">- You can swipe left or right to see different workouts
         (if there are multiple workouts set to this date there will be page indicators on display near the bottom
         of the screen).</string>
+    <string name="today_delete_info">- Exercises and Sets can be deleted via a left or right swipe.</string>
+    <string name="today_drag_info">- Exercises and Sets can be rearranged by long pressing the dark
+        gray area on the far left of the row and dragging the row either up or down.</string>
     <string name="choose_date_info">- Select a date to view that day\'s workout(s).</string>
     <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
     <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>

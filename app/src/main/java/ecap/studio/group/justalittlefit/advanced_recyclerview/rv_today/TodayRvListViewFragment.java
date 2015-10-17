@@ -235,9 +235,10 @@ public class TodayRvListViewFragment extends Fragment {
     }
 
     public AbstractExpandableDataProvider getDataProvider() {
-        //todo change this to actual code and not null
+        if (todayActivity != null) {
+            return todayActivity.getDataProvider();
+        }
         return null;
-        //return ((CreateEditWorkout) getActivity()).getDataProvider();
     }
 
     public void notifyGroupItemRestored(int groupPosition) {
@@ -277,9 +278,13 @@ public class TodayRvListViewFragment extends Fragment {
     }
 
     private void populateActivity() {
-        if (mActivity instanceof ViewActivity) {
+        if (mActivity instanceof TodayActivity) {
             todayActivity = (TodayActivity) mActivity;
         }
+    }
+
+    public ProgressBar getProgressDialog() {
+        return progressDialog;
     }
 }
 

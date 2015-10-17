@@ -192,6 +192,24 @@ public class QueryExecutor {
         }
     }
 
+    public static Workout getWorkoutByNameAndDate(String name, DateTime date) {
+        DateTime startOfDay = date.withTimeAtStartOfDay();
+        DateTime endOfDay = date.withTime(23, 59, 59, 999);
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        try {
+            QueryBuilder<Workout, Integer> queryBuilder = dao.queryBuilder();
+            Where where = queryBuilder.where();
+            where.eq(DbConstants.NAME_COLUMN_NAME, name);
+            where.and();
+            where.between(DbConstants.WORKOUT_DATE_COLUMN_NAME, startOfDay, endOfDay);
+            queryBuilder.setWhere(where);
+            List<Workout> workouts = queryBuilder.query();
+            return workouts.get(0);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public static List<Workout> getWorkoutsByName(final List<String> names) {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         final List<Workout> workouts = new ArrayList<>();
