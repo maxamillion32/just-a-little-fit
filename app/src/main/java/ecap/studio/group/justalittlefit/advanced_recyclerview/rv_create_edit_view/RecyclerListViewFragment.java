@@ -182,6 +182,7 @@ public class RecyclerListViewFragment extends Fragment {
         mActivity = null;
         createEditWorkoutActivity = null;
         createEditExerciseActivity = null;
+        createEditSetActivity = null;
 
         super.onDestroyView();
     }
