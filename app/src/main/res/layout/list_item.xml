@@ -23,8 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_toRightOf="@+id/drag_handle">
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/itemCb"

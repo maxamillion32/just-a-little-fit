@@ -168,6 +168,9 @@
     <string name="today_delete_info">- Exercises and Sets can be deleted via a left or right swipe.</string>
     <string name="today_drag_info">- Exercises and Sets can be rearranged by long pressing the dark
         gray area on the far left of the row and dragging the row either up or down.</string>
+    <string name="today_expand_info">- Click on the white space of the row to trigger its expansion/collapse. [ + ] denotes an exercise row can be expanded to show its sets. [ - ] denotes it can be
+        collapsed to hide its sets. </string>
+    <string name="today_check_info">- Checking the checkbox denotes that you have completed that workout set.</string>
     <string name="choose_date_info">- Select a date to view that day\'s workout(s).</string>
     <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
     <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>

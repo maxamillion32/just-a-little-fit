@@ -62,7 +62,9 @@ public class InformationDialog extends AppBaseDialog {
                 break;
             case Constants.TODAY:
                 setDialogMessage(getString(R.string.view_today_workout_info) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.today_delete_info)
+                        + Constants.NEWLINE + getString(R.string.today_expand_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_check_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_delete_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_drag_info));
                 break;
             case Constants.CHOOSER:
