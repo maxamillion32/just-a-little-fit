@@ -1,11 +1,10 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,12 +23,10 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
-import ecap.studio.group.justalittlefit.adapter.WorkoutRvAdapter;
 import ecap.studio.group.justalittlefit.adapter.WorkoutRvNameAdapter;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 public class TodayChooserActivity extends BaseNaviDrawerActivity {
 

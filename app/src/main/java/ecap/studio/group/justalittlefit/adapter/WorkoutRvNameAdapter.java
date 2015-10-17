@@ -16,7 +16,6 @@ import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.TodayActivity;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 public class WorkoutRvNameAdapter extends RecyclerView.Adapter<WorkoutRvNameAdapter.ViewHolder> {
 

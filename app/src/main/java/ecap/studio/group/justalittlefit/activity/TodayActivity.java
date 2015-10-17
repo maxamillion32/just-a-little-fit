@@ -1,7 +1,6 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,19 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.ButterKnife;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.bus.TodayBus;
-import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 public class TodayActivity extends BaseNaviDrawerActivity {
 
