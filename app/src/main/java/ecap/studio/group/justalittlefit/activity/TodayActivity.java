@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,16 +13,22 @@ import android.view.View;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.bus.TodayBus;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class TodayActivity extends BaseNaviDrawerActivity {
 
     boolean busRegistered;
+    Workout todayWorkout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,7 @@ public class TodayActivity extends BaseNaviDrawerActivity {
         frameLayout.addView(contentView, 0);
         ButterKnife.inject(this, frameLayout);
         setTitle(R.string.today_title_string);
+        getWorkout();
     }
 
 
@@ -64,16 +72,20 @@ public class TodayActivity extends BaseNaviDrawerActivity {
         super.setupDrawerContent(navigationView);
     }
 
-    @Subscribe
-    public void onAsyncTaskResult(DbTaskResult event) {
-
-    }
-
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.TODAY);
         dialog.show(fm, getString(R.string.infoDialogTagToday));
     }
+
+
+    private void getWorkout() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.WORKOUT)) {
+            todayWorkout = extras.getParcelable(Constants.WORKOUT);
+        }
+    }
+
     private void registerBus() {
         if (!busRegistered) {
             TodayBus.getInstance().register(this);

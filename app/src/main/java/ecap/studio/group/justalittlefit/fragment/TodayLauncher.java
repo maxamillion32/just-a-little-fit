@@ -14,6 +14,7 @@ import java.util.List;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.TodayActivity;
+import ecap.studio.group.justalittlefit.activity.TodayChooserActivity;
 import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
 import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
@@ -56,9 +57,21 @@ public class TodayLauncher extends Fragment {
             ArrayList<Workout> workouts = new ArrayList<>((List<Workout>) event.getResult());
             if (workouts.isEmpty()) {
                 Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
-            } else {
+            } else if (workouts.size() == Constants.INT_ONE) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
+
                 Intent intent = new Intent(getActivity(), TodayActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtras(bundle);
+                getActivity().startActivity(intent);
+            } else if (workouts.size() > Constants.INT_ONE) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
+
+                Intent intent = new Intent(getActivity(), TodayChooserActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtras(bundle);
                 getActivity().startActivity(intent);
             }
         }
