@@ -19,9 +19,12 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeabl
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractExpandableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 
+import java.util.zip.CheckedOutputStream;
+
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
+import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
 public class MyExpandableDraggableSwipeableItemAdapter
@@ -35,6 +38,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
     private EventListener mEventListener;
     private View.OnClickListener mItemViewOnClickListener;
     private View.OnClickListener mSwipeableViewContainerOnClickListener;
+    boolean isInExpandedState;
 
     public interface EventListener {
         void onGroupItemRemoved(int groupPosition, Exercise exercise);
@@ -82,12 +86,8 @@ public class MyExpandableDraggableSwipeableItemAdapter
     }
 
     public static class MyGroupViewHolder extends MyBaseViewHolder {
-        //todo change this to textview for [+] and [-]
-        //public MorphButtonCompat mMorphButton;
-
         public MyGroupViewHolder(View v) {
             super(v);
-            //mMorphButton = new MorphButtonCompat(v.findViewById(R.id.indicator));
         }
     }
 
@@ -101,6 +101,8 @@ public class MyExpandableDraggableSwipeableItemAdapter
             RecyclerViewExpandableItemManager expandableItemManager,
             AbstractExpandableDataProvider dataProvider) {
         mExpandableItemManager = expandableItemManager;
+        mExpandableItemManager.setOnGroupExpandListener(new MyExpandListener(this));
+        mExpandableItemManager.setOnGroupCollapseListener(new MyCollapseListener(this));
         mProvider = dataProvider;
         mItemViewOnClickListener = new View.OnClickListener() {
             @Override
@@ -186,6 +188,11 @@ public class MyExpandableDraggableSwipeableItemAdapter
 
         // set text
         holder.mTextView.setText(item.getText());
+        if (isInExpandedState) {
+            holder.mTvExpand.setText(Constants.COLLAPSE_ICON);
+        } else {
+            holder.mTvExpand.setText(Constants.EXPAND_ICON);
+        }
 
         // set background resource (target view ID: container)
         final int dragState = holder.getDragStateFlags();

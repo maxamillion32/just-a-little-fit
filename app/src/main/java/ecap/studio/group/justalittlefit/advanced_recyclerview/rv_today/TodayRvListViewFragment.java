@@ -27,9 +27,9 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.BaseNaviDrawerActivity;
 import ecap.studio.group.justalittlefit.activity.TodayActivity;
-import ecap.studio.group.justalittlefit.activity.ViewActivity;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class TodayRvListViewFragment extends Fragment {
     private static final String SAVED_STATE_EXPANDABLE_ITEM_MANAGER = "RecyclerViewExpandableItemManager";
