@@ -153,6 +153,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         case DbConstants.GET_FULL_WORKOUT:
                             return QueryExecutor.getWorkoutByNameAndDate(((Workout) dfo.getDbObject()).getName(),
                                     ((Workout) dfo.getDbObject()).getWorkoutDate());
+                        case DbConstants.DELETE_EXERCISES_AND_SETS:
+                            return QueryExecutor.deleteExercisesAndSets((java.util.HashMap<String, Object>) dfo.getDbObject());
                     }
                 }
                 break;

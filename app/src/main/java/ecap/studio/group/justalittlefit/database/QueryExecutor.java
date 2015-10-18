@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
+import ecap.studio.group.justalittlefit.util.Constants;
 
 /**
  * Helper class that will handle database functionality on objects of type
@@ -371,6 +372,22 @@ public class QueryExecutor {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public static String deleteExercisesAndSets(HashMap<String, Object> map) {
+        try {
+            Dao<Exercise, Integer> exerciseDao = DaoHelper.getInstance().getExerciseDao();
+            HashSet<Exercise> exercisesToDelete = (HashSet<Exercise>) map.get(Constants.EXERCISES);
+            exerciseDao.delete(exercisesToDelete);
+
+            Dao<ecap.studio.group.justalittlefit.model.Set, Integer> setDao = DaoHelper.getInstance().getSetDao();
+            HashSet<ecap.studio.group.justalittlefit.model.Set> setsToDelete =
+                    (HashSet<ecap.studio.group.justalittlefit.model.Set>) map.get(Constants.SETS_NORM_CASE);
+            setDao.delete(setsToDelete);
+        } catch (SQLException e) {
+            return null;
+        }
+        return Boolean.TRUE.toString();
     }
 
     public static List<Workout> getWorkoutsByDate(DateTime dateTime) throws SQLException {

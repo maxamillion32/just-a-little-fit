@@ -416,7 +416,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
                 }
                 // swipe left -- pin
             case RecyclerViewSwipeManager.RESULT_SWIPED_LEFT:
-                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_MOVE_TO_SWIPED_DIRECTION;
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM;
             // other --- do nothing
             case RecyclerViewSwipeManager.RESULT_CANCELED:
             default:
@@ -440,7 +440,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
                 }
                 // swipe left -- pin
             case RecyclerViewSwipeManager.RESULT_SWIPED_LEFT:
-                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_MOVE_TO_SWIPED_DIRECTION;
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM;
             // other --- do nothing
             case RecyclerViewSwipeManager.RESULT_CANCELED:
             default:

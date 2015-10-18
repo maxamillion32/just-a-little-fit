@@ -193,6 +193,14 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
         return RecyclerViewExpandableItemManager.getPackedPositionForChild(groupPosition, insertedPosition);
     }
 
+    public List<Object> getDataObjects() {
+        List<Object> dataObjs = new ArrayList<>();
+        for (Pair<GroupData, List<ChildData>> data : mData) {
+
+        }
+        return dataObjs;
+    }
+
     public static final class ConcreteGroupData extends GroupData {
 
         private final long mId;
