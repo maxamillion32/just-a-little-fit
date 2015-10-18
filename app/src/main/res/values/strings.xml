@@ -177,6 +177,7 @@
     <string name="mulitple_dates_info">- You can select multiple dates to assign to your workout(s) by clicking multiple calendar positions.</string>
     <string name="emptyWorkoutViewText">Click the + button to add a Workout</string>
     <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>
+    <string name="emptyExerciseSetViewText">Click the + button to add an Exercise and Set(s)</string>
     <string name="emptySetViewText">Click the + button to add a Set</string>
     <string name="title_activity_create_edit_exercise">CreateEditExercise</string>
     <string name="weighted_reps">Weighted Reps</string>

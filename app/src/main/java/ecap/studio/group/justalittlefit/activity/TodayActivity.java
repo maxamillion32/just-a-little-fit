@@ -13,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProviderFragment;
@@ -49,6 +51,8 @@ public class TodayActivity extends BaseNaviDrawerActivity {
     CoordinatorLayout clFab;
     boolean busRegistered;
     Workout todayWorkout;
+    @InjectView(R.id.rlDefault)
+    RelativeLayout rlDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
