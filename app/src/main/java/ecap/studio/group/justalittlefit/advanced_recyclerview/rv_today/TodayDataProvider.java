@@ -196,7 +196,34 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
     public List<Object> getDataObjects() {
         List<Object> dataObjs = new ArrayList<>();
         for (Pair<GroupData, List<ChildData>> data : mData) {
+            Exercise exercise = data.first.getExercise();
+            dataObjs.add(exercise);
+            List<ChildData> childDataList = data.second;
+            for (ChildData childData : childDataList) {
+                Set set = childData.getSet();
+                dataObjs.add(set);
+            }
+        }
+        return dataObjs;
+    }
 
+    public List<Object> getOrderedDataObjects() {
+        List<Object> dataObjs = new ArrayList<>();
+        int groupPosition = 0;
+        int childPosition = 0;
+        for (Pair<GroupData, List<ChildData>> data : mData) {
+            childPosition = 0;
+            Exercise exercise = data.first.getExercise();
+            exercise.setOrderNumber(groupPosition);
+            groupPosition++;
+            dataObjs.add(exercise);
+            List<ChildData> childDataList = data.second;
+            for (ChildData childData : childDataList) {
+                Set set = childData.getSet();
+                set.setOrderNumber(childPosition);
+                childPosition++;
+                dataObjs.add(set);
+            }
         }
         return dataObjs;
     }

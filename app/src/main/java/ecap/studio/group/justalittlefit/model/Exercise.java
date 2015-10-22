@@ -35,7 +35,7 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
     private boolean isComplete;
 
     /** The collection of {@link Set} that are associated to this Exercise in the database */
-    @ForeignCollectionField(columnName = DbConstants.SETS)
+    @ForeignCollectionField(columnName = DbConstants.SETS, orderColumnName = DbConstants.ORDER_NUMBER_COLUMN_NAME)
     ForeignCollection<Set> sets;
 
     public Exercise() {}

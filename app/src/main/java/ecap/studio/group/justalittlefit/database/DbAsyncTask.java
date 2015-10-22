@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -154,7 +155,9 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.getWorkoutByNameAndDate(((Workout) dfo.getDbObject()).getName(),
                                     ((Workout) dfo.getDbObject()).getWorkoutDate());
                         case DbConstants.DELETE_EXERCISES_AND_SETS:
-                            return QueryExecutor.deleteExercisesAndSets((java.util.HashMap<String, Object>) dfo.getDbObject());
+                            return QueryExecutor.deleteExercisesAndSets((HashMap<String, Object>) dfo.getDbObject());
+                        case DbConstants.UPDATE_EXERCISES_AND_SETS:
+                            return QueryExecutor.updateExercisesAndSets((HashMap<String, Object>) dfo.getDbObject());
                     }
                 }
                 break;

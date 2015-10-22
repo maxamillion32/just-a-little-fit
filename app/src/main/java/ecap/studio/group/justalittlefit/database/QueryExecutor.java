@@ -390,6 +390,17 @@ public class QueryExecutor {
         return Boolean.TRUE.toString();
     }
 
+    public static String updateExercisesAndSets(HashMap<String, Object> map) {
+        List<Exercise> exercises = (ArrayList<Exercise>) map.get(Constants.EXERCISES);
+        updateExercises(exercises);
+
+        List<ecap.studio.group.justalittlefit.model.Set> sets =
+                (ArrayList<ecap.studio.group.justalittlefit.model.Set>) map.get(Constants.SETS_NORM_CASE);
+        updateSets(sets);
+
+        return Boolean.TRUE.toString();
+    }
+
     public static List<Workout> getWorkoutsByDate(DateTime dateTime) throws SQLException {
         DateTime startOfDay = dateTime.withTimeAtStartOfDay();
         DateTime endOfDay = dateTime.withTime(23, 59, 59, 999);

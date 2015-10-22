@@ -17,11 +17,14 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -282,8 +285,25 @@ public class TodayActivity extends BaseNaviDrawerActivity {
     private void reorderWorkouts() {
         TodayDataProvider dataProvider =
                 (TodayDataProvider) getDataProvider();
-        dataProvider.getDataObjects();
-        //todo
+        List<Object> reorderedExercisesAndSets = dataProvider.getOrderedDataObjects();
+        List<Exercise> reorderedExercises = new ArrayList<>();
+        List<Set> reorderedSets = new ArrayList<>();
+        HashMap<String, Object> reorderedExercisesAndSetsMap = new HashMap<>();
+
+        for (Object object : reorderedExercisesAndSets) {
+            if (object instanceof Set) {
+                reorderedSets.add((Set) object);
+            } else if (object instanceof Exercise) {
+                reorderedExercises.add((Exercise) object);
+            }
+        }
+
+        reorderedExercisesAndSetsMap.put(Constants.EXERCISES, reorderedExercises);
+        reorderedExercisesAndSetsMap.put(Constants.SETS_NORM_CASE, reorderedSets);
+
+        DbFunctionObject reorderExercisesAndSetsDfo =
+                new DbFunctionObject(reorderedExercisesAndSetsMap, DbConstants.UPDATE_EXERCISES_AND_SETS);
+        new DbAsyncTask(Constants.TODAY).execute(reorderExercisesAndSetsDfo);
     }
 
     void showProgressDialog() {

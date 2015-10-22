@@ -34,7 +34,7 @@ public class Workout implements Comparable<Workout>, Parcelable {
     private DateTime workoutDate;
 
     /** The collection of {@link Exercise} that are associated to this Workout in the database */
-    @ForeignCollectionField(columnName = DbConstants.EXERCISES)
+    @ForeignCollectionField(columnName = DbConstants.EXERCISES, orderColumnName = DbConstants.ORDER_NUMBER_COLUMN_NAME)
     private ForeignCollection<Exercise> exercises;
 
     public Workout() {}
