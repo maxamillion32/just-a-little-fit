@@ -101,8 +101,6 @@ public class MyExpandableDraggableSwipeableItemAdapter
             RecyclerViewExpandableItemManager expandableItemManager,
             AbstractExpandableDataProvider dataProvider) {
         mExpandableItemManager = expandableItemManager;
-        mExpandableItemManager.setOnGroupExpandListener(new MyExpandListener(this));
-        mExpandableItemManager.setOnGroupCollapseListener(new MyCollapseListener(this));
         mProvider = dataProvider;
         mItemViewOnClickListener = new View.OnClickListener() {
             @Override
@@ -188,11 +186,6 @@ public class MyExpandableDraggableSwipeableItemAdapter
 
         // set text
         holder.mTextView.setText(item.getText());
-        if (isInExpandedState) {
-            holder.mTvExpand.setText(Constants.COLLAPSE_ICON);
-        } else {
-            holder.mTvExpand.setText(Constants.EXPAND_ICON);
-        }
 
         // set background resource (target view ID: container)
         final int dragState = holder.getDragStateFlags();
@@ -221,8 +214,11 @@ public class MyExpandableDraggableSwipeableItemAdapter
 
             if ((expandState & RecyclerViewExpandableItemManager.STATE_FLAG_IS_EXPANDED) != 0) {
                 //indicatorState = MorphButton.MorphState.END;
+                holder.mTvExpand.setText(Constants.COLLAPSE_ICON);
+
             } else {
                 //indicatorState = MorphButton.MorphState.START;
+                holder.mTvExpand.setText(Constants.EXPAND_ICON);
             }
 
             holder.mContainer.setBackgroundResource(bgResId);
