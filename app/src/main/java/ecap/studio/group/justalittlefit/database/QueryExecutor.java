@@ -144,8 +144,10 @@ public class QueryExecutor {
 
             for (DateTime dateTime : dateTimes) {
                 for (Workout workout : workouts) {
-                    workout.setWorkoutDate(dateTime);
-                    workoutsToAssign.add(workout);
+                    if (getWorkoutByNameAndDate(workout.getName(), dateTime) == null) {
+                        workout.setWorkoutDate(dateTime);
+                        workoutsToAssign.add(workout);
+                    }
                 }
             }
 
@@ -205,7 +207,11 @@ public class QueryExecutor {
             where.between(DbConstants.WORKOUT_DATE_COLUMN_NAME, startOfDay, endOfDay);
             queryBuilder.setWhere(where);
             List<Workout> workouts = queryBuilder.query();
-            return workouts.get(0);
+            if (workouts.size() > 0) {
+                return workouts.get(0);
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             return null;
         }
