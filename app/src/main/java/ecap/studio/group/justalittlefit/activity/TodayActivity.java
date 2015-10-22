@@ -39,14 +39,19 @@ import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.database.DbFunctionObject;
 import ecap.studio.group.justalittlefit.database.DbTaskResult;
+import ecap.studio.group.justalittlefit.dialog.AddExerciseDialog;
+import ecap.studio.group.justalittlefit.dialog.AddExerciseOrSetDialog;
+import ecap.studio.group.justalittlefit.dialog.AddSetDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.listener.AddExerciseDialogListener;
+import ecap.studio.group.justalittlefit.listener.AddSetDialogListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class TodayActivity extends BaseNaviDrawerActivity {
+public class TodayActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener, AddSetDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -122,7 +127,7 @@ public class TodayActivity extends BaseNaviDrawerActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // todo Add exercise and set dialog
+                displayAddExerciseOrSetDialog();
             }
         });
     }
@@ -318,9 +323,25 @@ public class TodayActivity extends BaseNaviDrawerActivity {
         }
     }
 
+    private void displayAddExerciseOrSetDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddExerciseOrSetDialog dialog = new AddExerciseOrSetDialog();
+        dialog.show(fm, getString(R.string.addExerciseOrSetDialogTag));
+    }
+
     void displayGeneralWorkoutListError() {
         String errorMsg = getString(R.string.workout_list_error);
         Log.e(LOG_TAG, errorMsg);
         Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), errorMsg);
+    }
+
+    @Override
+    public void onAddExerciseClick(AddExerciseDialog dialog) {
+        //todo
+    }
+
+    @Override
+    public void onAddSetClick(AddSetDialog dialog) {
+        //todo
     }
 }

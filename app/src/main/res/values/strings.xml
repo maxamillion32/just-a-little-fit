@@ -67,6 +67,12 @@
     <string name="addSet_success">Set successfully added</string>
     <string name="noImplementsAddSetDialogListener">doesn\'t implement AddSetDialogListener.</string>
 
+    <!-- AddExerciseOrSetDialog Strings -->
+    <string name="addExerciseOrSetDialog_Title">Add Exercise or Set?</string>
+    <string name="addExerciseOrSetDialog_addExercise">Add Exercise</string>
+    <string name="addExerciseOrSetDialog_addSet">Add Set</string>
+    <string name="addExerciseOrSetDialogTag">Add Exercise Or Set Dialog Tag</string>
+
     <!-- RepositionWorkoutDialog Strings -->
     <string name="repositionWorkoutDialog_title">Select a position for the Workout:</string>
     <string name="repositionWorkoutDialog_reposition">Reposition</string>
