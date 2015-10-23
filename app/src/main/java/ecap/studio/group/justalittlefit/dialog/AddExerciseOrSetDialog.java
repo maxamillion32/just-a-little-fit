@@ -18,16 +18,16 @@ public class AddExerciseOrSetDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
         builder.setTitle(getString(R.string.addExerciseOrSetDialog_Title));
-        builder.setPositiveButton(getString(R.string.addExerciseOrSetDialog_addExercise), new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.addExerciseOrSetDialog_addSet), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               displayDialog(false);
+               displayDialog(true);
             }
         });
-        builder.setNeutralButton(getString(R.string.addExerciseOrSetDialog_addSet), new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getString( R.string.addExerciseOrSetDialog_addExercise), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                displayDialog(true);
+                displayDialog(false);
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
