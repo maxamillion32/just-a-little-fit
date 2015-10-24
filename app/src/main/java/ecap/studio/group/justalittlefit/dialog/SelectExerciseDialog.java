@@ -31,7 +31,6 @@ import ecap.studio.group.justalittlefit.listener.SelectExerciseDialogListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
-import ecap.studio.group.justalittlefit.util.Utils;
 
 public class SelectExerciseDialog extends DialogFragment {
 
@@ -40,12 +39,14 @@ public class SelectExerciseDialog extends DialogFragment {
     @InjectView(R.id.rgExercises)
     RadioGroup exerciseRadioGroup;
     boolean busRegistered;
+    ArrayList<Exercise> deletedExercises;
 
-    public static SelectExerciseDialog newInstance(Workout workout) {
+    public static SelectExerciseDialog newInstance(Workout workout, ArrayList<Exercise> exercises) {
         SelectExerciseDialog dialog = new SelectExerciseDialog();
 
         Bundle args = new Bundle();
         args.putParcelable(Constants.WORKOUT, workout);
+        args.putParcelableArrayList(Constants.EXERCISES, exercises);
         dialog.setArguments(args);
 
         return dialog;
@@ -63,10 +64,12 @@ public class SelectExerciseDialog extends DialogFragment {
         Bundle args = getArguments();
         Workout workout;
 
-        if (args != null && args.containsKey(Constants.WORKOUT)) {
+        if (args != null) {
             workout = args.getParcelable(Constants.WORKOUT);
+            deletedExercises = args.getParcelableArrayList(Constants.EXERCISES);
         } else {
             workout = null;
+            deletedExercises = null;
         }
 
         DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(workout, DbConstants.GET_FULL_WORKOUT);
@@ -104,27 +107,38 @@ public class SelectExerciseDialog extends DialogFragment {
     private void createExerciseRadioGroup(Workout workout) {
         int count = 0;
         List<Exercise> exercises = new ArrayList<>(workout.getExercises());
+        List<String> deletedExerciseNameList = getDeletedExerciseStringList(deletedExercises);
         for (final Exercise exercise : exercises)
         {
-            TableRow row = new TableRow(getActivity());
-            row.setId(count);
-            count++;
-            row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-            RadioButton radioButton = new RadioButton(getActivity());
-            radioButton.setId(exercise.getExerciseId());
-            radioButton.setText(exercise.getName());
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    AddSetDialog dialog = AddSetDialog.newInstance(exercise);
-                    dialog.show(fm, getString(R.string.addSetDialogTag));
-                    getDialog().dismiss();
-                }
-            });
-            row.addView(radioButton);
-            exerciseRadioGroup.addView(row);
+            if (!deletedExerciseNameList.contains(exercise.getName().trim())) {
+                TableRow row = new TableRow(getActivity());
+                row.setId(count);
+                count++;
+                row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                RadioButton radioButton = new RadioButton(getActivity());
+                radioButton.setId(exercise.getExerciseId());
+                radioButton.setText(exercise.getName());
+                radioButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        AddSetDialog dialog = AddSetDialog.newInstance(exercise);
+                        dialog.show(fm, getString(R.string.addSetDialogTag));
+                        getDialog().dismiss();
+                    }
+                });
+                row.addView(radioButton);
+                exerciseRadioGroup.addView(row);
+            }
         }
+    }
+
+    public List<String> getDeletedExerciseStringList(ArrayList<Exercise> exercises) {
+        List<String> deletedExerciseNameList = new ArrayList<>();
+        for (Exercise exercise : exercises) {
+            deletedExerciseNameList.add(exercise.getName().trim());
+        }
+        return deletedExerciseNameList;
     }
 
     @Override

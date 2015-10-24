@@ -344,7 +344,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     private void displayAddExerciseOrSetDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        AddExerciseOrSetDialog dialog = AddExerciseOrSetDialog.newInstance(todayWorkout);
+        AddExerciseOrSetDialog dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
+                new ArrayList<>(exercisesToDelete));
         dialog.show(fm, getString(R.string.addExerciseOrSetDialogTag));
     }
 

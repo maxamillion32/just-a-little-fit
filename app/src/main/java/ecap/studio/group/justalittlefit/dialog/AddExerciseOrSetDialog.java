@@ -8,19 +8,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 
+import java.util.ArrayList;
+
 import ecap.studio.group.justalittlefit.R;
+import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 
 public class AddExerciseOrSetDialog extends DialogFragment {
 
     Workout workout;
+    ArrayList<Exercise> deletedExercises;
 
-    public static AddExerciseOrSetDialog newInstance(Workout workout) {
+    public static AddExerciseOrSetDialog newInstance(Workout workout,
+                                                     ArrayList<Exercise> exercises) {
         AddExerciseOrSetDialog dialog = new AddExerciseOrSetDialog();
 
         Bundle args = new Bundle();
         args.putParcelable(Constants.WORKOUT, workout);
+        args.putParcelableArrayList(Constants.EXERCISES, exercises);
         dialog.setArguments(args);
 
         return dialog;
@@ -34,8 +40,10 @@ public class AddExerciseOrSetDialog extends DialogFragment {
         Bundle args = getArguments();
         if (args != null && args.containsKey(Constants.WORKOUT)) {
             workout = args.getParcelable(Constants.WORKOUT);
+            deletedExercises = args.getParcelableArrayList(Constants.EXERCISES);
         } else {
             workout = null;
+            deletedExercises = null;
         }
 
         builder.setTitle(getString(R.string.addExerciseOrSetDialog_Title));
@@ -64,9 +72,7 @@ public class AddExerciseOrSetDialog extends DialogFragment {
     private void displayDialog(boolean displaySetDialog) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         if (displaySetDialog) {
-            /*AddSetDialog dialog = new AddSetDialog();
-            dialog.show(fm, getString(R.string.addSetDialogTag));*/
-            SelectExerciseDialog dialog = SelectExerciseDialog.newInstance(workout);
+            SelectExerciseDialog dialog = SelectExerciseDialog.newInstance(workout, deletedExercises);
             dialog.show(fm, getString(R.string.selectExerciseDialogTag));
         } else {
             AddExerciseDialog dialog = new AddExerciseDialog();
