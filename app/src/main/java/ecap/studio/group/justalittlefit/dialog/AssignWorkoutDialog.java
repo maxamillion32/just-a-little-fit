@@ -42,6 +42,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
     private List<String> selectedWorkoutNames;
     @InjectView(R.id.workoutContainer)
     LinearLayout workoutContainer;
+    boolean busRegistered;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
         ButterKnife.inject(this, view);
         selectedWorkoutNames = new ArrayList<>();
-        AssignDialogBus.getInstance().register(this);
+        registerBus();
         DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
         new DbAsyncTask(Constants.ASSIGN_DIALOG).execute(getAllWorkoutDfo);
         builder.setTitle(getString(R.string.assignWorkoutDialogHeaderMsg));
@@ -115,8 +116,30 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (!busRegistered) {
+            registerBus();
+        }
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            AssignDialogBus.getInstance().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            AssignDialogBus.getInstance().unregister(this);
+            busRegistered = false;
+        }
+    }
+
+    @Override
     public void onDestroy() {
-        AssignDialogBus.getInstance().unregister(this);
+        unregisterBus();
         super.onDestroy();
     }
 
