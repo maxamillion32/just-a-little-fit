@@ -49,6 +49,8 @@ public class Constants {
 
     public static final String ASSIGN_DIALOG = "AssignDialog";
 
+    public static final String SELECT_DIALOG = "SelectDialog";
+
     public static final String EMPTY_STRING = "";
 
     public static final String SPACE = " ";

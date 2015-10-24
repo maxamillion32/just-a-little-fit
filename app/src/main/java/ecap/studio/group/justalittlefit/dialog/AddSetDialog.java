@@ -19,6 +19,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.listener.AddSetDialogListener;
+import ecap.studio.group.justalittlefit.model.Exercise;
+import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
@@ -51,6 +53,17 @@ public class AddSetDialog extends DialogFragment {
     EditText etWeightAmount;
     @InjectView(R.id.etTimedRepCount)
     EditText etTimedRepCount;
+    Exercise exercise;
+
+    public static AddSetDialog newInstance(Exercise exercise) {
+        AddSetDialog dialog = new AddSetDialog();
+
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.EXERCISE, exercise);
+        dialog.setArguments(args);
+
+        return dialog;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -59,6 +72,14 @@ public class AddSetDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_set_dialog_view, null);
         ButterKnife.inject(this, view);
+
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(Constants.EXERCISE)) {
+            exercise = args.getParcelable(Constants.EXERCISE);
+        } else {
+            exercise = null;
+        }
+
         builder.setTitle(getString(R.string.addSetDialog_Title));
         builder.setView(view);
         builder.setPositiveButton(getString(R.string.addSetDialog_add), new DialogInterface.OnClickListener() {
@@ -205,5 +226,9 @@ public class AddSetDialog extends DialogFragment {
 
     public EditText getEtTimedRepCount() {
         return etTimedRepCount;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
     }
 }

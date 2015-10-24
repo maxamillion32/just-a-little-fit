@@ -9,14 +9,35 @@ import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 
 import ecap.studio.group.justalittlefit.R;
-import ecap.studio.group.justalittlefit.util.Utils;
+import ecap.studio.group.justalittlefit.model.Workout;
+import ecap.studio.group.justalittlefit.util.Constants;
 
 public class AddExerciseOrSetDialog extends DialogFragment {
+
+    Workout workout;
+
+    public static AddExerciseOrSetDialog newInstance(Workout workout) {
+        AddExerciseOrSetDialog dialog = new AddExerciseOrSetDialog();
+
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.WORKOUT, workout);
+        dialog.setArguments(args);
+
+        return dialog;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
+
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(Constants.WORKOUT)) {
+            workout = args.getParcelable(Constants.WORKOUT);
+        } else {
+            workout = null;
+        }
+
         builder.setTitle(getString(R.string.addExerciseOrSetDialog_Title));
         builder.setPositiveButton(getString(R.string.addExerciseOrSetDialog_addSet), new DialogInterface.OnClickListener() {
             @Override
@@ -43,8 +64,10 @@ public class AddExerciseOrSetDialog extends DialogFragment {
     private void displayDialog(boolean displaySetDialog) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         if (displaySetDialog) {
-            AddSetDialog dialog = new AddSetDialog();
-            dialog.show(fm, getString(R.string.addSetDialogTag));
+            /*AddSetDialog dialog = new AddSetDialog();
+            dialog.show(fm, getString(R.string.addSetDialogTag));*/
+            SelectExerciseDialog dialog = SelectExerciseDialog.newInstance(workout);
+            dialog.show(fm, getString(R.string.selectExerciseDialogTag));
         } else {
             AddExerciseDialog dialog = new AddExerciseDialog();
             dialog.show(fm, getString(R.string.addExerciseDialogTag));

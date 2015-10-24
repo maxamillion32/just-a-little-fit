@@ -63,6 +63,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     private HashSet<Set> setsToDelete;
     boolean reorderTriggeredByAdd;
     String addedExerciseName;
+    Exercise parentExercise;
+    Set addedSet;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -156,6 +158,10 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             }
         } else if (event.getResult() instanceof Exercise) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
+            DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
+            new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
+        } else if (event.getResult() instanceof Set) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.addSet_success));
             DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
             new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
         } else if (event.getResult() instanceof String) {
@@ -338,7 +344,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     private void displayAddExerciseOrSetDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        AddExerciseOrSetDialog dialog = new AddExerciseOrSetDialog();
+        AddExerciseOrSetDialog dialog = AddExerciseOrSetDialog.newInstance(todayWorkout);
         dialog.show(fm, getString(R.string.addExerciseOrSetDialogTag));
     }
 
@@ -358,7 +364,29 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onAddSetClick(AddSetDialog dialog) {
-        //todo
+        showProgressDialog();
+        reorderTriggeredByAdd = true;
+        parentExercise = dialog.getExercise();
+        if (dialog.getRbWeightedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+            String exerciseCd = Constants.WEIGHTS;
+            int weight = Utils.returnValidNumberFromEditText(dialog.getEtWeightAmount());
+            String weightCd;
+            if (dialog.getRbLbs().isChecked()) {
+                weightCd = Constants.LBS;
+            } else {
+                weightCd = Constants.KGS;
+            }
+            addedSet = new Set(reps, weightCd, exerciseCd, weight);
+        } else {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+            Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
+            Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
+            Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
+            String exerciseCd = Constants.LOGGED_TIMED;
+            addedSet = new Set(reps, exerciseCd, hours, mins, seconds);
+        }
+        reorderWorkouts();
     }
 
     private void addExerciseOrSetToUI() {
@@ -376,6 +404,15 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             }
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
+        }
+
+        if (dataProvider != null && dataProvider.getCount() >= 0 && addedSet != null) {
+            addedSet.setExercise(parentExercise);
+            addedSet.setOrderNumber(dataProvider.getCount());
+            DbFunctionObject insertWorkoutSet = new DbFunctionObject(addedSet, DbConstants.INSERT_SET);
+            new DbAsyncTask(Constants.TODAY).execute(insertWorkoutSet);
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
         }
     }
 }

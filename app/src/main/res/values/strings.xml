@@ -60,6 +60,11 @@
     <string name="addExercise_success">Exercise successfully added</string>
     <string name="noImplementsAddExerciseDialogListener">doesn\'t implement AddExerciseDialogListener.</string>
 
+    <!-- SelectExeriseDialog Strings -->
+    <string name="selectExerciseDialog_Title">Select Exercise</string>
+    <string name="selectExerciseDialogTag">Select Exercise Dialog Tag</string>
+    <string name="noImplementsSelectExerciseDialogListener">doesn\'t implement SelectExerciseDialogListener.</string>
+
     <!-- AddSetDialog Strings -->
     <string name="addSetDialog_Title">Create Set</string>
     <string name="addSetDialog_add">Add Set</string>

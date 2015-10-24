@@ -14,9 +14,11 @@ import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
+import ecap.studio.group.justalittlefit.bus.SelectDialogBus;
 import ecap.studio.group.justalittlefit.bus.TodayBus;
 import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
 import ecap.studio.group.justalittlefit.bus.ViewBus;
+import ecap.studio.group.justalittlefit.dialog.SelectExerciseDialog;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -160,6 +162,17 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.updateExercisesAndSets((HashMap<String, Object>) dfo.getDbObject());
                         case DbConstants.INSERT_EXERCISE:
                             return QueryExecutor.createExerciseForToday((Exercise) dfo.getDbObject());
+                        case DbConstants.INSERT_SET:
+                            return QueryExecutor.createSetForToday((Set) dfo.getDbObject());
+                    }
+                }
+                break;
+            case Constants.SELECT_DIALOG:
+                for (DbFunctionObject dfo : params) {
+                    switch (dfo.getFunctionInt()) {
+                        case DbConstants.GET_FULL_WORKOUT:
+                            return QueryExecutor.getWorkoutByNameAndDate(((Workout) dfo.getDbObject()).getName(),
+                                    ((Workout) dfo.getDbObject()).getWorkoutDate());
                     }
                 }
                 break;
@@ -191,6 +204,9 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 ViewBus.getInstance().post(new DbTaskResult(result));
             case Constants.TODAY:
                 TodayBus.getInstance().post(new DbTaskResult(result));
+            case Constants.SELECT_DIALOG:
+                SelectDialogBus.getInstance().post(new DbTaskResult(result));
+                break;
         }
     }
 }

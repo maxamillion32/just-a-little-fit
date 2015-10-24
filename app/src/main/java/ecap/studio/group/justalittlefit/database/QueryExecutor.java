@@ -388,6 +388,14 @@ public class QueryExecutor {
         }
     }
 
+    public static ecap.studio.group.justalittlefit.model.Set createSetForToday(ecap.studio.group.justalittlefit.model.Set set) {
+        if (createSet(set) != null) {
+            return set;
+        } else {
+            return null;
+        }
+    }
+
     public static String deleteExercisesAndSets(HashMap<String, Object> map) {
         try {
             Dao<Exercise, Integer> exerciseDao = DaoHelper.getInstance().getExerciseDao();
