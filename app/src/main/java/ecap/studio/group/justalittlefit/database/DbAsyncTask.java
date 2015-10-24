@@ -158,6 +158,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.deleteExercisesAndSets((HashMap<String, Object>) dfo.getDbObject());
                         case DbConstants.UPDATE_EXERCISES_AND_SETS:
                             return QueryExecutor.updateExercisesAndSets((HashMap<String, Object>) dfo.getDbObject());
+                        case DbConstants.INSERT_EXERCISE:
+                            return QueryExecutor.createExerciseForToday((Exercise) dfo.getDbObject());
                     }
                 }
                 break;

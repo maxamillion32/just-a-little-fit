@@ -207,6 +207,19 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
         return dataObjs;
     }
 
+    public List<String> getExerciseDisplayNames() {
+        List<String> exerciseNames = new ArrayList<>();
+        for (Pair<GroupData, List<ChildData>> data : mData) {
+            Exercise exercise = data.first.getExercise();
+            exerciseNames.add(exercise.getName().trim());
+        }
+        return exerciseNames;
+    }
+
+    public int getCount() {
+        return getDataObjects().size();
+    }
+
     public List<Object> getOrderedDataObjects() {
         List<Object> dataObjs = new ArrayList<>();
         int groupPosition = 0;

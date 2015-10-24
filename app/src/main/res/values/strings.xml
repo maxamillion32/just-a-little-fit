@@ -141,6 +141,7 @@
     <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>
     <string name="add_exercise_error">An error occurred in adding your exercise to the Exercise list. Please try again.</string>
     <string name="add_set_error">An error occurred in adding your exercise to the Set list. Please try again.</string>
+    <string name="add_exercise_and_set_error">An error occurred in adding to Today\'s Workout. Please try again.</string>
     <string name="add_workout_error_already_exists">Workout not added. Please add only uniquely named workouts to the Workout list.</string>
     <string name="add_exercise_error_already_exists">Exercise not added. Please add only uniquely named exercises to the Exercise list.</string>
     <string name="reposition_workout_error">An error occurred in repositioning your workout to the Workout list. Please try again.</string>

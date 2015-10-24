@@ -17,19 +17,17 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
-import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_create_edit_view.RecyclerListViewFragment;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_today.AbstractExpandableDataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_today.TodayDataProvider;
 import ecap.studio.group.justalittlefit.advanced_recyclerview.rv_today.TodayDataProviderFragment;
@@ -63,6 +61,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     Workout todayWorkout;
     private HashSet<Exercise> exercisesToDelete;
     private HashSet<Set> setsToDelete;
+    boolean reorderTriggeredByAdd;
+    String addedExerciseName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -145,6 +145,19 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
+        } else if (event.getResult() instanceof Map) {
+            // Data order saved
+            if (reorderTriggeredByAdd) {
+                // Call method to add exercise to view
+                addExerciseOrSetToUI();
+            } else {
+                // onPause result returned and data order saved, reset boolean trigger
+                reorderTriggeredByAdd = false;
+            }
+        } else if (event.getResult() instanceof Exercise) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
+            DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
+            new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder workouts before leaving activity
             reorderWorkouts();
@@ -337,11 +350,32 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onAddExerciseClick(AddExerciseDialog dialog) {
-        //todo
+        showProgressDialog();
+        reorderTriggeredByAdd = true;
+        reorderWorkouts();
+        addedExerciseName = dialog.getAddExerciseText().getText().toString();
     }
 
     @Override
     public void onAddSetClick(AddSetDialog dialog) {
         //todo
+    }
+
+    private void addExerciseOrSetToUI() {
+        TodayDataProvider dataProvider =
+                (TodayDataProvider)getDataProvider();
+
+        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getExerciseDisplayNames() != null
+                && addedExerciseName != null) {
+            if (!dataProvider.getExerciseDisplayNames().contains(addedExerciseName.trim())) {
+                Exercise newExercise = new Exercise(todayWorkout, addedExerciseName, dataProvider.getCount());
+                DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
+                new DbAsyncTask(Constants.TODAY).execute(insertExercise);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+            }
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
+        }
     }
 }

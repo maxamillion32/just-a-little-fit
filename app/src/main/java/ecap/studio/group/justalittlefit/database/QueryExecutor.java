@@ -263,6 +263,14 @@ public class QueryExecutor {
         }
     }
 
+    public static Exercise createExerciseForToday(Exercise exercise) {
+        if (createExercise(exercise) != null) {
+            return exercise;
+        } else {
+            return null;
+        }
+    }
+
     public static Boolean updateExercise(Exercise exercise) {
         Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
         try {
@@ -396,7 +404,7 @@ public class QueryExecutor {
         return Boolean.TRUE.toString();
     }
 
-    public static String updateExercisesAndSets(HashMap<String, Object> map) {
+    public static HashMap updateExercisesAndSets(HashMap<String, Object> map) {
         List<Exercise> exercises = (ArrayList<Exercise>) map.get(Constants.EXERCISES);
         updateExercises(exercises);
 
@@ -404,7 +412,7 @@ public class QueryExecutor {
                 (ArrayList<ecap.studio.group.justalittlefit.model.Set>) map.get(Constants.SETS_NORM_CASE);
         updateSets(sets);
 
-        return Boolean.TRUE.toString();
+        return map;
     }
 
     public static List<Workout> getWorkoutsByDate(DateTime dateTime) throws SQLException {
