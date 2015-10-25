@@ -57,7 +57,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
         public View mDragHandle;
         public TextView mTextView;
         public TextView mTvExpand;
-        public CheckBox itemCb;
+        public CheckBox mItemCb;
         private int mExpandStateFlags;
 
         public MyBaseViewHolder(View v) {
@@ -66,7 +66,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
             mDragHandle = v.findViewById(R.id.drag_handle);
             mTextView = (TextView) v.findViewById(android.R.id.text1);
             mTvExpand = (TextView) v.findViewById(R.id.tvExpand);
-            itemCb = (CheckBox) v.findViewById(R.id.itemCb);
+            mItemCb = (CheckBox) v.findViewById(R.id.itemCb);
         }
 
         @Override
@@ -243,6 +243,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
         // (if the item is *pinned*, click event comes to the mContainer)
         holder.mContainer.setOnClickListener(mSwipeableViewContainerOnClickListener);
+        holder.mItemCb.setOnCheckedChangeListener(new CbChangeListener(holder));
 
         // set text
         holder.mTextView.setText(item.getText());

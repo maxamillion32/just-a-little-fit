@@ -3,6 +3,7 @@ package ecap.studio.group.justalittlefit.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -206,5 +207,13 @@ public class Utils {
         final int bottom = v.getBottom() + ty;
 
         return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
+    }
+
+    public static void handleStrikeThroughText(TextView textView, boolean doStrikeThrough) {
+        if (doStrikeThrough) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            textView.setPaintFlags(textView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        }
     }
 }
