@@ -50,6 +50,7 @@
         <activity
             android:name=".activity.TodayActivity"
             android:label="@string/title_activity_today"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
