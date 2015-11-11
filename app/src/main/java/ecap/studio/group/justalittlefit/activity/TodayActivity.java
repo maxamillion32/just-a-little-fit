@@ -280,6 +280,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         if (!busRegistered) {
             registerBus();
         }
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
+        selectedItem.setChecked(true);
     }
 
     @Override

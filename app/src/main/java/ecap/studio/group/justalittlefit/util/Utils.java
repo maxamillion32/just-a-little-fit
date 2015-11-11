@@ -32,6 +32,7 @@ import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.Assign;
 import ecap.studio.group.justalittlefit.activity.ChooseWorkoutDate;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
+import ecap.studio.group.justalittlefit.activity.Home;
 import ecap.studio.group.justalittlefit.fragment.TodayLauncher;
 import ecap.studio.group.justalittlefit.model.Workout;
 
@@ -165,6 +166,11 @@ public class Utils {
                                     new Intent(activity, ChooseWorkoutDate.class);
                             chooseWorkoutDateIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             activity.startActivity(chooseWorkoutDateIntent);
+                        } else if (selectedTitle.equals(activity.getString(R.string.home_string).trim())) {
+                            Intent homeIntent =
+                                    new Intent(activity, Home.class);
+                            homeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            activity.startActivity(homeIntent);
                         } else {
                             /* Shouldn't reach this but if so, doing nothing here
                             is harmless as the drawer will close */

@@ -179,6 +179,8 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         if (!busRegistered) {
             registerBus();
         }
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
+        selectedItem.setChecked(true);
     }
 
     @Override

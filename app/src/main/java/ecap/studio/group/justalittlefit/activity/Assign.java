@@ -198,4 +198,11 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         DateTime maxDate = now.plusYears(1);
         assignCalendar.init(now.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
+        selectedItem.setChecked(true);
+    }
 }

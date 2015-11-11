@@ -250,6 +250,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         if (!busRegistered) {
             registerBus();
         }
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
+        selectedItem.setChecked(true);
     }
 
     private void reorderWorkouts() {

@@ -17,6 +17,7 @@ import ecap.studio.group.justalittlefit.util.Utils;
 public class BaseNaviDrawerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     FrameLayout frameLayout;
+    NavigationView navigationView;
     boolean progressDialogReady;
 
     @Override
@@ -34,7 +35,7 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         frameLayout = (FrameLayout) findViewById(R.id.content_frame);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }

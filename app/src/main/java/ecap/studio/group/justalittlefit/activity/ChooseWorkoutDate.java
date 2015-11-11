@@ -139,6 +139,8 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
     public void onResume() {
         super.onResume();
         resetCalendarView();
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
+        selectedItem.setChecked(true);
     }
 
 }

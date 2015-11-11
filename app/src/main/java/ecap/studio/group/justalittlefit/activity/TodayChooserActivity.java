@@ -113,4 +113,11 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
                 new ArrayList<>(workouts), this);
         rvWorkoutName.setAdapter(workoutRvNameAdapter);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
+        selectedItem.setChecked(true);
+    }
 }

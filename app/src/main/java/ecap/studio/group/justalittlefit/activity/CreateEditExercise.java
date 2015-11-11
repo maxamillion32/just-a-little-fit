@@ -273,6 +273,8 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         if (!busRegistered) {
             registerBus();
         }
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
+        selectedItem.setChecked(true);
     }
 
     @Override

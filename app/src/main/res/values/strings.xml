@@ -20,6 +20,7 @@
     <string name="title_activity_create_edit_workout">CreateEditWorkout</string>
 
     <!-- General Strings -->
+    <string name="home_string">Home</string>
     <string name="today_string">Today</string>
     <string name="assign_string">Assign</string>
     <string name="view_string">View</string>

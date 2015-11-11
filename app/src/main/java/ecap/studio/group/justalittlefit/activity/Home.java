@@ -1,11 +1,15 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -21,7 +25,6 @@ import butterknife.InjectViews;
 import butterknife.OnClick;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.database.DatabaseHelper;
-import ecap.studio.group.justalittlefit.database.DbConstants;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -29,7 +32,7 @@ import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
 
-public class Home extends AppCompatActivity {
+public class Home extends BaseNaviDrawerActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
     private ProgressDialog progressDialog;
@@ -40,8 +43,12 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        ButterKnife.inject(this);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_home, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        setTitle(Constants.EMPTY_STRING);
         getHelper();
         this.formatHomeTextViews();
     }
@@ -62,12 +69,22 @@ public class Home extends AppCompatActivity {
         super.onResume();
         getHelper();
         dismissProgressDialog();
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
+        selectedItem.setChecked(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         dismissProgressDialog();
+    }
+
+    @Override
+    void setupDrawerContent(NavigationView navigationView) {
+        // Check menu item of currently displayed activity
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
+        selectedItem.setChecked(true);
+        super.setupDrawerContent(navigationView);
     }
 
     /**
@@ -87,91 +104,6 @@ public class Home extends AppCompatActivity {
         if (databaseHelper != null) {
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
-        }
-    }
-
-    /**
-     * Inserts mock data for dev purposes on db creation (if needed).
-     */
-    void insertMockDataIfNeeded() {
-        try {
-            Dao<Workout, Integer> workoutDao = getHelper().getWorkoutDao();
-            if (workoutDao.queryForAll().size() == 0) {
-                Log.i(LOG_TAG, "Creating mock dev data");
-                this.createMockData();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Inserts mock data for dev purposes on db creation.
-     */
-    void createMockData() {
-        this.insertWorkoutsToDatabase();
-        this.createExercisesForWorkouts();
-        this.createSetsForWorkouts();
-        this.queryForSets();
-    }
-
-    void insertWorkoutsToDatabase() {
-        Workout workout = new Workout("Arms", 0);
-        Workout workout1 = new Workout("Abs", 1);
-        Workout workout2 = new Workout("Shoulders", 2);
-        try {
-            Dao<Workout, Integer> workoutDao = getHelper().getWorkoutDao();
-            workoutDao.create(workout);
-            workoutDao.assignEmptyForeignCollection(workout, DbConstants.EXERCISES);
-            workoutDao.create(workout1);
-            workoutDao.assignEmptyForeignCollection(workout1, DbConstants.EXERCISES);
-            workoutDao.create(workout2);
-            workoutDao.assignEmptyForeignCollection(workout2, DbConstants.EXERCISES);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    void createExercisesForWorkouts() {
-        Exercise ex = new Exercise("Push Ups", 0);
-        Exercise ex1 = new Exercise("Curls", 1);
-
-        Exercise ex2 = new Exercise("Situps-Weighted Situps", 0);
-        Exercise ex3 = new Exercise("Gorilla ups-Captain raises", 1);
-
-        Exercise ex4 = new Exercise("Shoulder press-Dips", 0);
-        Exercise ex5 = new Exercise("Lat pull downs", 1);
-
-        ArrayList<Exercise> exerciseList = new ArrayList<>();
-        exerciseList.add(ex);
-        exerciseList.add(ex1);
-
-        ArrayList<Exercise> exerciseList2 = new ArrayList<>();
-        exerciseList2.add(ex2);
-        exerciseList2.add(ex3);
-
-        ArrayList<Exercise> exerciseList3 = new ArrayList<>();
-        exerciseList3.add(ex4);
-        exerciseList3.add(ex5);
-
-        this.addExercisesToWorkouts(1, exerciseList);
-        this.addExercisesToWorkouts(2, exerciseList2);
-        this.addExercisesToWorkouts(3, exerciseList3);
-    }
-
-    void createSetsForWorkouts() {
-        try {
-            Dao<Exercise, Integer> exerciseDao = getHelper().getExerciseDao();
-            for (int i = 1; i < exerciseDao.queryForAll().size() + 1; i++) {
-                Exercise ex = exerciseDao.queryForId(i);
-                ForeignCollection<Set> sets;
-                sets = ex.getSets();
-                this.setSets(sets, this.getSetsForDb());
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
