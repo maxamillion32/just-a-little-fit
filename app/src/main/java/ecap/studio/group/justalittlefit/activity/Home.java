@@ -42,7 +42,7 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.inject(this);
-        this.insertMockDataIfNeeded();
+        getHelper();
         this.formatHomeTextViews();
     }
 
@@ -60,6 +60,7 @@ public class Home extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        getHelper();
         dismissProgressDialog();
     }
 
