@@ -109,6 +109,7 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                 Snackbar.make(getActivity().findViewById(R.id.fab),
                         getString(R.string.workout_list_empty_for_assign), Snackbar.LENGTH_LONG)
                         .show();
+                dismiss();
             } else {
                 createWorkoutCheckBoxes(workouts);
             }
