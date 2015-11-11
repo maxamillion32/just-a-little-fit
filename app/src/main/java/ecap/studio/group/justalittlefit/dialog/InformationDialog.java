@@ -71,6 +71,12 @@ public class InformationDialog extends AppBaseDialog {
             case Constants.CHOOSER:
                 setDialogMessage(getString(R.string.choose_today_workout));
                 break;
+            case Constants.HOME:
+                setDialogMessage(getString(R.string.home_today_info) + Constants.NEWLINE
+                        + Constants.NEWLINE + getString(R.string.home_create_edit_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_assign_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_view_info));
+                break;
         }
         setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
             @Override

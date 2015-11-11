@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import butterknife.InjectViews;
 import butterknife.OnClick;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.database.DatabaseHelper;
+import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -51,6 +55,27 @@ public class Home extends BaseNaviDrawerActivity {
         setTitle(Constants.EMPTY_STRING);
         getHelper();
         this.formatHomeTextViews();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_info:
+                displayInfoDialog();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -186,5 +211,11 @@ public class Home extends BaseNaviDrawerActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    private void displayInfoDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = InformationDialog.newInstance(Constants.HOME);
+        dialog.show(fm, getString(R.string.infoDialogTagHome));
     }
 }
