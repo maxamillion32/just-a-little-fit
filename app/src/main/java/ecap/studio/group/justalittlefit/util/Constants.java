@@ -127,7 +127,7 @@ public class Constants {
 
     public static final String WORKOUTS = "workouts";
 
-    public static final String TODAY_LAUNCHER_FRAG_TAG = "todayLauncherTag";
+    public static final String PEEK_LAUNCHER_FRAG_TAG = "peekLauncherTag";
 
     public static final String LOADING = "Loading...";
 
