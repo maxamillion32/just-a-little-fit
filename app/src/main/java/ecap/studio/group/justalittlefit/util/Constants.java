@@ -121,7 +121,9 @@ public class Constants {
 
     public static final String COLON = ":";
 
-    public static final String TODAY_LAUNCHER = "todayLauncher";
+    public static final String PEEK_LAUNCHER = "peekLauncher";
+
+    public static final String DATE_TIME = "dateTime";
 
     public static final String WORKOUTS = "workouts";
 

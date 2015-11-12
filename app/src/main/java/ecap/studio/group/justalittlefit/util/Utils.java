@@ -33,7 +33,7 @@ import ecap.studio.group.justalittlefit.activity.Assign;
 import ecap.studio.group.justalittlefit.activity.ChooseWorkoutDate;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 import ecap.studio.group.justalittlefit.activity.Home;
-import ecap.studio.group.justalittlefit.fragment.TodayLauncher;
+import ecap.studio.group.justalittlefit.fragment.PeekLauncher;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -182,10 +182,10 @@ public class Utils {
     }
 
     public static void launchTodayActivity(AppCompatActivity activity) {
-        TodayLauncher launcher = (TodayLauncher) activity.getSupportFragmentManager()
+        PeekLauncher launcher = (PeekLauncher) activity.getSupportFragmentManager()
                 .findFragmentByTag(Constants.TODAY_LAUNCHER_FRAG_TAG);
         if (launcher == null) {
-            launcher = TodayLauncher.getNewInstance();
+            launcher = PeekLauncher.getNewInstance(null);
         } else {
             activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
         }

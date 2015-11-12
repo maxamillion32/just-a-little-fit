@@ -14,11 +14,10 @@ import ecap.studio.group.justalittlefit.bus.AssignDialogBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditExerciseBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditSetBus;
 import ecap.studio.group.justalittlefit.bus.CreateEditWorkoutBus;
+import ecap.studio.group.justalittlefit.bus.PeekLauncherBus;
 import ecap.studio.group.justalittlefit.bus.SelectDialogBus;
 import ecap.studio.group.justalittlefit.bus.TodayBus;
-import ecap.studio.group.justalittlefit.bus.TodayLauncherBus;
 import ecap.studio.group.justalittlefit.bus.ViewBus;
-import ecap.studio.group.justalittlefit.dialog.SelectExerciseDialog;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -107,11 +106,13 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
-            case Constants.TODAY_LAUNCHER:
+            case Constants.PEEK_LAUNCHER:
                 for (DbFunctionObject dfo : params) {
                     try {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.GET_WORKOUTS_BY_DATE:
+                                DateTime dateTime = (dfo.getDbObject() == null) ? new DateTime() :
+                                        (DateTime) dfo.getDbObject();
                                 return QueryExecutor.getWorkoutsByDate(new DateTime());
                         }
                     } catch (SQLException e) {
@@ -197,8 +198,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
             case Constants.ASSIGN:
                 AssignBus.getInstance().post(new DbTaskResult(result));
                 break;
-            case Constants.TODAY_LAUNCHER:
-                TodayLauncherBus.getInstance().post(new DbTaskResult(result));
+            case Constants.PEEK_LAUNCHER:
+                PeekLauncherBus.getInstance().post(new DbTaskResult(result));
                 break;
             case Constants.VIEW_TEXT:
                 ViewBus.getInstance().post(new DbTaskResult(result));
