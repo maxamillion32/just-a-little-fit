@@ -81,7 +81,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         DateTime now = new DateTime();
         DateTime minDate = now.minusYears(5);
         DateTime maxDate = now.plusYears(5);
-        chooseCalendar.init(minDate.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
+        chooseCalendar.init(minDate.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.SINGLE);
         chooseCalendar.scrollToDate(now.toDate());
 
         chooseCalendar.setOnInvalidDateSelectedListener(new CalendarPickerView.OnInvalidDateSelectedListener() {
@@ -103,10 +103,8 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constants.DATE, date);
 
-                Intent intent = new Intent(activity, ViewActivity.class);
-                intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                activity.startActivity(intent);
+                DateTime dateTime = new DateTime(date);
+                Utils.launchViewActivity(activity, dateTime);
             }
 
             @Override
@@ -126,7 +124,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         DateTime now = new DateTime();
         DateTime minDate = now.minusYears(5);
         DateTime maxDate = now.plusYears(5);
-        chooseCalendar.init(minDate.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.MULTIPLE);
+        chooseCalendar.init(minDate.toDate(), maxDate.toDate()).inMode(CalendarPickerView.SelectionMode.SINGLE);
         chooseCalendar.scrollToDate(now.toDate());
     }
 

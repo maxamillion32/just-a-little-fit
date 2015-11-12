@@ -183,14 +183,26 @@ public class Utils {
 
     public static void launchTodayActivity(AppCompatActivity activity) {
         PeekLauncher launcher = (PeekLauncher) activity.getSupportFragmentManager()
-                .findFragmentByTag(Constants.TODAY_LAUNCHER_FRAG_TAG);
+                .findFragmentByTag(Constants.PEEK_LAUNCHER_FRAG_TAG);
         if (launcher == null) {
             launcher = PeekLauncher.getNewInstance(null);
         } else {
             activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
         }
         activity.getSupportFragmentManager().executePendingTransactions();
-        activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.TODAY_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
+        activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.PEEK_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
+    }
+
+    public static void launchViewActivity(AppCompatActivity activity, DateTime dateTime) {
+        PeekLauncher launcher = (PeekLauncher) activity.getSupportFragmentManager()
+                .findFragmentByTag(Constants.PEEK_LAUNCHER_FRAG_TAG);
+        if (launcher == null) {
+            launcher = PeekLauncher.getNewInstance(dateTime);
+        } else {
+            activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
+        }
+        activity.getSupportFragmentManager().executePendingTransactions();
+        activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.PEEK_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
     }
 
     public static ProgressDialog showProgressDialog(Context context) {

@@ -113,7 +113,7 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             case DbConstants.GET_WORKOUTS_BY_DATE:
                                 DateTime dateTime = (dfo.getDbObject() == null) ? new DateTime() :
                                         (DateTime) dfo.getDbObject();
-                                return QueryExecutor.getWorkoutsByDate(new DateTime());
+                                return QueryExecutor.getWorkoutsByDate(dateTime);
                         }
                     } catch (SQLException e) {
                         return null;

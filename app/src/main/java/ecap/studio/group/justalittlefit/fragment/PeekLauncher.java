@@ -17,6 +17,7 @@ import java.util.List;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.activity.TodayActivity;
 import ecap.studio.group.justalittlefit.activity.TodayChooserActivity;
+import ecap.studio.group.justalittlefit.activity.ViewActivity;
 import ecap.studio.group.justalittlefit.bus.PeekLauncherBus;
 import ecap.studio.group.justalittlefit.database.DbAsyncTask;
 import ecap.studio.group.justalittlefit.database.DbConstants;
@@ -95,11 +96,34 @@ public class PeekLauncher extends Fragment {
                     getActivity().startActivity(intent);
                 }
             }
+        } else {
+            if (event == null || event.getResult() == null) {
+                displayViewWorkoutsError();
+            } else if (event.getResult() instanceof List) {
+                ArrayList<Workout> workouts = new ArrayList<>((List<Workout>) event.getResult());
+                if (workouts.isEmpty()) {
+                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_to_view));
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constants.DATE, workouts.get(0).getWorkoutDate());
+
+                    Intent intent = new Intent(getActivity(), ViewActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtras(bundle);
+                    getActivity().startActivity(intent);
+                }
+            }
         }
     }
 
     void displayTodayWorkoutsError() {
         String errorMsg = getString(R.string.today_workouts_error);
+        Log.e(LOG_TAG, errorMsg);
+        Utils.displayLongToast(getActivity(), errorMsg);
+    }
+
+    void displayViewWorkoutsError() {
+        String errorMsg = getString(R.string.workout_view_error);
         Log.e(LOG_TAG, errorMsg);
         Utils.displayLongToast(getActivity(), errorMsg);
     }
