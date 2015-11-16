@@ -107,7 +107,6 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                         getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
                         .show();
             } else if (workouts.isEmpty()) {
-                // Display dialog
                 displayJumpToCreateEditDialog();
                 dismiss();
             } else {
