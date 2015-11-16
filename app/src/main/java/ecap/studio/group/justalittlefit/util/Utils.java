@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -233,5 +235,16 @@ public class Utils {
         } else {
             textView.setPaintFlags(textView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
         }
+    }
+
+    public static boolean isToday(DateTime dateTime) {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        DateTime startOfToday = today.toDateTimeAtStartOfDay();
+        DateTime startOfTomorrow = tomorrow.toDateTimeAtStartOfDay();
+
+        Interval todayInterval = new Interval(startOfToday, startOfTomorrow);
+        return todayInterval.contains(dateTime);
     }
 }

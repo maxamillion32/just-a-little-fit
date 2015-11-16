@@ -1,7 +1,6 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -23,10 +22,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.dialog.SelectViewOrTodayDialog;
+import ecap.studio.group.justalittlefit.listener.SelectViewOrTodayDialogListener;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
+public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectViewOrTodayDialogListener {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
@@ -34,6 +35,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
 
     @InjectView(R.id.chooseCalendar)
     CalendarPickerView chooseCalendar;
+    DateTime chosenDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +105,12 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constants.DATE, date);
 
-                DateTime dateTime = new DateTime(date);
-                Utils.launchViewActivity(activity, dateTime);
+                chosenDateTime = new DateTime(date);
+                if (Utils.isToday(chosenDateTime)) {
+                    displaySelectViewOrTodayDialog();
+                } else {
+                    Utils.launchViewActivity(activity, chosenDateTime);
+                }
             }
 
             @Override
@@ -118,6 +124,12 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.CHOOSE);
         dialog.show(fm, getString(R.string.infoDialogTagChooseWorkoutDate));
+    }
+
+    private void displaySelectViewOrTodayDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        SelectViewOrTodayDialog dialog = new SelectViewOrTodayDialog();
+        dialog.show(fm, getString(R.string.selectViewOrTodayDialogTag));
     }
 
     private void resetCalendarView() {
@@ -141,4 +153,13 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         selectedItem.setChecked(true);
     }
 
+    @Override
+    public void onSelectViewDialog(SelectViewOrTodayDialog dialog) {
+        Utils.launchViewActivity(this, chosenDateTime);
+    }
+
+    @Override
+    public void onSelectTodayDialog(SelectViewOrTodayDialog dialog) {
+        Utils.launchTodayActivity(this);
+    }
 }
