@@ -143,11 +143,18 @@
     <string name="selectViewOrTodayDialog_Title">View Today\'s Workout</string>
     <string name="selectViewOption">View</string>
     <string name="selectTodayOption">Today</string>
-    <string name="selectInfo">- This is today\'s date. You can view this workout(s) in either of two ways.</string>
+    <string name="selectInfo">This is today\'s date. You can view this workout(s) in either of two ways.</string>
     <string name="selectViewInfo">- Select the \"View\" option to view this workout(s) in an uneditable, recap fashion.</string>
     <string name="selectTodayInfo">- Select the \"Today\" option to view this workout(s) in a modifiable, on-the-go state.</string>
     <string name="selectViewOrTodayDialogTag">Select View Or Today Dialog Tag</string>
     <string name="noImplementsSelectViewOrTodayDialogListener">doesn\'t implement SelectViewOrTodayDialogListener.</string>
+
+    <!-- JumpToCreateEditDialog Strings -->
+    <string name="jumpToCreateEditDialog_Title">No Workouts Found</string>
+    <string name="goToCreateEdit">Yes, I\'d like to</string>
+    <string name="noGoToCreateEdit">No thanks</string>
+    <string name="optForCreateEdit">You currently have no Workouts to assign. Would you like to go create one/some?</string>
+    <string name="jumpToCreateEditDialogTag">Jump To Create Edit Dialog Tag</string>
 
     <!-- Error Messages -->
     <string name="db_error">An error occurred. Please try again.</string>

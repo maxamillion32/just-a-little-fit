@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -106,14 +107,19 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
                         getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
                         .show();
             } else if (workouts.isEmpty()) {
-                Snackbar.make(getActivity().findViewById(R.id.fab),
-                        getString(R.string.workout_list_empty_for_assign), Snackbar.LENGTH_LONG)
-                        .show();
+                // Display dialog
+                displayJumpToCreateEditDialog();
                 dismiss();
             } else {
                 createWorkoutCheckBoxes(workouts);
             }
         }
+    }
+
+    private void displayJumpToCreateEditDialog() {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        JumpToCreateEditDialog dialog = new JumpToCreateEditDialog();
+        dialog.show(fm, getString(R.string.jumpToCreateEditDialogTag));
     }
 
     @Override
