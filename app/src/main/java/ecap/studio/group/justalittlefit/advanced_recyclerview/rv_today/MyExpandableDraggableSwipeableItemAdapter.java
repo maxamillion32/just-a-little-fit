@@ -19,7 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeabl
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractExpandableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 
-import java.util.zip.CheckedOutputStream;
+import java.util.HashMap;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
@@ -38,7 +38,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
     private EventListener mEventListener;
     private View.OnClickListener mItemViewOnClickListener;
     private View.OnClickListener mSwipeableViewContainerOnClickListener;
-    boolean isInExpandedState;
+    HashMap<Exercise, View> exerciseViewMap = new HashMap<>();
 
     public interface EventListener {
         void onGroupItemRemoved(int groupPosition, Exercise exercise);
@@ -86,12 +86,14 @@ public class MyExpandableDraggableSwipeableItemAdapter
     }
 
     public static class MyGroupViewHolder extends MyBaseViewHolder {
+        Exercise exercise;
         public MyGroupViewHolder(View v) {
             super(v);
         }
     }
 
     public static class MyChildViewHolder extends MyBaseViewHolder {
+        Set set;
         public MyChildViewHolder(View v) {
             super(v);
         }
@@ -181,11 +183,19 @@ public class MyExpandableDraggableSwipeableItemAdapter
         // group item
         final AbstractExpandableDataProvider.GroupData item = mProvider.getGroupItem(groupPosition);
 
+        exerciseViewMap.put(item.getExercise(), holder.mTextView);
+
         // set listeners
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
 
         // set text
         holder.mTextView.setText(item.getText());
+        holder.exercise = item.getExercise();
+
+        if (holder.exercise.isComplete()) {
+            Utils.strikeThroughText(holder.mTextView);
+            holder.mItemCb.setChecked(true);
+        }
 
         // set background resource (target view ID: container)
         final int dragState = holder.getDragStateFlags();
@@ -243,10 +253,16 @@ public class MyExpandableDraggableSwipeableItemAdapter
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
         // (if the item is *pinned*, click event comes to the mContainer)
         holder.mContainer.setOnClickListener(mSwipeableViewContainerOnClickListener);
-        holder.mItemCb.setOnCheckedChangeListener(new CbChangeListener(holder));
+        holder.mItemCb.setOnCheckedChangeListener(new CbChangeListener(holder, exerciseViewMap));
 
         // set text
         holder.mTextView.setText(item.getText());
+        holder.set = item.getSet();
+
+        if (holder.set.isComplete()) {
+            Utils.strikeThroughText(holder.mTextView);
+            holder.mItemCb.setChecked(true);
+        }
 
         final int dragState = holder.getDragStateFlags();
         final int swipeState = holder.getSwipeStateFlags();

@@ -231,10 +231,18 @@ public class Utils {
 
     public static void handleStrikeThroughText(TextView textView, boolean doStrikeThrough) {
         if (doStrikeThrough) {
-            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            strikeThroughText(textView);
         } else {
-            textView.setPaintFlags(textView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+            clearStrikeThroughText(textView);
         }
+    }
+
+    public static void strikeThroughText(TextView textView) {
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+    }
+
+    public static void clearStrikeThroughText(TextView textView) {
+        textView.setPaintFlags(textView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
     }
 
     public static boolean isToday(DateTime dateTime) {
