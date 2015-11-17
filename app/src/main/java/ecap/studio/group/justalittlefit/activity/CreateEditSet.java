@@ -313,6 +313,8 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         if (!busRegistered) {
             registerBus();
         }
+        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
+        selectedItem.setChecked(true);
     }
 
     @Override
