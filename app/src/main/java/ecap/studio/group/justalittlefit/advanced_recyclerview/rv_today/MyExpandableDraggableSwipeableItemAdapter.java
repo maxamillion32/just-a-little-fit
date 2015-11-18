@@ -39,6 +39,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
     private View.OnClickListener mItemViewOnClickListener;
     private View.OnClickListener mSwipeableViewContainerOnClickListener;
     HashMap<Exercise, View> exerciseViewMap = new HashMap<>();
+    HashMap<Exercise, Integer> exerciseCountMap = new HashMap<>();
 
     public interface EventListener {
         void onGroupItemRemoved(int groupPosition, Exercise exercise);
@@ -182,19 +183,20 @@ public class MyExpandableDraggableSwipeableItemAdapter
     public void onBindGroupViewHolder(MyGroupViewHolder holder, int groupPosition, int viewType) {
         // group item
         final AbstractExpandableDataProvider.GroupData item = mProvider.getGroupItem(groupPosition);
+        holder.exercise = item.getExercise();
 
-        exerciseViewMap.put(item.getExercise(), holder.mTextView);
+        exerciseViewMap.put(holder.exercise, holder.mTextView);
+        exerciseCountMap.put(holder.exercise, holder.exercise.getSets().size());
 
         // set listeners
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
 
         // set text
         holder.mTextView.setText(item.getText());
-        holder.exercise = item.getExercise();
+
 
         if (holder.exercise.isComplete()) {
             Utils.strikeThroughText(holder.mTextView);
-            holder.mItemCb.setChecked(true);
         }
 
         // set background resource (target view ID: container)
@@ -253,15 +255,23 @@ public class MyExpandableDraggableSwipeableItemAdapter
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
         // (if the item is *pinned*, click event comes to the mContainer)
         holder.mContainer.setOnClickListener(mSwipeableViewContainerOnClickListener);
-        holder.mItemCb.setOnCheckedChangeListener(new CbChangeListener(holder, exerciseViewMap));
+        holder.mItemCb.setOnCheckedChangeListener(new CbChangeListener(holder, exerciseViewMap, exerciseCountMap));
 
         // set text
         holder.mTextView.setText(item.getText());
         holder.set = item.getSet();
 
+        // get exercise set count from map
+        int exerciseSetCount = exerciseCountMap.get(holder.set.getExercise());
+
         if (holder.set.isComplete()) {
             Utils.strikeThroughText(holder.mTextView);
             holder.mItemCb.setChecked(true);
+            exerciseCountMap.put(holder.set.getExercise(), Utils.returnExerciseSetCount(holder.set.getExercise(),
+                    exerciseSetCount, Constants.INT_NEG_ONE));
+        } else {
+            exerciseCountMap.put(holder.set.getExercise(), Utils.returnExerciseSetCount(holder.set.getExercise(),
+                    exerciseSetCount, Constants.INT_ZERO));
         }
 
         final int dragState = holder.getDragStateFlags();

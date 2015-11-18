@@ -36,6 +36,7 @@ import ecap.studio.group.justalittlefit.activity.ChooseWorkoutDate;
 import ecap.studio.group.justalittlefit.activity.CreateEditWorkout;
 import ecap.studio.group.justalittlefit.activity.Home;
 import ecap.studio.group.justalittlefit.fragment.PeekLauncher;
+import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Workout;
 
 /**
@@ -254,5 +255,16 @@ public class Utils {
 
         Interval todayInterval = new Interval(startOfToday, startOfTomorrow);
         return todayInterval.contains(dateTime);
+    }
+
+    public static Integer returnExerciseSetCount(Exercise exercise, int currentCount, int addend) {
+        int maxCount = exercise.getSets().size();
+        int currentPlusAddend = currentCount + addend;
+
+        if (currentPlusAddend > maxCount) {
+            return maxCount;
+        } else {
+            return currentPlusAddend;
+        }
     }
 }

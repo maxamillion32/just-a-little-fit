@@ -99,6 +99,10 @@ public class Constants {
 
     public static final int INT_ONE = 1;
 
+    public static final Integer INT_NEG_ONE = -1;
+
+    public static final Integer INT_ZERO = 0;
+
     public static final String DATA_FRAG_TYPE = "DATA_FRAG_TYPE";
 
     public static final String WORKOUT_LIST = "WORKOUT_LIST";
@@ -138,5 +142,6 @@ public class Constants {
     public static final String EXPAND_ICON = "[ + ]";
 
     public static final String COLLAPSE_ICON = "[ - ]";
+
 }
 
