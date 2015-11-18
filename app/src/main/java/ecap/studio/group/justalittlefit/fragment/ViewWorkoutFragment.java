@@ -18,6 +18,7 @@ import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.adapter.WorkoutRvAdapter;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class ViewWorkoutFragment extends Fragment {
 
@@ -43,6 +44,11 @@ public class ViewWorkoutFragment extends Fragment {
         workout = getArguments().getParcelable(Constants.WORKOUT);
         View v = inflater.inflate(R.layout.frag_view_workout, container, false);
         ButterKnife.inject(this, v);
+        if (Utils.isWorkoutComplete(workout)) {
+            Utils.strikeThroughText(tvWorkoutName);
+        } else {
+            Utils.clearStrikeThroughText(tvWorkoutName);
+        }
         tvWorkoutName.setText(workout.getName());
         setupRecyclerView();
         return v;

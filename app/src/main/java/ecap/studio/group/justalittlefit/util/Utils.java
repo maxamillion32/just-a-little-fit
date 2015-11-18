@@ -267,4 +267,15 @@ public class Utils {
             return currentPlusAddend;
         }
     }
+
+    public static boolean isWorkoutComplete(Workout workout) {
+        boolean workoutIsComplete = true;
+        for (Exercise exercise : workout.getExercises()) {
+            if (!exercise.isComplete()) {
+                workoutIsComplete = false;
+                break;
+            }
+        }
+        return workoutIsComplete;
+    }
 }

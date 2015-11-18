@@ -16,6 +16,7 @@ import java.util.List;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
+import ecap.studio.group.justalittlefit.util.Utils;
 
 public class WorkoutRvAdapter extends RecyclerView.Adapter<WorkoutRvAdapter.ViewHolder> {
 
@@ -37,6 +38,11 @@ public class WorkoutRvAdapter extends RecyclerView.Adapter<WorkoutRvAdapter.View
     @Override
     public void onBindViewHolder(WorkoutRvAdapter.ViewHolder holder, int position) {
         Exercise exercise = exercises.get(position);
+        if (exercise.isComplete()) {
+            Utils.strikeThroughText(holder.exerciseName);
+        } else {
+            Utils.clearStrikeThroughText(holder.exerciseName);
+        }
         holder.exerciseName.setText(exercise.getName());
 
         for (Set set : exercise.getSets()) {
@@ -47,6 +53,11 @@ public class WorkoutRvAdapter extends RecyclerView.Adapter<WorkoutRvAdapter.View
             tvSet.setPadding(0, 0, 0, 5);
             tvSet.setText("\u2022 " + set.toString());
             row.addView(tvSet);
+            if (set.isComplete()) {
+                Utils.strikeThroughText(tvSet);
+            } else {
+                Utils.clearStrikeThroughText(tvSet);
+            }
             holder.exerciseContainer.addView(row);
         }
     }
