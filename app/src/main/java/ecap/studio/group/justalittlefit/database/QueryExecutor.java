@@ -63,6 +63,16 @@ public class QueryExecutor {
         }
     }
 
+    public static Boolean deleteTodayWorkout(Workout workout) {
+        try {
+            Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+            dao.delete(workout);
+            return true;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public static Integer deleteUnassignedWorkouts() {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         try {

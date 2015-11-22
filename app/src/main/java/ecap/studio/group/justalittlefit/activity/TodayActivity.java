@@ -1,6 +1,7 @@
 package ecap.studio.group.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -40,16 +41,19 @@ import ecap.studio.group.justalittlefit.database.DbTaskResult;
 import ecap.studio.group.justalittlefit.dialog.AddExerciseDialog;
 import ecap.studio.group.justalittlefit.dialog.AddExerciseOrSetDialog;
 import ecap.studio.group.justalittlefit.dialog.AddSetDialog;
+import ecap.studio.group.justalittlefit.dialog.AppBaseDialog;
+import ecap.studio.group.justalittlefit.dialog.ConfirmDeleteTodayWorkoutDialog;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
 import ecap.studio.group.justalittlefit.listener.AddExerciseDialogListener;
 import ecap.studio.group.justalittlefit.listener.AddSetDialogListener;
+import ecap.studio.group.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
-public class TodayActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener, AddSetDialogListener {
+public class TodayActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener, AddSetDialogListener, ConfirmDeleteTodayWorkoutListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -94,7 +98,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_info, menu);
+        getMenuInflater().inflate(R.menu.menu_info_delete_single, menu);
         return true;
     }
 
@@ -104,6 +108,9 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.action_delete:
+                displayConfirmDeleteWorkoutDialog();
+                break;
             case R.id.action_info:
                 displayInfoDialog();
                 break;
@@ -167,6 +174,11 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder workouts before leaving activity
             reorderWorkouts();
+        } else if (event.getResult() instanceof Boolean) {
+            Utils.displayLongToast(this, getString(R.string.workout_deleted));
+            Intent intent = new Intent(this, Home.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 
@@ -174,6 +186,12 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.TODAY);
         dialog.show(fm, getString(R.string.infoDialogTagToday));
+    }
+
+    private void displayConfirmDeleteWorkoutDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ConfirmDeleteTodayWorkoutDialog dialog = new ConfirmDeleteTodayWorkoutDialog();
+        dialog.show(fm, getString(R.string.confirmDeleteTodayWorkoutDialogTag));
     }
 
     private void getWorkout() {
@@ -417,5 +435,11 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
         }
+    }
+
+    @Override
+    public void onDeleteTodayWorkoutClick(AppBaseDialog dialog) {
+        DbFunctionObject deleteWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.DELETE_WORKOUT);
+        new DbAsyncTask(Constants.TODAY).execute(deleteWorkoutDfo);
     }
 }

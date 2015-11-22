@@ -165,6 +165,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.createExerciseForToday((Exercise) dfo.getDbObject());
                         case DbConstants.INSERT_SET:
                             return QueryExecutor.createSetForToday((Set) dfo.getDbObject());
+                        case DbConstants.DELETE_WORKOUT:
+                        return QueryExecutor.deleteTodayWorkout((Workout) dfo.getDbObject());
                     }
                 }
                 break;

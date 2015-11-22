@@ -26,6 +26,7 @@
     <string name="view_string">View</string>
     <string name="create_edit_string">Create/Edit</string>
     <string name="delete_item">Delete</string>
+    <string name="delete_workout">Delete Workout</string>
     <string name="delete_all">Delete All</string>
     <string name="information">Information</string>
     <string name="add_workout">Add Workout</string>
@@ -155,6 +156,11 @@
     <string name="noGoToCreateEdit">No thanks</string>
     <string name="optForCreateEdit">You currently have no Workouts to assign. Would you like to go create one/some?</string>
     <string name="jumpToCreateEditDialogTag">Jump To Create Edit Dialog Tag</string>
+
+    <!-- ConfirmDeleteTodayWorkoutDialog Strings -->
+    <string name="deleteTodayWorkout">Yes, delete this workout</string>
+    <string name="noImplementsConfirmDeleteTodayWorkoutListener">doesn\'t implement ConfirmDeleteTodayWorkoutListener.</string>
+    <string name="confirmDeleteTodayWorkoutDialogTag">Jump To Create Edit Dialog Tag</string>
 
     <!-- Error Messages -->
     <string name="db_error">An error occurred. Please try again.</string>
