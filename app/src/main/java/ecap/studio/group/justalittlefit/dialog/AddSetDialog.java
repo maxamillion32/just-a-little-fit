@@ -105,10 +105,10 @@ public class AddSetDialog extends DialogFragment {
                     public void onClick(View view) {
                         if (getRbWeightedSet().isChecked()) {
                             String errMsg = Constants.EMPTY_STRING;
-                            if (getEtRepCount().getText().toString().trim().isEmpty()) {
+                            if ((Utils.editableIsZeroOrNullOrEmpty(getEtRepCount().getText()))) {
                                 errMsg += "Please enter in a rep count greater than 0";
                             }
-                            if (getEtWeightAmount().getText().toString().trim().isEmpty()) {
+                            if ((Utils.editableIsZeroOrNullOrEmpty(getEtWeightAmount().getText()))) {
                                 String weightErr = "Please enter in a weight amount greater than 0";
                                 if (errMsg.trim().isEmpty()) {
                                     errMsg += weightErr;
@@ -119,12 +119,12 @@ public class AddSetDialog extends DialogFragment {
                             handleDismissOrErrDisplay(errMsg, createSetDialog);
                         } else if (getRbTimedSet().isChecked()) {
                             String errMsg = Constants.EMPTY_STRING;
-                            if (getEtRepCount().getText().toString().trim().isEmpty()) {
+                            if (Utils.editableIsZeroOrNullOrEmpty(getEtTimedRepCount().getText())) {
                                 errMsg += "Please enter in a rep count greater than 0";
                             }
-                            if (getEtHours().getText().toString().trim().isEmpty() &&
-                                    getEtMins().getText().toString().trim().isEmpty() &&
-                                    getEtSeconds().getText().toString().trim().isEmpty()) {
+                            if (Utils.editableIsZeroOrNullOrEmpty(getEtHours().getText()) &&
+                                    Utils.editableIsZeroOrNullOrEmpty(getEtMins().getText()) &&
+                                    Utils.editableIsZeroOrNullOrEmpty(getEtSeconds().getText())) {
                                 String timedErr = "Please enter in at least one value for hours, minutes, or seconds";
                                 if (errMsg.trim().isEmpty()) {
                                     errMsg += timedErr;

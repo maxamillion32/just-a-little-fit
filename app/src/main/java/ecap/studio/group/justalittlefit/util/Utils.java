@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -277,5 +278,14 @@ public class Utils {
             }
         }
         return workoutIsComplete;
+    }
+
+    public static boolean editableIsZeroOrNullOrEmpty(Editable value) {
+        if (value == null || value.toString() == null || value.toString().isEmpty()
+                || Integer.parseInt(value.toString().trim()) == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
