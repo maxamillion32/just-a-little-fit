@@ -286,6 +286,20 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         }
     }
 
+    public void onChildItemClicked(int groupPosition, int childPosition) {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+        ((TodayRvListViewFragment) fragment).notifyChildItemRestored(groupPosition, childPosition);
+        AbstractExpandableDataProvider.ChildData data = getDataProvider().getChildItem(groupPosition, childPosition);
+        Set set = data.getSet();
+        displayAddSetDialogUponEdit(set);
+    }
+
+    private void displayAddSetDialogUponEdit(Set set) {
+        FragmentManager fm = getSupportFragmentManager();
+        AddSetDialog dialog = AddSetDialog.newInstance(set);
+        dialog.show(fm, getString(R.string.addSetDialogTag));
+    }
+
     @Override
     protected void onDestroy() {
         unregisterBus();

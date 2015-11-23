@@ -226,7 +226,7 @@ public class TodayRvListViewFragment extends Fragment {
         if (childPosition == RecyclerView.NO_POSITION) {
             //((ExpandableDraggableSwipeableExampleActivity) getActivity()).onGroupItemClicked(groupPosition);
         } else {
-            //((ExpandableDraggableSwipeableExampleActivity) getActivity()).onChildItemClicked(groupPosition, childPosition);
+            todayActivity.onChildItemClicked(groupPosition, childPosition);
         }
     }
 
