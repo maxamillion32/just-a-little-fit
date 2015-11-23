@@ -185,6 +185,12 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         this.setsToDelete.add(set);
     }
 
+    public void onItemClicked(int position) {
+        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        Set set = (Set) data.getDataObject();
+        displayAddSetDialogUponEdit(set);
+    }
+
     private View.OnClickListener undoSetDelete() {
         return new View.OnClickListener() {
             @Override
@@ -298,6 +304,12 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     private void displayAddSetDialog() {
         FragmentManager fm = getSupportFragmentManager();
         AddSetDialog dialog = new AddSetDialog();
+        dialog.show(fm, getString(R.string.addSetDialogTag));
+    }
+
+    private void displayAddSetDialogUponEdit(Set set) {
+        FragmentManager fm = getSupportFragmentManager();
+        AddSetDialog dialog = AddSetDialog.newInstance(set);
         dialog.show(fm, getString(R.string.addSetDialogTag));
     }
 

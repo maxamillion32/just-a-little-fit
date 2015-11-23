@@ -193,9 +193,13 @@ public class RecyclerListViewFragment extends Fragment {
             if (position != RecyclerView.NO_POSITION) {
                 createEditWorkoutActivity.onItemClicked(position);
             }
-        } else {
+        } else if (createEditWorkoutActivity == null && createEditSetActivity == null) {
             if (createEditExerciseActivity != null && position != RecyclerView.NO_POSITION) {
                 createEditExerciseActivity.onItemClicked(position);
+            }
+        } else if (createEditWorkoutActivity == null && createEditExerciseActivity == null) {
+            if (createEditSetActivity != null && position != RecyclerView.NO_POSITION) {
+                createEditSetActivity.onItemClicked(position);
             }
         }
     }

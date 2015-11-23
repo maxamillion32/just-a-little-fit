@@ -288,4 +288,12 @@ public class Utils {
             return false;
         }
     }
+
+    public static Integer ensureNonNullInteger(Integer intObj) {
+        if (intObj == null) {
+            return 0;
+        } else {
+            return intObj;
+        }
+    }
 }

@@ -20,7 +20,7 @@ import butterknife.OnClick;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.listener.AddSetDialogListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
-import ecap.studio.group.justalittlefit.model.Workout;
+import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.util.Constants;
 import ecap.studio.group.justalittlefit.util.Utils;
 
@@ -54,12 +54,23 @@ public class AddSetDialog extends DialogFragment {
     @InjectView(R.id.etTimedRepCount)
     EditText etTimedRepCount;
     Exercise exercise;
+    Set set;
 
     public static AddSetDialog newInstance(Exercise exercise) {
         AddSetDialog dialog = new AddSetDialog();
 
         Bundle args = new Bundle();
         args.putParcelable(Constants.EXERCISE, exercise);
+        dialog.setArguments(args);
+
+        return dialog;
+    }
+
+    public static AddSetDialog newInstance(Set set) {
+        AddSetDialog dialog = new AddSetDialog();
+
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.SET, set);
         dialog.setArguments(args);
 
         return dialog;
@@ -80,6 +91,12 @@ public class AddSetDialog extends DialogFragment {
             exercise = null;
         }
 
+        if (args != null && args.containsKey(Constants.SET)) {
+            set = args.getParcelable(Constants.SET);
+        } else {
+            set = null;
+        }
+
         builder.setTitle(getString(R.string.addSetDialog_Title));
         builder.setView(view);
         builder.setPositiveButton(getString(R.string.addSetDialog_add), new DialogInterface.OnClickListener() {
@@ -95,6 +112,7 @@ public class AddSetDialog extends DialogFragment {
             }
         });
         final AlertDialog createSetDialog = builder.create();
+        setUiFromData(set);
         createSetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -147,6 +165,34 @@ public class AddSetDialog extends DialogFragment {
         return createSetDialog;
     }
 
+    void setUiFromData(Set set) {
+        if (set != null) {
+            if (set.getExerciseTypeCode().equals(Constants.LOGGED_TIMED)) {
+                displayTimedView();
+                Integer hours = Utils.ensureNonNullInteger(set.getHours());
+                Integer mins = Utils.ensureNonNullInteger(set.getMinutes());
+                Integer secs = Utils.ensureNonNullInteger(set.getSeconds());
+
+                tvHours.setText(Utils.ensureValidString(hours.toString()));
+                tvMins.setText(Utils.ensureValidString(mins.toString()));
+                tvSeconds.setText(Utils.ensureValidString(secs.toString()));
+                etTimedRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
+            } else {
+                displayWeightedView();
+                Integer weight = Utils.ensureNonNullInteger(set.getWeight());
+                etRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
+                etWeightAmount.setText(Utils.ensureValidString(weight.toString()));
+                if (set.getExerciseTypeCode().equals(Constants.LBS)) {
+                    rbLbs.setChecked(true);
+                    rbKgs.setChecked(false);
+                } else {
+                    rbLbs.setChecked(false);
+                    rbKgs.setChecked(true);
+                }
+            }
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -176,16 +222,26 @@ public class AddSetDialog extends DialogFragment {
         // Check which radio button was clicked
         switch(view.getId()) {
             case R.id.rbWeightType:
-                if (checked)
-                    llTimedSetView.setVisibility(View.GONE);
-                    llWeightedSetView.setVisibility(View.VISIBLE);
+                if (checked) {
+                    displayWeightedView();
                     break;
+                }
             case R.id.rbLoggedTimeType:
-                if (checked)
-                    llTimedSetView.setVisibility(View.VISIBLE);
-                llWeightedSetView.setVisibility(View.GONE);
+                if (checked) {
+                    displayTimedView();
                     break;
+                }
         }
+    }
+
+    void displayWeightedView() {
+        llTimedSetView.setVisibility(View.GONE);
+        llWeightedSetView.setVisibility(View.VISIBLE);
+    }
+
+    void displayTimedView() {
+        llTimedSetView.setVisibility(View.VISIBLE);
+        llWeightedSetView.setVisibility(View.GONE);
     }
 
     public RadioButton getRbLbs() {
