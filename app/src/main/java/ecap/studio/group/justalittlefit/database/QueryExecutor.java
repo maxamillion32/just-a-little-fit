@@ -340,11 +340,10 @@ public class QueryExecutor {
         return sets;
     }
 
-    public static Boolean updateSet(ecap.studio.group.justalittlefit.model.Set set) {
+    public static Double updateSet(ecap.studio.group.justalittlefit.model.Set set) {
         Dao<ecap.studio.group.justalittlefit.model.Set, Integer> dao = DaoHelper.getInstance().getSetDao();
         try {
-            dao.update(set);
-            return true;
+            return Double.parseDouble(dao.update(set) + Constants.EMPTY_STRING);
         } catch (SQLException e) {
             return null;
         }

@@ -424,6 +424,11 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         reorderWorkouts();
     }
 
+    @Override
+    public void onEditSetClick(AddSetDialog dialog) {
+
+    }
+
     private void addExerciseOrSetToUI() {
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();

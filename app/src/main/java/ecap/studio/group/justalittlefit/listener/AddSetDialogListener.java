@@ -7,4 +7,5 @@ import ecap.studio.group.justalittlefit.dialog.AddSetDialog;
  */
 public interface AddSetDialogListener {
     public void onAddSetClick(AddSetDialog dialog);
+    public void onEditSetClick(AddSetDialog dialog);
 }

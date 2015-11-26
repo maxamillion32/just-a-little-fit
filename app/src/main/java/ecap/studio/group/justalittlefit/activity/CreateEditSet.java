@@ -54,6 +54,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     Exercise parentExercise;
     boolean busRegistered;
     boolean reorderTriggeredByAddSet;
+    boolean reorderTriggeredByEditSet;
     Set addedSet;
     private HashSet<Set> setsToDelete;
     @InjectView(R.id.rlDefault)
@@ -70,18 +71,28 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         ButterKnife.inject(this, frameLayout);
 
         if (savedInstanceState == null) {
-            parentExercise = getParentExercise();
-            if (parentExercise != null) {
-                DbFunctionObject getSetsByExercise = new DbFunctionObject(parentExercise, DbConstants.GET_SETS_BY_EXERCISE);
-                new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(getSetsByExercise);
-            } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
-            }
+           displaySetList();
         }
 
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_set_title_string);
         setsToDelete = new HashSet<>();
+    }
+
+    void displaySetList() {
+        showProgressDialog();
+        parentExercise = getParentExercise();
+        if (parentExercise != null) {
+            DbFunctionObject getSetsByExercise = new DbFunctionObject(parentExercise, DbConstants.GET_SETS_BY_EXERCISE);
+            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(getSetsByExercise);
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
+        }
+
+        if (reorderTriggeredByEditSet) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
+            reorderTriggeredByEditSet = false;
+        }
     }
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
@@ -120,7 +131,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         } else if (event.getResult() instanceof java.util.Set) {
             // Data order saved
             if (reorderTriggeredByAddSet) {
-                // Call method to add exercise to view
                 addSetToUI();
             } else {
                 // onPause result returned and data order saved, reset boolean trigger
@@ -130,8 +140,9 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addSet_success));
             DbFunctionObject getSetsByExercise = new DbFunctionObject(parentExercise, DbConstants.GET_SETS_BY_EXERCISE);
             new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(getSetsByExercise);
-        }
-        else if (event.getResult() instanceof String) {
+        } else if (event.getResult() instanceof Double) {
+            displaySetList();
+        } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder sets before leaving activity
             reorderSets();
         } else if (event.getResult() instanceof Integer) {
@@ -383,5 +394,45 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
             String exerciseCd = Constants.LOGGED_TIMED;
             addedSet = new Set(reps, exerciseCd, hours, mins, seconds);
         }
+    }
+
+    @Override
+    public void onEditSetClick(AddSetDialog dialog) {
+        showProgressDialog();
+        reorderTriggeredByEditSet = true;
+        Set set = dialog.getSet();
+
+        if (dialog.getRbWeightedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+            String exerciseCd = Constants.WEIGHTS;
+            int weight = Utils.returnValidNumberFromEditText(dialog.getEtWeightAmount());
+            String weightCd;
+            if (dialog.getRbLbs().isChecked()) {
+                weightCd = Constants.LBS;
+            } else {
+                weightCd = Constants.KGS;
+            }
+            set.setReps(reps);
+            set.setWeightTypeCode(weightCd);
+            set.setExerciseTypeCode(exerciseCd);
+            set.setWeight(weight);
+        } else {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+            Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
+            Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
+            Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
+            String exerciseCd = Constants.LOGGED_TIMED;
+            set.setReps(reps);
+            set.setExerciseTypeCode(exerciseCd);
+            set.setMinutes(mins);
+            set.setHours(hours);
+            set.setSeconds(seconds);
+        }
+
+        dialog.dismiss();
+
+        DbFunctionObject editSetDfo =
+                new DbFunctionObject(set, DbConstants.UPDATE_SET);
+        new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(editSetDfo);
     }
 }

@@ -116,61 +116,70 @@ public class AddSetDialog extends DialogFragment {
             }
         });
         final AlertDialog createSetDialog = builder.create();
-        displayAndEnableEditingForUi(set);
         setEtListeners();
         createSetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
                 Button b = createSetDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        if (getRbWeightedSet().isChecked()) {
-                            String errMsg = Constants.EMPTY_STRING;
-                            if ((Utils.editableIsZeroOrNullOrEmpty(getEtRepCount().getText()))) {
-                                errMsg += "Please enter in a rep count greater than 0";
-                            }
-                            if ((Utils.editableIsZeroOrNullOrEmpty(getEtWeightAmount().getText()))) {
-                                String weightErr = "Please enter in a weight amount greater than 0";
-                                if (errMsg.trim().isEmpty()) {
-                                    errMsg += weightErr;
-                                } else {
-                                    errMsg += "\n" + weightErr;
+                if (set == null) {
+                    b.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (getRbWeightedSet().isChecked()) {
+                                String errMsg = Constants.EMPTY_STRING;
+                                if ((Utils.editableIsZeroOrNullOrEmpty(getEtRepCount().getText()))) {
+                                    errMsg += "Please enter in a rep count greater than 0";
                                 }
-                            }
-                            handleDismissOrErrDisplay(errMsg, createSetDialog);
-                        } else if (getRbTimedSet().isChecked()) {
-                            String errMsg = Constants.EMPTY_STRING;
-                            if (Utils.editableIsZeroOrNullOrEmpty(getEtTimedRepCount().getText())) {
-                                errMsg += "Please enter in a rep count greater than 0";
-                            }
-                            if (Utils.editableIsZeroOrNullOrEmpty(getEtHours().getText()) &&
-                                    Utils.editableIsZeroOrNullOrEmpty(getEtMins().getText()) &&
-                                    Utils.editableIsZeroOrNullOrEmpty(getEtSeconds().getText())) {
-                                String timedErr = "Please enter in at least one value for hours, minutes, or seconds";
-                                if (errMsg.trim().isEmpty()) {
-                                    errMsg += timedErr;
-                                } else {
-                                    errMsg += "\n" + timedErr;
+                                if ((Utils.editableIsZeroOrNullOrEmpty(getEtWeightAmount().getText()))) {
+                                    String weightErr = "Please enter in a weight amount greater than 0";
+                                    if (errMsg.trim().isEmpty()) {
+                                        errMsg += weightErr;
+                                    } else {
+                                        errMsg += "\n" + weightErr;
+                                    }
                                 }
                                 handleDismissOrErrDisplay(errMsg, createSetDialog);
+                            } else if (getRbTimedSet().isChecked()) {
+                                String errMsg = Constants.EMPTY_STRING;
+                                if (Utils.editableIsZeroOrNullOrEmpty(getEtTimedRepCount().getText())) {
+                                    errMsg += "Please enter in a rep count greater than 0";
+                                }
+                                if (Utils.editableIsZeroOrNullOrEmpty(getEtHours().getText()) &&
+                                        Utils.editableIsZeroOrNullOrEmpty(getEtMins().getText()) &&
+                                        Utils.editableIsZeroOrNullOrEmpty(getEtSeconds().getText())) {
+                                    String timedErr = "Please enter in at least one value for hours, minutes, or seconds";
+                                    if (errMsg.trim().isEmpty()) {
+                                        errMsg += timedErr;
+                                    } else {
+                                        errMsg += "\n" + timedErr;
+                                    }
+                                    handleDismissOrErrDisplay(errMsg, createSetDialog);
+                                } else {
+                                    listener.onAddSetClick(AddSetDialog.this);
+                                    createSetDialog.dismiss();
+                                }
                             } else {
                                 listener.onAddSetClick(AddSetDialog.this);
                                 createSetDialog.dismiss();
                             }
-                        } else {
-                            listener.onAddSetClick(AddSetDialog.this);
-                            createSetDialog.dismiss();
                         }
-                    }
-                });
+                    });
+                } else {
+                    b.setText(getString(R.string.addSetDialog_edit));
+                    b.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onEditSetClick(AddSetDialog.this);
+                        }
+                    });
+                }
             }
         });
+        displayAndEnableEditingForUi(set, createSetDialog);
         return createSetDialog;
     }
 
-    void displayAndEnableEditingForUi(Set set) {
+    void displayAndEnableEditingForUi(Set set, AlertDialog dialog) {
         if (set != null) {
             if (set.getExerciseTypeCode().equals(Constants.LOGGED_TIMED)) {
                 rbTimedSet.setChecked(true);
@@ -302,5 +311,9 @@ public class AddSetDialog extends DialogFragment {
 
     public Exercise getExercise() {
         return exercise;
+    }
+
+    public Set getSet() {
+        return set;
     }
 }
