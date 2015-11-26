@@ -75,13 +75,18 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         exercisesToDelete = new HashSet<>();
 
         if (savedInstanceState == null) {
-            parentWorkout = getParentWorkout();
-            if (parentWorkout != null) {
-                DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
-                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
-            } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
-            }
+            displayExerciseList();
+        }
+    }
+
+    void displayExerciseList() {
+        showProgressDialog();
+        parentWorkout = getParentWorkout();
+        if (parentWorkout != null) {
+            DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
+            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
         }
     }
 
@@ -128,8 +133,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             }
         } else if (event.getResult() instanceof Boolean) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
-            DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
-            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
+            displayExerciseList();
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder exercises before leaving activity
             reorderExercises();

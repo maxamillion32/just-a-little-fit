@@ -72,13 +72,18 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         ButterKnife.inject(this, frameLayout);
 
         if (savedInstanceState == null) {
-            DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
-            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
+            displayWorkoutList();
         }
 
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_title_string);
         workoutsToDelete = new HashSet<>();
+    }
+
+    void displayWorkoutList() {
+        showProgressDialog();
+        DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
+        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
     }
 
     @Override
@@ -180,8 +185,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             reorderWorkouts();
         } else if (event.getResult() instanceof Boolean) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
-            DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
-            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
+            displayWorkoutList();
         } else {
             displayGeneralWorkoutListError();
         }
