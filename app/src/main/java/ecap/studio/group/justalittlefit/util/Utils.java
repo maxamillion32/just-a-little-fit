@@ -296,4 +296,14 @@ public class Utils {
             return intObj;
         }
     }
+
+    public static String returnTwoDigitString(String digits) {
+        String validDigits = ensureValidString(digits).trim();
+
+        if (validDigits.length() < 2) {
+            return "0" + validDigits;
+        } else {
+            return digits;
+        }
+    }
 }

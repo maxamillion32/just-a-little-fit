@@ -7,18 +7,22 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.listener.AddSetDialogListener;
+import ecap.studio.group.justalittlefit.listener.SetEtListener;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.util.Constants;
@@ -38,11 +42,11 @@ public class AddSetDialog extends DialogFragment {
     @InjectView(R.id.rbKgs)
     RadioButton rbKgs;
     @InjectView(R.id.etHours)
-    EditText tvHours;
+    EditText etHours;
     @InjectView(R.id.etMins)
-    EditText tvMins;
+    EditText etMins;
     @InjectView(R.id.etSeconds)
-    EditText tvSeconds;
+    EditText etSeconds;
     @InjectView(R.id.llWeightedRepsOptions)
     LinearLayout llWeightedSetView;
     @InjectView(R.id.llTimedOptions)
@@ -112,7 +116,8 @@ public class AddSetDialog extends DialogFragment {
             }
         });
         final AlertDialog createSetDialog = builder.create();
-        setUiFromData(set);
+        displayAndEnableEditingForUi(set);
+        setEtListeners();
         createSetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -165,24 +170,28 @@ public class AddSetDialog extends DialogFragment {
         return createSetDialog;
     }
 
-    void setUiFromData(Set set) {
+    void displayAndEnableEditingForUi(Set set) {
         if (set != null) {
             if (set.getExerciseTypeCode().equals(Constants.LOGGED_TIMED)) {
+                rbTimedSet.setChecked(true);
+                rbWeightedSet.setChecked(false);
                 displayTimedView();
                 Integer hours = Utils.ensureNonNullInteger(set.getHours());
                 Integer mins = Utils.ensureNonNullInteger(set.getMinutes());
                 Integer secs = Utils.ensureNonNullInteger(set.getSeconds());
 
-                tvHours.setText(Utils.ensureValidString(hours.toString()));
-                tvMins.setText(Utils.ensureValidString(mins.toString()));
-                tvSeconds.setText(Utils.ensureValidString(secs.toString()));
+                etHours.setText(Utils.returnTwoDigitString(hours.toString()));
+                etMins.setText(Utils.returnTwoDigitString(mins.toString()));
+                etSeconds.setText(Utils.returnTwoDigitString(secs.toString()));
                 etTimedRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
             } else {
+                rbTimedSet.setChecked(false);
+                rbWeightedSet.setChecked(true);
                 displayWeightedView();
                 Integer weight = Utils.ensureNonNullInteger(set.getWeight());
                 etRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
                 etWeightAmount.setText(Utils.ensureValidString(weight.toString()));
-                if (set.getExerciseTypeCode().equals(Constants.LBS)) {
+                if (set.getWeightTypeCode().equals(Constants.LBS)) {
                     rbLbs.setChecked(true);
                     rbKgs.setChecked(false);
                 } else {
@@ -191,6 +200,13 @@ public class AddSetDialog extends DialogFragment {
                 }
             }
         }
+    }
+
+    void setEtListeners() {
+        SetEtListener listener = new SetEtListener(etMins);
+        SetEtListener listener1 = new SetEtListener(etSeconds);
+        etHours.setOnEditorActionListener(listener);
+        etMins.setOnEditorActionListener(listener1);
     }
 
     @Override
@@ -253,15 +269,15 @@ public class AddSetDialog extends DialogFragment {
     }
 
     public EditText getEtHours() {
-        return tvHours;
+        return etHours;
     }
 
     public EditText getEtMins() {
-        return tvMins;
+        return etMins;
     }
 
     public EditText getEtSeconds() {
-        return tvSeconds;
+        return etSeconds;
     }
 
     public EditText getEtRepCount() {
