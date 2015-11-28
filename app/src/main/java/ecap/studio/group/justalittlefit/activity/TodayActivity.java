@@ -71,6 +71,9 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     Set addedSet;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
+    boolean reorderTriggeredByEditSet;
+    Integer editedGroupPosition;
+    Integer editedChildPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +90,16 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         setsToDelete = new HashSet<>();
 
         if (savedInstanceState == null) {
-            if (todayWorkout != null) {
-                DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
-                new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
-            } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.workout_list_error));
-            }
+            displayTodayWorkout();
+        }
+    }
+
+    void displayTodayWorkout() {
+        if (todayWorkout != null) {
+            DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
+            new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.workout_list_error));
         }
     }
 
@@ -151,9 +158,17 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             getSupportFragmentManager().beginTransaction()
                     .add(TodayDataProviderFragment.newInstance(new ArrayList<>(workoutObj.getExercises())), FRAGMENT_TAG_DATA_PROVIDER)
                     .commitAllowingStateLoss();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
-                    .commitAllowingStateLoss();
+            if (reorderTriggeredByEditSet) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
+                        .commitAllowingStateLoss();
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
+                reorderTriggeredByEditSet = false;
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
+                        .commitAllowingStateLoss();
+            }
         } else if (event.getResult() instanceof Map) {
             // Data order saved
             if (reorderTriggeredByAdd) {
@@ -179,6 +194,10 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             Intent intent = new Intent(this, Home.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+        }  else if (event.getResult() instanceof Double) {
+            // Do nothing, UI already updated
+        } else {
+            displayGeneralWorkoutListError();
         }
     }
 
@@ -290,6 +309,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
         ((TodayRvListViewFragment) fragment).notifyChildItemRestored(groupPosition, childPosition);
         AbstractExpandableDataProvider.ChildData data = getDataProvider().getChildItem(groupPosition, childPosition);
+        editedChildPosition = childPosition;
+        editedGroupPosition = groupPosition;
         Set set = data.getSet();
         displayAddSetDialogUponEdit(set);
     }
@@ -426,7 +447,47 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onEditSetClick(AddSetDialog dialog) {
+        showProgressDialog();
+        reorderTriggeredByEditSet = true;
+        Set set = dialog.getSet();
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
 
+        if (dialog.getRbWeightedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+            String exerciseCd = Constants.WEIGHTS;
+            int weight = Utils.returnValidNumberFromEditText(dialog.getEtWeightAmount());
+            String weightCd;
+            if (dialog.getRbLbs().isChecked()) {
+                weightCd = Constants.LBS;
+            } else {
+                weightCd = Constants.KGS;
+            }
+            set.setReps(reps);
+            set.setWeightTypeCode(weightCd);
+            set.setExerciseTypeCode(exerciseCd);
+            set.setWeight(weight);
+        } else {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+            Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
+            Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
+            Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
+            String exerciseCd = Constants.LOGGED_TIMED;
+            set.setReps(reps);
+            set.setExerciseTypeCode(exerciseCd);
+            set.setMinutes(mins);
+            set.setHours(hours);
+            set.setSeconds(seconds);
+        }
+
+        dialog.dismiss();
+
+        getDataProvider().setChildItem(editedGroupPosition, editedChildPosition, set);
+        ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
+        ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
+
+        DbFunctionObject editSetDfo =
+                new DbFunctionObject(set, DbConstants.UPDATE_SET);
+        new DbAsyncTask(Constants.TODAY).execute(editSetDfo);
     }
 
     private void addExerciseOrSetToUI() {

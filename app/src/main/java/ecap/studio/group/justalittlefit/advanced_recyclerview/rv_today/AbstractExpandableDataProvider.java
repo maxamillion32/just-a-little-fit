@@ -24,6 +24,8 @@ public abstract class AbstractExpandableDataProvider {
     public static abstract class ChildData extends BaseData {
         public abstract long getChildId();
         public abstract Set getSet();
+        public abstract void setExerciseSet(Set set);
+        public abstract void setText(String text);
     }
 
     public abstract int getGroupCount();
@@ -31,6 +33,7 @@ public abstract class AbstractExpandableDataProvider {
 
     public abstract GroupData getGroupItem(int groupPosition);
     public abstract ChildData getChildItem(int groupPosition, int childPosition);
+    public abstract void setChildItem(int groupPosition, int childPosition, Set set);
 
     public abstract void moveGroupItem(int fromGroupPosition, int toGroupPosition);
     public abstract void moveChildItem(int fromGroupPosition, int fromChildPosition, int toGroupPosition, int toChildPosition);

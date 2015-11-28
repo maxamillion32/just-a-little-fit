@@ -82,6 +82,26 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
         return children.get(childPosition);
     }
 
+    public void setChildItem(int groupPosition, int childPosition, Set set) {
+        if (groupPosition < 0 || groupPosition >= getGroupCount()) {
+            throw new IndexOutOfBoundsException("groupPosition = " + groupPosition);
+        }
+
+        final List<ChildData> children = mData.get(groupPosition).second;
+
+        if (childPosition < 0 || childPosition >= children.size()) {
+            throw new IndexOutOfBoundsException("childPosition = " + childPosition);
+        }
+
+        ChildData childData = children.get(childPosition);
+        childData.setExerciseSet(set);
+        childData.setText(set.toString());
+
+        children.set(childPosition, childData);
+        GroupData groupData = mData.get(groupPosition).first;
+        mData.set(groupPosition, new Pair<GroupData, List<ChildData>>(groupData, children));
+    }
+
     @Override
     public void moveGroupItem(int fromGroupPosition, int toGroupPosition) {
         if (fromGroupPosition == toGroupPosition) {
@@ -303,7 +323,7 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
     public static final class ConcreteChildData extends ChildData {
 
         private long mId;
-        private final String mText;
+        private String mText;
         private final int mSwipeReaction;
         private boolean mPinnedToSwipeLeft;
         private Set mSetObj;
@@ -323,6 +343,16 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
         @Override
         public Set getSet() {
             return mSetObj;
+        }
+
+        @Override
+        public void setExerciseSet(Set set) {
+            this.mSetObj = set;
+        }
+
+        @Override
+        public void setText(String text) {
+            mText = text;
         }
 
         @Override
