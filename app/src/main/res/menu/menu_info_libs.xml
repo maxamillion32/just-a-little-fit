@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/a_More"
+        android:icon="@drawable/ic_dots_vertical"
+        app:showAsAction="always"
+        android:title="More">
+        <menu>
+            <item
+                android:id="@+id/action_info"
+                android:icon="@drawable/ic_information_outline"
+                app:showAsAction="never"
+                android:title="@string/information"/>
+            <item
+                android:id="@+id/action_libs"
+                android:icon="@drawable/ic_library_books"
+                app:showAsAction="never"
+                android:title="@string/lib_credits"/>
+        </menu>
+    </item>
+</menu>

@@ -3,6 +3,7 @@ package ecap.studio.group.justalittlefit.dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.util.Constants;
@@ -13,6 +14,7 @@ import ecap.studio.group.justalittlefit.util.Utils;
  */
 public class InformationDialog extends AppBaseDialog {
     private static final String INFO_TITLE = "Information";
+    private static final String LIBS_TITLE = "Open Source Library Credits";
 
     public static InformationDialog newInstance(String dialogType) {
         InformationDialog dialog = new InformationDialog();
@@ -26,6 +28,7 @@ public class InformationDialog extends AppBaseDialog {
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         setTitle(INFO_TITLE);
+        String dialogBtnTxt = getString(R.string.got_it);
         String dialogType = Utils.ensureValidString(
                 getArguments().getString(Constants.DIALOG_TYPE));
         switch(dialogType) {
@@ -78,8 +81,28 @@ public class InformationDialog extends AppBaseDialog {
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_assign_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_view_info));
                 break;
+            case Constants.LIBS:
+                setTitle(LIBS_TITLE);
+                dialogBtnTxt = getString(R.string.ok);
+                setDialogMessage(Html.fromHtml(getString(R.string.picasso)) + Constants.NEWLINE + getString(R.string.picasso_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.adv_rv)
+                        + Constants.NEWLINE + getString(R.string.adv_rv_info)  + Constants.NEWLINE
+                        + getString(R.string.butter_knife) + Constants.NEWLINE + getString(R.string.butter_knife_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.otto)
+                        + Constants.NEWLINE + getString(R.string.otto_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.joda_time)
+                        + Constants.NEWLINE + getString(R.string.joda_time_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.circle_indicator)
+                        + Constants.NEWLINE + getString(R.string.circle_indicator_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.android_times_square)
+                        + Constants.NEWLINE + getString(R.string.android_times_square_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.orm_lite)
+                        + Constants.NEWLINE + getString(R.string.orm_lite_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.picasso)
+                        + Constants.NEWLINE + getString(R.string.picasso_info));
+                break;
         }
-        setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
+        setPositiveButton(dialogBtnTxt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // onClick will close dialog

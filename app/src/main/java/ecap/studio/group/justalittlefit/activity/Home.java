@@ -59,7 +59,7 @@ public class Home extends BaseNaviDrawerActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_info, menu);
+        getMenuInflater().inflate(R.menu.menu_info_libs, menu);
         return true;
     }
 
@@ -71,6 +71,9 @@ public class Home extends BaseNaviDrawerActivity {
                 return true;
             case R.id.action_info:
                 displayInfoDialog();
+                break;
+            case R.id.action_libs:
+                displayLibsDialog();
                 break;
             default:
                 break;
@@ -216,6 +219,12 @@ public class Home extends BaseNaviDrawerActivity {
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.HOME);
+        dialog.show(fm, getString(R.string.infoDialogTagHome));
+    }
+
+    private void displayLibsDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InformationDialog dialog = InformationDialog.newInstance(Constants.LIBS);
         dialog.show(fm, getString(R.string.infoDialogTagHome));
     }
 }

@@ -29,6 +29,8 @@ public class Constants {
 
     public static final String HOME = "Home";
 
+    public static final String LIBS = "Libs";
+
     public static final String CREATE_EDIT = "Create/Edit";
 
     public static final String ASSIGN = "Assign";
