@@ -44,6 +44,7 @@
         <activity
             android:name="group.g203.justalittlefit.activity.ViewActivity"
             android:label="@string/title_activity_view"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
