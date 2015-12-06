@@ -242,14 +242,15 @@
     <string name="home_assign_info">- Click the \"Assign\" option to assign workouts you created inside the app to specific dates.</string>
 
     <!--Open Source Library Credits Dialog messages-->
-    <string name="picasso">=== Picasso ===</string>
-    <string name="adv_rv">=== android-advancedrecyclerview ===</string>
-    <string name="butter_knife">=== Butter Knife ===</string>
-    <string name="otto">=== Otto ===</string>
-    <string name="joda_time">=== Joda Time ===</string>
-    <string name="circle_indicator">=== CircleIndicator ===</string>
-    <string name="android_times_square">=== Android Times Square ===</string>
-    <string name="orm_lite">=== OrmLite ===</string>
+    <string name="libCredDialogTag">Library Credits Dialog Tag</string>
+    <string name="picasso">Picasso</string>
+    <string name="adv_rv">android-advancedrecyclerview</string>
+    <string name="butter_knife">Butter Knife</string>
+    <string name="otto">Otto</string>
+    <string name="joda_time">Joda Time</string>
+    <string name="circle_indicator">CircleIndicator</string>
+    <string name="android_times_square">Android Times Square</string>
+    <string name="orm_lite">OrmLite</string>
     <string name="picasso_info">Copyright 2013 Square, Inc.\r\n\r\nLicensed under the Apache License, Version 2.0 (the \"License\");\r\nyou may not use this file except in compliance with the License.\r\nYou may obtain a copy of the License at\r\n\r\n   http://www.apache.org/licenses/LICENSE-2.0\r\n\r\nUnless required by applicable law or agreed to in writing, software\r\ndistributed under the License is distributed on an \"AS IS\" BASIS,\r\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\nSee the License for the specific language governing permissions and\r\nlimitations under the License.</string>
     <string name="adv_rv_info">Copyright (C) 2015 Haruki Hasegawa\r\n\r\nLicensed under the Apache License, Version 2.0 (the \"License\");\r\nyou may not use this file except in compliance with the License.\r\nYou may obtain a copy of the License at\r\n\r\n    http://www.apache.org/licenses/LICENSE-2.0\r\n\r\nUnless required by applicable law or agreed to in writing, software\r\ndistributed under the License is distributed on an \"AS IS\" BASIS,\r\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\nSee the License for the specific language governing permissions and\r\nlimitations under the License.\r\n</string>
     <string name="butter_knife_info">Copyright 2013 Jake Wharton\r\n\r\nLicensed under the Apache License, Version 2.0 (the \"License\");\r\nyou may not use this file except in compliance with the License.\r\nYou may obtain a copy of the License at\r\n\r\n   http://www.apache.org/licenses/LICENSE-2.0\r\n\r\nUnless required by applicable law or agreed to in writing, software\r\ndistributed under the License is distributed on an \"AS IS\" BASIS,\r\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\nSee the License for the specific language governing permissions and\r\nlimitations under the License.</string>

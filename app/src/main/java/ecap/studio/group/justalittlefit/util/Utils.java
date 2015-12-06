@@ -231,12 +231,8 @@ public class Utils {
         return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
     }
 
-    public static void handleStrikeThroughText(TextView textView, boolean doStrikeThrough) {
-        if (doStrikeThrough) {
-            strikeThroughText(textView);
-        } else {
-            clearStrikeThroughText(textView);
-        }
+    public static void underlineText(TextView textView) {
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     public static void strikeThroughText(TextView textView) {

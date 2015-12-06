@@ -29,6 +29,7 @@ import butterknife.OnClick;
 import ecap.studio.group.justalittlefit.R;
 import ecap.studio.group.justalittlefit.database.DatabaseHelper;
 import ecap.studio.group.justalittlefit.dialog.InformationDialog;
+import ecap.studio.group.justalittlefit.dialog.LibraryCreditsDialog;
 import ecap.studio.group.justalittlefit.model.Exercise;
 import ecap.studio.group.justalittlefit.model.Set;
 import ecap.studio.group.justalittlefit.model.Workout;
@@ -135,45 +136,6 @@ public class Home extends BaseNaviDrawerActivity {
         }
     }
 
-    void addExercisesToWorkouts(int workoutId, List<Exercise>exerciseList) {
-        Dao<Workout, Integer> workoutDao;
-        try {
-            workoutDao = getHelper().getWorkoutDao();
-            Workout wo = workoutDao.queryForId(workoutId);
-            ForeignCollection<Exercise> exercises = wo.getExercises();
-            for (Exercise exercise : exerciseList) {
-                exercises.add(exercise);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    void queryForSets() {
-        try {
-            Dao<Set, Integer> setDao = getHelper().getSetDao();
-            List<Set> sets = setDao.queryForAll();
-            Log.i(LOG_TAG, "setDao has this many sets: " + sets.size());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    List<Set> getSetsForDb() {
-        ArrayList<Set> sets = new ArrayList<>();
-        sets.add(new Set(10, Constants.LBS, Constants.WEIGHTS, 0, 50));
-        sets.add(new Set(8, Constants.LBS, Constants.WEIGHTS, 1, 30));
-        sets.add(new Set(6, Constants.LOGGED_TIMED, 1, 0, 2, 30));
-        return sets;
-    }
-
-    void setSets(ForeignCollection<Set> setCollect, List<Set> sets) {
-        for (Set set : sets) {
-            setCollect.add(set);
-        }
-    }
-
     private void formatHomeTextViews() {
         for (TextView tv : homeTextViews) {
             Typeface face=Typeface.createFromAsset(getAssets(), Constants.CUSTOM_FONT_TTF);
@@ -224,7 +186,7 @@ public class Home extends BaseNaviDrawerActivity {
 
     private void displayLibsDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        InformationDialog dialog = InformationDialog.newInstance(Constants.LIBS);
-        dialog.show(fm, getString(R.string.infoDialogTagHome));
+        LibraryCreditsDialog dialog = LibraryCreditsDialog.newInstance();
+        dialog.show(fm, getString(R.string.libCredDialogTag));
     }
 }
