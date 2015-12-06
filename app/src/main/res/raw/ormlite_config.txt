@@ -1,8 +1,8 @@
 #
-# generated on 2015/10/21 04:42:01
+# generated on 2015/12/06 05:08:59
 #
 # --table-start--
-dataClass=ecap.studio.group.justalittlefit.model.Workout
+dataClass=group.g203.justalittlefit.model.Workout
 tableName=workout
 # --table-fields-start--
 # --field-start--
@@ -37,7 +37,7 @@ foreignCollectionOrderColumnName=order_num
 # --table-end--
 #################################
 # --table-start--
-dataClass=ecap.studio.group.justalittlefit.model.Exercise
+dataClass=group.g203.justalittlefit.model.Exercise
 tableName=exercise
 # --table-fields-start--
 # --field-start--
@@ -78,7 +78,7 @@ foreignCollectionOrderColumnName=order_num
 # --table-end--
 #################################
 # --table-start--
-dataClass=ecap.studio.group.justalittlefit.model.Set
+dataClass=group.g203.justalittlefit.model.Set
 tableName=set
 # --table-fields-start--
 # --field-start--

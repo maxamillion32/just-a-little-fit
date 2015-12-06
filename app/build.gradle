@@ -19,7 +19,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "ecap.studio.group.justalittlefit"
+        applicationId "group.g203.justalittlefit"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
