@@ -18,7 +18,7 @@ import group.g203.justalittlefit.util.Constants;
 public class AddExerciseOrSetDialog extends DialogFragment {
 
     Workout workout;
-    ArrayList<Exercise> deletedExercises;
+    ArrayList<Exercise> exercises;
 
     public static AddExerciseOrSetDialog newInstance(Workout workout,
                                                      ArrayList<Exercise> exercises) {
@@ -40,10 +40,10 @@ public class AddExerciseOrSetDialog extends DialogFragment {
         Bundle args = getArguments();
         if (args != null && args.containsKey(Constants.WORKOUT)) {
             workout = args.getParcelable(Constants.WORKOUT);
-            deletedExercises = args.getParcelableArrayList(Constants.EXERCISES);
+            exercises = args.getParcelableArrayList(Constants.EXERCISES);
         } else {
             workout = null;
-            deletedExercises = null;
+            exercises = null;
         }
 
         builder.setTitle(getString(R.string.addExerciseOrSetDialog_Title));
@@ -72,7 +72,7 @@ public class AddExerciseOrSetDialog extends DialogFragment {
     private void displayDialog(boolean displaySetDialog) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         if (displaySetDialog) {
-            SelectExerciseDialog dialog = SelectExerciseDialog.newInstance(workout, deletedExercises);
+            SelectExerciseDialog dialog = SelectExerciseDialog.newInstance(workout);
             dialog.show(fm, getString(R.string.selectExerciseDialogTag));
         } else {
             AddExerciseDialog dialog = new AddExerciseDialog();
