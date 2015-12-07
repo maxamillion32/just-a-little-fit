@@ -96,6 +96,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     void displayTodayWorkout() {
         if (todayWorkout != null) {
+            setTitle(Utils.returnStandardDateString(todayWorkout.getWorkoutDate()) + Constants.COLON +
+                    Constants.SPACE + todayWorkout.getName());
             DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
             new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
         } else {
@@ -399,8 +401,14 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     private void displayAddExerciseOrSetDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        AddExerciseOrSetDialog dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
-                new ArrayList<>(exercisesToDelete));
+        AddExerciseOrSetDialog dialog;
+        if (Utils.collectionIsNullOrEmpty(todayWorkout.getExercises())) {
+            dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
+                    new ArrayList<>(exercisesToDelete));
+        } else {
+            dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
+                    new ArrayList<>(exercisesToDelete));
+        }
         dialog.show(fm, getString(R.string.addExerciseOrSetDialogTag));
     }
 
