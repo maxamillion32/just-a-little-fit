@@ -69,6 +69,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
     boolean reorderTriggeredByEditSet;
+    boolean recentlyAddedExercise;
     Integer editedGroupPosition;
     Integer editedChildPosition;
 
@@ -156,12 +157,17 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             getSupportFragmentManager().beginTransaction()
                     .add(TodayDataProviderFragment.newInstance(new ArrayList<>(workoutObj.getExercises())), FRAGMENT_TAG_DATA_PROVIDER)
                     .commitAllowingStateLoss();
-            if (reorderTriggeredByEditSet) {
+            if (reorderTriggeredByEditSet || recentlyAddedExercise) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
                         .commitAllowingStateLoss();
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
-                reorderTriggeredByEditSet = false;
+                if (reorderTriggeredByEditSet) {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
+                    reorderTriggeredByEditSet = false;
+                }
+                if (recentlyAddedExercise) {
+                    recentlyAddedExercise = false;
+                }
             } else {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
@@ -183,6 +189,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             }
         } else if (event.getResult() instanceof Exercise) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
+            recentlyAddedExercise = true;
             DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
             new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
         } else if (event.getResult() instanceof Set) {
