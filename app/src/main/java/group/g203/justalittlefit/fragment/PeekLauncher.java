@@ -30,7 +30,7 @@ import group.g203.justalittlefit.util.Utils;
 public class PeekLauncher extends Fragment {
     private final String LOG_TAG = getClass().getSimpleName();
     private ProgressDialog progressDialog = null;
-    boolean isTodayLauncher;
+    static boolean isTodayLauncher;
 
     public static final PeekLauncher getNewInstance(DateTime dateTime) {
         PeekLauncher peekLauncher = new PeekLauncher();
@@ -48,11 +48,11 @@ public class PeekLauncher extends Fragment {
         progressDialog = Utils.showProgressDialog(getActivity());
         DateTime dateTime = (DateTime) getArguments().getSerializable(Constants.DATE_TIME);
         if (dateTime == null) {
-            getTodaysWorkouts();
             isTodayLauncher = true;
+            getTodaysWorkouts();
         } else {
-            getViewWorkouts(dateTime);
             isTodayLauncher = false;
+            getViewWorkouts(dateTime);
         }
     }
 

@@ -188,11 +188,10 @@ public class Utils {
     public static void launchTodayActivity(AppCompatActivity activity) {
         PeekLauncher launcher = (PeekLauncher) activity.getSupportFragmentManager()
                 .findFragmentByTag(Constants.PEEK_LAUNCHER_FRAG_TAG);
-        if (launcher == null) {
-            launcher = PeekLauncher.getNewInstance(null);
-        } else {
+        if (launcher != null) {
             activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
         }
+        launcher = PeekLauncher.getNewInstance(null);
         activity.getSupportFragmentManager().executePendingTransactions();
         activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.PEEK_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
     }
@@ -200,11 +199,10 @@ public class Utils {
     public static void launchViewActivity(AppCompatActivity activity, DateTime dateTime) {
         PeekLauncher launcher = (PeekLauncher) activity.getSupportFragmentManager()
                 .findFragmentByTag(Constants.PEEK_LAUNCHER_FRAG_TAG);
-        if (launcher == null) {
-            launcher = PeekLauncher.getNewInstance(dateTime);
-        } else {
+        if (launcher != null) {
             activity.getSupportFragmentManager().beginTransaction().remove(launcher).commitAllowingStateLoss();
         }
+        launcher = PeekLauncher.getNewInstance(dateTime);
         activity.getSupportFragmentManager().executePendingTransactions();
         activity.getSupportFragmentManager().beginTransaction().add(launcher, Constants.PEEK_LAUNCHER_FRAG_TAG).commitAllowingStateLoss();
     }
