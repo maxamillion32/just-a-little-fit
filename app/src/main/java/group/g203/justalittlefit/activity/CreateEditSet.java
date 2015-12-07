@@ -56,7 +56,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     boolean reorderTriggeredByAddSet;
     boolean reorderTriggeredByEditSet;
     Set addedSet;
-    private HashSet<Set> setsToDelete;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -76,7 +75,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_set_title_string);
-        setsToDelete = new HashSet<>();
     }
 
     void displaySetList() {
@@ -189,11 +187,19 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     public void onItemRemoved(Object dataObject) {
         determineDefaultStatus();
-        Utils.displayLongActionSnackbar(fab, getString(R.string.set_deleted),
-                Constants.UNDO, undoSetDelete(),
-                getResources().getColor(R.color.app_blue_gray));
         Set set = (Set) dataObject;
-        this.setsToDelete.add(set);
+
+        Integer removeResult = Utils.removeSet(set.getExercise().getSets(),
+                Utils.ensureValidString(set.toString().trim()));
+        if (removeResult == Constants.INT_ONE) {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.set_deleted),
+                    Constants.UNDO, undoSetDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        } else {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.set_modify_error),
+                    Constants.UNDO, undoSetDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        }
     }
 
     public void onItemClicked(int position) {
@@ -213,7 +219,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                         getString(R.string.exercise_removal_undone));
                 AbstractDataProvider.Data data = getDataProvider().getItem(position);
                 Set set = (Set) data.getDataObject();
-                setsToDelete.remove(set);
+                set.getExercise().getSets().add(set);
                 determineDefaultStatus();
             }
         };
@@ -344,14 +350,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     protected void onPause() {
         super.onPause();
         unregisterBus();
-        if (setsToDelete != null && !setsToDelete.isEmpty()) {
-            DbFunctionObject deleteSetsDfo =
-                    new DbFunctionObject(new ArrayList<>(setsToDelete),
-                            DbConstants.DELETE_SETS);
-            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSetsDfo);
-        } else {
-            reorderSets();
-        }
+        reorderSets();
     }
 
     @Override

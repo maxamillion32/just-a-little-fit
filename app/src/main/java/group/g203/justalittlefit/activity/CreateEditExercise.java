@@ -57,7 +57,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     boolean busRegistered;
     boolean reorderTriggeredByAddExercise;
     String addedExerciseName;
-    private HashSet<Exercise> exercisesToDelete;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
 
@@ -72,7 +71,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         ButterKnife.inject(this, frameLayout);
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_exercise_title_string);
-        exercisesToDelete = new HashSet<>();
 
         if (savedInstanceState == null) {
             displayExerciseList();
@@ -194,11 +192,19 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     public void onItemRemoved(Object dataObject) {
         determineDefaultStatus();
-        Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_deleted),
-                Constants.UNDO, undoExerciseDelete(),
-                getResources().getColor(R.color.app_blue_gray));
         Exercise exercise = (Exercise) dataObject;
-        this.exercisesToDelete.add(exercise);
+
+        Integer removeResult = Utils.removeExercise(exercise.getWorkout().getExercises(),
+                Utils.ensureValidString(exercise.getName().trim()));
+        if (removeResult == Constants.INT_ONE) {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_deleted),
+                    Constants.UNDO, undoExerciseDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        } else {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_modify_error),
+                    Constants.UNDO, undoExerciseDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        }
     }
 
     public void onItemClicked(int position) {
@@ -224,7 +230,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                         getString(R.string.exercise_removal_undone));
                 AbstractDataProvider.Data data = getDataProvider().getItem(position);
                 Exercise exercise = (Exercise) data.getDataObject();
-                exercisesToDelete.remove(exercise);
+                exercise.getWorkout().getExercises().add(exercise);
                 determineDefaultStatus();
             }
         };
@@ -261,14 +267,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     protected void onPause() {
         super.onPause();
         unregisterBus();
-        if (exercisesToDelete != null && !exercisesToDelete.isEmpty()) {
-            DbFunctionObject deleteWorkoutsDfo =
-                    new DbFunctionObject(new ArrayList<>(exercisesToDelete),
-                            DbConstants.DELETE_EXERCISES);
-            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteWorkoutsDfo);
-        } else {
-            reorderExercises();
-        }
+        reorderExercises();
     }
 
     @Override
