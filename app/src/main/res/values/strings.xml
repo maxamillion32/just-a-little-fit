@@ -170,6 +170,7 @@
     <string name="db_error">An error occurred. Please try again.</string>
     <string name="workout_view_error">An error occurred while you were trying to view your workout(s). Please try again.</string>
     <string name="workout_list_error">An error occurred in displaying your Workout list. Please try again.</string>
+    <string name="workout_modify_error">An error occurred in modifying your Workout list. Please try again.</string>
     <string name="exercise_list_error">An error occurred in displaying your Exercise list. Please try again.</string>
     <string name="set_list_error">An error occurred in displaying your Set list. Please try again.</string>
     <string name="add_workout_error">An error occurred in adding your workout to the Workout list. Please try again.</string>

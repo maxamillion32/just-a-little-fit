@@ -22,7 +22,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +62,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     CoordinatorLayout clFab;
     boolean busRegistered;
     Workout todayWorkout;
-    private HashSet<Exercise> exercisesToDelete;
-    private HashSet<Set> setsToDelete;
     boolean reorderTriggeredByAdd;
     String addedExerciseName;
     Exercise parentExercise;
@@ -86,8 +83,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         setTitle(R.string.today_title_string);
         setupFloatingActionButton(this);
         getWorkout();
-        exercisesToDelete = new HashSet<>();
-        setsToDelete = new HashSet<>();
 
         if (savedInstanceState == null) {
             displayTodayWorkout();
@@ -101,7 +96,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
             new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
         } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.workout_list_error));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.workout_modify_error));
         }
     }
 
@@ -157,6 +152,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof Workout) {
             Workout workoutObj = (Workout) event.getResult();
+            todayWorkout = workoutObj;
             getSupportFragmentManager().beginTransaction()
                     .add(TodayDataProviderFragment.newInstance(new ArrayList<>(workoutObj.getExercises())), FRAGMENT_TAG_DATA_PROVIDER)
                     .commitAllowingStateLoss();
@@ -170,6 +166,11 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container, new TodayRvListViewFragment(), FRAGMENT_LIST_VIEW)
                         .commitAllowingStateLoss();
+            }
+            if (Utils.collectionIsNullOrEmpty(todayWorkout.getExercises())) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
             }
         } else if (event.getResult() instanceof Map) {
             // Data order saved
@@ -224,17 +225,31 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     public void onGroupItemRemoved(Exercise exercise) {
         determineDefaultStatus();
-        Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_deleted),
-                Constants.UNDO, undoDelete(),
-                getResources().getColor(R.color.app_blue_gray));
-        this.exercisesToDelete.add(exercise);
+        Integer removeResult = Utils.removeExercise(todayWorkout.getExercises(),
+                Utils.ensureValidString(exercise.getName().trim()));
+        if (removeResult == Constants.INT_ONE) {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_deleted),
+                    Constants.UNDO, undoDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        } else {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_modify_error),
+                    Constants.UNDO, undoDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        }
     }
 
     public void onChildItemRemoved(Set set) {
-        Utils.displayLongActionSnackbar(fab, getString(R.string.set_deleted),
-                Constants.UNDO, undoDelete(),
-                getResources().getColor(R.color.app_blue_gray));
-        this.setsToDelete.add(set);
+        Integer removeResult = Utils.removeSet(set.getExercise().getSets(),
+                Utils.ensureValidString(set.toString().trim()));
+        if (removeResult == Constants.INT_ONE) {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.set_deleted),
+                    Constants.UNDO, undoDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        } else {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_modify_error),
+                    Constants.UNDO, undoDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        }
     }
 
     private View.OnClickListener undoDelete() {
@@ -262,7 +277,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             ((TodayRvListViewFragment) fragment).notifyGroupItemRestored(groupPosition);
             AbstractExpandableDataProvider.GroupData data = getDataProvider().getGroupItem(groupPosition);
             Exercise exercise = data.getExercise();
-            exercisesToDelete.remove(exercise);
+            todayWorkout.getExercises().add(exercise);
             Utils.displayLongSimpleSnackbar(fab,
                     getString(R.string.exercise_removal_undone));
             determineDefaultStatus();
@@ -271,7 +286,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             ((TodayRvListViewFragment) fragment).notifyChildItemRestored(groupPosition, childPosition);
             AbstractExpandableDataProvider.ChildData data = getDataProvider().getChildItem(groupPosition, childPosition);
             Set set = data.getSet();
-            setsToDelete.remove(set);
+            set.getExercise().getSets().add(set);
             Utils.displayLongSimpleSnackbar(fab,
                     getString(R.string.set_removal_undone));
             determineDefaultStatus();
@@ -343,19 +358,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     protected void onPause() {
         super.onPause();
         unregisterBus();
-        if ((exercisesToDelete != null && !exercisesToDelete.isEmpty()) ||
-                (setsToDelete != null && !setsToDelete.isEmpty())) {
-            HashMap<String, Object> exerciseAndSetMap = new HashMap<>();
-            exerciseAndSetMap.put(Constants.EXERCISES, exercisesToDelete);
-            exerciseAndSetMap.put(Constants.SETS_NORM_CASE, setsToDelete);
-
-            DbFunctionObject deleteExercisesAndSetsDfo =
-                    new DbFunctionObject(exerciseAndSetMap,
-                            DbConstants.DELETE_EXERCISES_AND_SETS);
-            new DbAsyncTask(Constants.TODAY).execute(deleteExercisesAndSetsDfo);
-        } else {
-            reorderWorkouts();
-        }
     }
 
     public TodayRvListViewFragment getRecyclerViewFrag() {
@@ -401,15 +403,14 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     private void displayAddExerciseOrSetDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        AddExerciseOrSetDialog dialog;
         if (Utils.collectionIsNullOrEmpty(todayWorkout.getExercises())) {
-            dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
-                    new ArrayList<>(exercisesToDelete));
+            AddExerciseDialog dialog = new AddExerciseDialog();
+            dialog.show(fm, getString(R.string.addExerciseDialogTag));
         } else {
-            dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
-                    new ArrayList<>(exercisesToDelete));
+            AddExerciseOrSetDialog dialog = AddExerciseOrSetDialog.newInstance(todayWorkout,
+                    new ArrayList<>(todayWorkout.getExercises()));
+            dialog.show(fm, getString(R.string.addExerciseOrSetDialogTag));
         }
-        dialog.show(fm, getString(R.string.addExerciseOrSetDialogTag));
     }
 
     void displayGeneralWorkoutListError() {
