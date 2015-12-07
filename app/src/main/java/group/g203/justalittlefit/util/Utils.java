@@ -19,12 +19,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.dao.ForeignCollection;
+
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -38,6 +42,7 @@ import group.g203.justalittlefit.activity.CreateEditWorkout;
 import group.g203.justalittlefit.activity.Home;
 import group.g203.justalittlefit.fragment.PeekLauncher;
 import group.g203.justalittlefit.model.Exercise;
+import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.model.Workout;
 
 /**
@@ -299,5 +304,70 @@ public class Utils {
         } else {
             return digits;
         }
+    }
+
+    public static Integer removeWorkout(ForeignCollection<Workout> workouts, String exerciseName) {
+        Integer removedWorkout = 0;
+        CloseableIterator<Workout> iterator =
+                workouts.closeableIterator();
+        try {
+            while (iterator.hasNext()) {
+                Workout workout = iterator.next();
+                if (ensureValidString(workout.getName()).trim().equals(exerciseName)) {
+                    iterator.remove();
+                    removedWorkout = Constants.INT_ONE;
+                }
+            }
+        } finally {
+            try {
+                iterator.close();
+            } catch (SQLException e) {
+                removedWorkout = Constants.INT_NEG_ONE;
+            }
+        }
+        return removedWorkout;
+    }
+
+    public static Integer removeExercise(ForeignCollection<Exercise> exercises, String exerciseName) {
+        Integer removedExercise = 0;
+        CloseableIterator<Exercise> iterator =
+                exercises.closeableIterator();
+        try {
+            while (iterator.hasNext()) {
+                Exercise exercise = iterator.next();
+                if (ensureValidString(exercise.getName()).trim().equals(exerciseName)) {
+                    iterator.remove();
+                    removedExercise = Constants.INT_ONE;
+                }
+            }
+        } finally {
+            try {
+                iterator.close();
+            } catch (SQLException e) {
+                removedExercise = Constants.INT_NEG_ONE;
+            }
+        }
+        return removedExercise;
+    }
+    public static Integer removeSet(ForeignCollection<Set> sets, String exerciseName) {
+        Integer removedSets = 0;
+        CloseableIterator<Set> iterator =
+                sets.closeableIterator();
+        try {
+            while (iterator.hasNext()) {
+                Set set = iterator.next();
+                if (ensureValidString(set.toString()).trim().equals(exerciseName)) {
+                    iterator.remove();
+                    removedSets = Constants.INT_ONE;
+                }
+            }
+        } finally {
+            try {
+                iterator.close();
+            } catch (SQLException e) {
+                removedSets = Constants.INT_NEG_ONE;
+            }
+        }
+        return removedSets;
     }
 }
