@@ -306,10 +306,8 @@ public class Utils {
         }
     }
 
-    public static Integer removeWorkout(ForeignCollection<Workout> workouts, String exerciseName) {
+    public static Integer removeWorkout(CloseableIterator<Workout> iterator, String exerciseName) {
         Integer removedWorkout = 0;
-        CloseableIterator<Workout> iterator =
-                workouts.closeableIterator();
         try {
             while (iterator.hasNext()) {
                 Workout workout = iterator.next();

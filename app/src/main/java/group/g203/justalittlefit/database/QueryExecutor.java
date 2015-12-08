@@ -1,5 +1,6 @@
 package group.g203.justalittlefit.database;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -35,6 +36,32 @@ public class QueryExecutor {
         queryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
         List<Workout> workouts = queryBuilder.query();
         return workouts;
+    }
+
+    public static CloseableIterator<Workout> getUnassignedWorkoutsCi() throws SQLException {
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        QueryBuilder<Workout, Integer> queryBuilder = dao.queryBuilder();
+        Where where = queryBuilder.where();
+        where.isNull(DbConstants.WORKOUT_DATE_COLUMN_NAME);
+        queryBuilder.setWhere(where);
+        queryBuilder.orderBy(DbConstants.ORDER_NUMBER_COLUMN_NAME, true);
+        CloseableIterator<Workout> workouts = dao.iterator(queryBuilder.prepare());
+        return workouts;
+    }
+
+    public static HashMap<String, Object> getUnassignedWorkoutsMap() {
+        HashMap<String, Object> map = new HashMap<>(2);
+
+        try {
+            CloseableIterator<Workout> iterator = getUnassignedWorkoutsCi();
+            List<Workout> workoutList = getUnassignedWorkouts();
+            map.put(Constants.ITERATOR, iterator);
+            map.put(Constants.LIST, workoutList);
+        } catch (SQLException e) {
+            map = null;
+        }
+
+        return map;
     }
 
     public static Workout getWorkoutById(int id) throws SQLException {

@@ -43,23 +43,19 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
         switch(invokingClass) {
             case Constants.CREATE_EDIT_WORKOUT:
                 for (DbFunctionObject dfo : params) {
-                    try {
-                        switch (dfo.getFunctionInt()) {
-                            case DbConstants.GET_ALL_UNASSIGNED_WORKOUTS:
-                                return QueryExecutor.getUnassignedWorkouts();
-                            case DbConstants.DELETE_ALL_WORKOUTS:
-                                return QueryExecutor.deleteUnassignedWorkouts();
-                            case DbConstants.DELETE_WORKOUTS:
-                                return QueryExecutor.deleteWorkouts((List<Workout>) dfo.getDbObject());
-                            case DbConstants.DELETE_WORKOUT:
-                                return QueryExecutor.deleteWorkout((Workout) dfo.getDbObject());
-                            case DbConstants.INSERT_WORKOUT:
-                                return QueryExecutor.createWorkout((Workout) dfo.getDbObject());
-                            case DbConstants.UPDATE_WORKOUTS:
-                                return QueryExecutor.updateWorkouts((List<Workout>) dfo.getDbObject());
-                        }
-                    } catch (SQLException e) {
-                        return null;
+                    switch (dfo.getFunctionInt()) {
+                        case DbConstants.GET_ALL_UNASSIGNED_WORKOUTS:
+                            return QueryExecutor.getUnassignedWorkoutsMap();
+                        case DbConstants.DELETE_ALL_WORKOUTS:
+                            return QueryExecutor.deleteUnassignedWorkouts();
+                        case DbConstants.DELETE_WORKOUTS:
+                            return QueryExecutor.deleteWorkouts((List<Workout>) dfo.getDbObject());
+                        case DbConstants.DELETE_WORKOUT:
+                            return QueryExecutor.deleteWorkout((Workout) dfo.getDbObject());
+                        case DbConstants.INSERT_WORKOUT:
+                            return QueryExecutor.createWorkout((Workout) dfo.getDbObject());
+                        case DbConstants.UPDATE_WORKOUTS:
+                            return QueryExecutor.updateWorkouts((List<Workout>) dfo.getDbObject());
                     }
                 }
                 break;

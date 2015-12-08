@@ -17,9 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,11 +54,11 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
-    private HashSet<Workout> workoutsToDelete;
     FloatingActionButton fab;
     CoordinatorLayout clFab;
     boolean busRegistered;
     boolean reorderTriggeredByAddWorkout;
+    CloseableIterator<Workout> ciWorkouts;
     String addedWorkoutName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
@@ -77,7 +79,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_title_string);
-        workoutsToDelete = new HashSet<>();
     }
 
     void displayWorkoutList() {
@@ -131,19 +132,27 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     public void onItemRemoved(Object dataObject) {
         determineDefaultStatus();
-        Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
-                Constants.UNDO, undoWorkoutDelete(),
-                getResources().getColor(R.color.app_blue_gray));
         Workout workoutToDelete = (Workout) dataObject;
-        this.workoutsToDelete.add(workoutToDelete);
+
+        Integer removeResult = Utils.removeWorkout(ciWorkouts,
+                Utils.ensureValidString(workoutToDelete.getName().trim()));
+
+        if (removeResult == Constants.INT_ONE) {
+            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
+                    Constants.UNDO, undoWorkoutDelete(),
+                    getResources().getColor(R.color.app_blue_gray));
+        } else {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_modify_error));
+        }
     }
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressDialog();
         if (event == null || event.getResult() == null) {
+            hideProgressDialog();
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof Set) {
+            hideProgressDialog();
             // Data order saved
             if (reorderTriggeredByAddWorkout) {
                 // Call method to add workout to view
@@ -152,8 +161,10 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 // onPause result returned and data order saved, reset boolean trigger
                 reorderTriggeredByAddWorkout = false;
             }
-        } else if (event.getResult() instanceof List) {
-            List<Workout> workouts = (List<Workout>) event.getResult();
+        } else if (event.getResult() instanceof HashMap) {
+            HashMap<String, Object> map = (HashMap<String, Object>) event.getResult();
+            ciWorkouts = (CloseableIterator<Workout>) map.get(Constants.ITERATOR);
+            List<Workout> workouts = (List<Workout>) map.get(Constants.LIST);
             getSupportFragmentManager().beginTransaction()
                     .add(DataProviderFragment.newInstance(Constants.WORKOUT, new ArrayList<>(workouts)),
                             FRAGMENT_TAG_DATA_PROVIDER)
@@ -161,13 +172,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
-
+            hideProgressDialog();
             if (workouts.size() == 0) {
                 rlDefault.setVisibility(View.VISIBLE);
             } else {
                 rlDefault.setVisibility(View.INVISIBLE);
             }
         } else if (event.getResult() instanceof Integer) {
+            hideProgressDialog();
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
             MyDraggableSwipeableItemAdapter adapter =
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
@@ -181,12 +193,15 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
             }
         } else if (event.getResult() instanceof String) {
+            hideProgressDialog();
             // onPause delete returned, reorder workouts before leaving activity
             reorderWorkouts();
         } else if (event.getResult() instanceof Boolean) {
+            hideProgressDialog();
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
             displayWorkoutList();
         } else {
+            hideProgressDialog();
             displayGeneralWorkoutListError();
         }
     }
@@ -238,14 +253,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     protected void onPause() {
         super.onPause();
         unregisterBus();
-        if (workoutsToDelete != null && !workoutsToDelete.isEmpty()) {
-            DbFunctionObject deleteWorkoutsDfo =
-                    new DbFunctionObject(new ArrayList<>(workoutsToDelete),
-                            DbConstants.DELETE_WORKOUTS);
-            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
-        } else {
-           reorderWorkouts();
-        }
+        reorderWorkouts();
     }
 
     @Override
@@ -299,7 +307,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                         getString(R.string.workout_removal_undone));
                 AbstractDataProvider.Data data = getDataProvider().getItem(position);
                 Workout workout = (Workout) data.getDataObject();
-                workoutsToDelete.remove(workout);
+                //workoutsToDelete.remove(workout);
                 determineDefaultStatus();
             }
         };
