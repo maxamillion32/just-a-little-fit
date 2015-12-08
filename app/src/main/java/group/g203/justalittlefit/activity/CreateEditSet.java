@@ -196,9 +196,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                     Constants.UNDO, undoSetDelete(),
                     getResources().getColor(R.color.app_blue_gray));
         } else {
-            Utils.displayLongActionSnackbar(fab, getString(R.string.set_modify_error),
-                    Constants.UNDO, undoSetDelete(),
-                    getResources().getColor(R.color.app_blue_gray));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.set_modify_error));
         }
     }
 

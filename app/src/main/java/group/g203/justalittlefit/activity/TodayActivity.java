@@ -239,9 +239,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                     Constants.UNDO, undoDelete(),
                     getResources().getColor(R.color.app_blue_gray));
         } else {
-            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_modify_error),
-                    Constants.UNDO, undoDelete(),
-                    getResources().getColor(R.color.app_blue_gray));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.workout_modify_error));
         }
     }
 

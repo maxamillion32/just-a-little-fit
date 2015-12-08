@@ -201,9 +201,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                     Constants.UNDO, undoExerciseDelete(),
                     getResources().getColor(R.color.app_blue_gray));
         } else {
-            Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_modify_error),
-                    Constants.UNDO, undoExerciseDelete(),
-                    getResources().getColor(R.color.app_blue_gray));
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_modify_error));
         }
     }
 
