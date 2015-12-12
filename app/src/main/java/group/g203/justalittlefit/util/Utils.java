@@ -141,10 +141,11 @@ public class Utils {
     public static void setupDrawerContent(final AppCompatActivity activity, final DrawerLayout drawerLayout, NavigationView navigationView) {
         TextView headerView = new TextView(activity);
         headerView.setGravity(Gravity.CENTER);
-        headerView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 60);
+        headerView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 60);
         Typeface face=Typeface.createFromAsset(activity.getAssets(), Constants.CUSTOM_FONT_TTF);
         headerView.setText(activity.getString(R.string.title_name));
         headerView.setTypeface(face);
+        headerView.setPadding(0, 80, 0, 0);
         navigationView.addHeaderView(headerView);
 
         navigationView.setNavigationItemSelectedListener(
