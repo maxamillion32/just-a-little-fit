@@ -27,6 +27,7 @@
     <string name="create_edit_string">Create/Edit</string>
     <string name="delete_item">Delete</string>
     <string name="delete_workout">Delete Workout</string>
+    <string name="delete_workout_alt">Delete Workout(s)</string>
     <string name="delete_all">Delete All</string>
     <string name="information">Information</string>
     <string name="lib_credits">Library Credits</string>
@@ -144,6 +145,12 @@
     <string name="enforceWorkoutsForAssignment">You must select at least one Workout</string>
     <string name="noImplementsAssignWorkoutDialogListener">doesn\'t implement AssignWorkoutDialogListener.</string>
 
+    <!-- DeleteWorkoutsFromViewDialog Strings -->
+    <string name="deleteWorkoutsFromViewDialogTitle">Choose Workout(s) To Delete:</string>
+    <string name="deleteWorkoutsFromViewDialogTag">Delete Workouts From View Dialog Tag</string>
+    <string name="enforceDeleteSelection">Please select at least one Workout to delete or press \'Cancel\'</string>
+    <string name="noImplementsDeleteWorkoutsFromViewDialogListener">doesn\'t implement DeleteWorkoutsFromViewDialogListener.</string>
+
     <!-- SelectViewOrTodayDialog Strings -->
     <string name="selectViewOrTodayDialog_Title">View Today\'s Workout</string>
     <string name="selectViewOption">View</string>
@@ -164,7 +171,7 @@
     <!-- ConfirmDeleteTodayWorkoutDialog Strings -->
     <string name="deleteTodayWorkout">Yes, delete this workout</string>
     <string name="noImplementsConfirmDeleteTodayWorkoutListener">doesn\'t implement ConfirmDeleteTodayWorkoutListener.</string>
-    <string name="confirmDeleteTodayWorkoutDialogTag">Jump To Create Edit Dialog Tag</string>
+    <string name="confirmDeleteTodayWorkoutDialogTag">Confirm Delete Today Workout Dialog Tag</string>
 
     <!-- Error Messages -->
     <string name="db_error">An error occurred. Please try again.</string>

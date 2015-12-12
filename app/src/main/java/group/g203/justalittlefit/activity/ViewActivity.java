@@ -2,6 +2,7 @@ package group.g203.justalittlefit.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -30,14 +31,19 @@ import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
 import group.g203.justalittlefit.database.DbTaskResult;
+import group.g203.justalittlefit.dialog.AppBaseDialog;
+import group.g203.justalittlefit.dialog.ConfirmDeleteTodayWorkoutDialog;
+import group.g203.justalittlefit.dialog.DeleteWorkoutsFromViewDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.fragment.ViewWorkoutFragment;
+import group.g203.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
+import group.g203.justalittlefit.listener.DeleteWorkoutsFromViewDialogListener;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 import me.relex.circleindicator.CircleIndicator;
 
-public class ViewActivity extends BaseNaviDrawerActivity {
+public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDeleteTodayWorkoutListener, DeleteWorkoutsFromViewDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.vpWorkouts)
@@ -47,6 +53,7 @@ public class ViewActivity extends BaseNaviDrawerActivity {
     boolean busRegistered;
     ProgressDialog progressDialog;
     DateTime dateTime;
+    List<Workout> workouts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +87,27 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         if (event == null || event.getResult() == null) {
             displayError();
         } else if (event.getResult() instanceof List) {
-            if (Utils.collectionIsNullOrEmpty((List<Workout>)event.getResult())) {
+            workouts = (List<Workout>)event.getResult();
+            if (Utils.collectionIsNullOrEmpty(workouts)) {
                 this.finish();
                 Utils.displayLongToast(this, getString(R.string.no_workouts_to_view));
             } else {
                 setTitle(Utils.returnStandardDateString(dateTime));
-                setViewPager((List<Workout>) event.getResult());
+                setViewPager(workouts);
+            }
+        } else if (event.getResult() instanceof Integer) {
+            if (event.getResult() == workouts.size()) {
+                Utils.displayLongToast(this, getString(R.string.workout_deleted));
+                Intent intent = new Intent(this, Home.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                Utils.displayLongToast(this, getString(R.string.workout_deleted));
+                Intent intent = getIntent();
+                finish();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         } else {
             displayError();
@@ -128,7 +150,7 @@ public class ViewActivity extends BaseNaviDrawerActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_info, menu);
+        getMenuInflater().inflate(R.menu.menu_view_info_delete_single, menu);
         return true;
     }
 
@@ -141,6 +163,9 @@ public class ViewActivity extends BaseNaviDrawerActivity {
             case R.id.action_info:
                 displayInfoDialog();
                 break;
+            case R.id.action_delete:
+                displayDeleteDialog();
+                break;
             default:
                 break;
         }
@@ -151,6 +176,21 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.VIEW_TEXT);
         dialog.show(fm, getString(R.string.infoDialogTagView));
+    }
+
+    private void displayDeleteDialog() {
+        if (Utils.collectionIsNullOrEmpty(workouts)) {
+            Utils.displayLongToast(this, getString(R.string.workout_view_error));
+        } else {
+            FragmentManager fm = getSupportFragmentManager();
+            if (workouts.size() == Constants.INT_ONE) {
+                ConfirmDeleteTodayWorkoutDialog dialog = ConfirmDeleteTodayWorkoutDialog.newDeleteFromViewInstance();
+                dialog.show(fm, getString(R.string.confirmDeleteTodayWorkoutDialogTag));
+            } else {
+                DeleteWorkoutsFromViewDialog dialog = DeleteWorkoutsFromViewDialog.getInstance(new ArrayList<>(workouts));
+                dialog.show(fm, getString(R.string.deleteWorkoutsFromViewDialogTag));
+            }
+        }
     }
 
     private void registerBus() {
@@ -193,5 +233,20 @@ public class ViewActivity extends BaseNaviDrawerActivity {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onDeleteTodayWorkoutClick(AppBaseDialog dialog) {
+        handleDeleteViewWorkouts(workouts);
+    }
+
+    @Override
+    public void onDeleteWorkoutsClick(DeleteWorkoutsFromViewDialog dialog) {
+        handleDeleteViewWorkouts(dialog.getSelectedWorkouts());
+    }
+
+    void handleDeleteViewWorkouts(List<Workout> workouts) {
+        DbFunctionObject deleteWorkoutsDfo = new DbFunctionObject(workouts, DbConstants.DELETE_WORKOUTS);
+        new DbAsyncTask(Constants.VIEW_TEXT).execute(deleteWorkoutsDfo);
     }
 }

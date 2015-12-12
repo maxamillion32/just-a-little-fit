@@ -80,6 +80,15 @@ public class QueryExecutor {
         return Boolean.TRUE.toString();
     }
 
+    public static Integer deleteViewWorkouts(List<Workout> workouts) {
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        try {
+            return dao.delete(workouts);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public static Workout deleteWorkout(Workout workout) {
         try {
             Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();

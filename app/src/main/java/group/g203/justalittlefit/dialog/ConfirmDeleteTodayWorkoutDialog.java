@@ -11,12 +11,30 @@ import group.g203.justalittlefit.util.Constants;
 
 public class ConfirmDeleteTodayWorkoutDialog extends AppBaseDialog {
     private static final String DELETE_TODAY_WORKOUT_TITLE = "Delete This Workout for today?";
+    private static final String DELETE_WORKOUT_TITLE = "Delete This Workout?";
+    private static final String TITLE = "Title";
     ConfirmDeleteTodayWorkoutListener listener;
+
+    public static ConfirmDeleteTodayWorkoutDialog newDeleteFromViewInstance() {
+        ConfirmDeleteTodayWorkoutDialog dialog = new ConfirmDeleteTodayWorkoutDialog();
+
+        Bundle args = new Bundle();
+        args.putString(TITLE, DELETE_WORKOUT_TITLE);
+        dialog.setArguments(args);
+
+        return dialog;
+    }
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        setTitle(DELETE_TODAY_WORKOUT_TITLE);
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(TITLE)) {
+            setTitle(args.getString(TITLE));
+        } else {
+            setTitle(DELETE_TODAY_WORKOUT_TITLE);
+        }
+
         setPositiveButton(getString(R.string.deleteTodayWorkout), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
