@@ -156,7 +156,7 @@
     <string name="selectViewOption">View</string>
     <string name="selectTodayOption">Today</string>
     <string name="selectInfo">This is today\'s date. You can view this workout(s) in either of two ways.</string>
-    <string name="selectViewInfo">- Select the \"View\" option to view this workout(s) in an uneditable, recap fashion.</string>
+    <string name="selectViewInfo">- Select the \"View\" option to view this workout(s) in a recap fashion. You can delete the workout(s) but otherwise, they aren\'t editable.</string>
     <string name="selectTodayInfo">- Select the \"Today\" option to view this workout(s) in a modifiable, on-the-go state.</string>
     <string name="selectViewOrTodayDialogTag">Select View Or Today Dialog Tag</string>
     <string name="noImplementsSelectViewOrTodayDialogListener">doesn\'t implement SelectViewOrTodayDialogListener.</string>
@@ -210,7 +210,7 @@
     <string name="workout_removal_undone">Workout restored</string>
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
-    <string name="view_workout_info">- View this date\'s workout(s). The workout(s) can\'t be edited here.</string>
+    <string name="view_workout_info">- View this date\'s workout(s). The workout(s) can be deleted but otherwise can\'t be edited here.</string>
     <string name="view_today_workout_info">- View today\'s workout(s) and update your progress as you workout.</string>
     <string name="choose_today_workout">- Choose from one of the workout\'s scheduled for today to view and update your progress on the workout.</string>
     <string name="view_multiple_workout_info">- You can swipe left or right to see different workouts
