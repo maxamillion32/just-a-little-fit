@@ -48,12 +48,12 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     FloatingActionButton fab;
     CoordinatorLayout clFab;
     private List<DateTime> dateTimes;
+    boolean busRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
-        AssignBus.getInstance().register(this);
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_assign, null, false);
@@ -150,6 +150,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     @Override
     public void onDestroy() {
+        unregisterBus();
         super.onDestroy();
     }
 
@@ -202,7 +203,30 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     @Override
     public void onResume() {
         super.onResume();
+        if (!busRegistered) {
+            registerBus();
+        }
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
         selectedItem.setChecked(true);
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            AssignBus.getInstance().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            AssignBus.getInstance().unregister(this);
+            busRegistered = false;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterBus();
     }
 }
