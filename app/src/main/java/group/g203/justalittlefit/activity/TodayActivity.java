@@ -430,7 +430,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         showProgressDialog();
         reorderTriggeredByAdd = true;
         reorderWorkouts();
-        addedExerciseName = dialog.getAddExerciseText().getText().toString();
+        addedExerciseName = Utils.ensureValidString(dialog.getAddExerciseText().getText().toString());
     }
 
     @Override

@@ -324,7 +324,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         showProgressDialog();
         reorderTriggeredByAddWorkout = true;
         reorderWorkouts();
-        addedWorkoutName = dialog.getAddWorkoutText().getText().toString();
+        addedWorkoutName = Utils.ensureValidString(dialog.getAddWorkoutText().getText().toString());
     }
 
     private void addWorkoutToUI() {

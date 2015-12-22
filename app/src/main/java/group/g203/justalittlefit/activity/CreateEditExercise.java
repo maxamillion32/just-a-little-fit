@@ -343,7 +343,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         showProgressDialog();
         reorderTriggeredByAddExercise = true;
         reorderExercises();
-        addedExerciseName = dialog.getAddExerciseText().getText().toString();
+        addedExerciseName = Utils.ensureValidString(dialog.getAddExerciseText().getText().toString());
     }
 
     private void addExerciseToUI() {

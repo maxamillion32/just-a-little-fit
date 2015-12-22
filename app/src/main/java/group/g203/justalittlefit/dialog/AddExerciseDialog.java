@@ -57,7 +57,7 @@ public class AddExerciseDialog extends DialogFragment {
 
                     @Override
                     public void onClick(View view) {
-                        if (addExerciseText.getText().toString().trim().isEmpty()) {
+                        if (Utils.ensureValidString(addExerciseText.getText().toString()).isEmpty()) {
                             Utils.displayLongToast(
                                     getActivity(),
                                     getString(R.string.addExercise_requireName));

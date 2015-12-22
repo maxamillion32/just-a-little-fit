@@ -53,7 +53,7 @@ public class Utils {
         if (text == null || text.isEmpty()) {
             return Constants.EMPTY_STRING;
         } else {
-            return text;
+            return text.trim();
         }
     }
 
