@@ -148,7 +148,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressDialog();
+        hideProgressBar();
         if (event == null || event.getResult() == null) {
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof Workout) {
@@ -395,15 +395,15 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         new DbAsyncTask(Constants.TODAY).execute(reorderExercisesAndSetsDfo);
     }
 
-    void showProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+    void showProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
         }
     }
 
-    void hideProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
+    void hideProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -427,7 +427,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onAddExerciseClick(AddExerciseDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByAdd = true;
         reorderWorkouts();
         addedExerciseName = Utils.ensureValidString(dialog.getAddExerciseText().getText().toString());
@@ -435,7 +435,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onAddSetClick(AddSetDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByAdd = true;
         parentExercise = dialog.getExercise();
         if (dialog.getRbWeightedSet().isChecked()) {
@@ -462,7 +462,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onEditSetClick(AddSetDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByEditSet = true;
         Set set = dialog.getSet();
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);

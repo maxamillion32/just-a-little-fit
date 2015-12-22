@@ -37,7 +37,7 @@ public class RecyclerListViewFragment extends Fragment {
     private RecyclerViewDragDropManager mRecyclerViewDragDropManager;
     private RecyclerViewSwipeManager mRecyclerViewSwipeManager;
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
-    private ProgressBar progressDialog;
+    private ProgressBar progressBar;
     private Activity mActivity;
     private CreateEditWorkout createEditWorkoutActivity;
     private CreateEditExercise createEditExerciseActivity;
@@ -56,9 +56,9 @@ public class RecyclerListViewFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressDialog = (ProgressBar) getView().findViewById(R.id.progressDialog);
-        progressDialog.bringToFront();
-        ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(true);
+        progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+        progressBar.bringToFront();
+        ((BaseNaviDrawerActivity)mActivity).setProgressBarReady(true);
         this.populateActivity();
 
         //noinspection ConstantConditions
@@ -178,7 +178,7 @@ public class RecyclerListViewFragment extends Fragment {
         }
         mAdapter = null;
         mLayoutManager = null;
-        ((BaseNaviDrawerActivity)mActivity).setProgressDialogReady(false);
+        ((BaseNaviDrawerActivity)mActivity).setProgressBarReady(false);
         mActivity = null;
         createEditWorkoutActivity = null;
         createEditExerciseActivity = null;
@@ -232,8 +232,8 @@ public class RecyclerListViewFragment extends Fragment {
         mRecyclerView.scrollToPosition(position);
     }
 
-    public ProgressBar getProgressDialog() {
-        return progressDialog;
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
     @Override

@@ -16,8 +16,6 @@ import android.widget.RelativeLayout;
 
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -78,7 +76,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     }
 
     void displaySetList() {
-        showProgressDialog();
+        showProgressBar();
         parentExercise = getParentExercise();
         if (parentExercise != null) {
             DbFunctionObject getSetsByExercise = new DbFunctionObject(parentExercise, DbConstants.GET_SETS_BY_EXERCISE);
@@ -108,7 +106,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressDialog();
+        hideProgressBar();
         if (event == null || event.getResult() == null) {
             displayGeneralSetListError();
         } else if (event.getResult() instanceof List) {
@@ -282,15 +280,15 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         }
     }
 
-    void showProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+    void showProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
         }
     }
 
-    void hideProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
+    void hideProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -369,7 +367,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Override
     public void onAddSetClick(AddSetDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByAddSet = true;
         reorderSets();
         if (dialog.getRbWeightedSet().isChecked()) {
@@ -395,7 +393,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Override
     public void onEditSetClick(AddSetDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByEditSet = true;
         Set set = dialog.getSet();
 

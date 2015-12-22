@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -78,7 +77,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     }
 
     void displayExerciseList() {
-        showProgressDialog();
+        showProgressBar();
         parentWorkout = getParentWorkout();
         if (parentWorkout != null) {
             DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
@@ -90,7 +89,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressDialog();
+        hideProgressBar();
         if (event == null || event.getResult() == null) {
             displayGeneralExerciseListError();
         } else if (event.getResult() instanceof Integer) {
@@ -314,15 +313,15 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         }
     }
 
-    void showProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+    void showProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
         }
     }
 
-    void hideProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
+    void hideProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -340,7 +339,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     @Override
     public void onAddExerciseClick(AddExerciseDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByAddExercise = true;
         reorderExercises();
         addedExerciseName = Utils.ensureValidString(dialog.getAddExerciseText().getText().toString());

@@ -22,7 +22,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -82,7 +81,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     }
 
     void displayWorkoutList() {
-        showProgressDialog();
+        showProgressBar();
         DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
     }
@@ -149,10 +148,10 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         if (event == null || event.getResult() == null) {
-            hideProgressDialog();
+            hideProgressBar();
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof Set) {
-            hideProgressDialog();
+            hideProgressBar();
             // Data order saved
             if (reorderTriggeredByAddWorkout) {
                 // Call method to add workout to view
@@ -172,14 +171,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
-            hideProgressDialog();
+            hideProgressBar();
             if (workouts.size() == 0) {
                 rlDefault.setVisibility(View.VISIBLE);
             } else {
                 rlDefault.setVisibility(View.INVISIBLE);
             }
         } else if (event.getResult() instanceof Integer) {
-            hideProgressDialog();
+            hideProgressBar();
             final Fragment recyclerFrag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
             MyDraggableSwipeableItemAdapter adapter =
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
@@ -193,15 +192,15 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
             }
         } else if (event.getResult() instanceof String) {
-            hideProgressDialog();
+            hideProgressBar();
             // onPause delete returned, reorder workouts before leaving activity
             reorderWorkouts();
         } else if (event.getResult() instanceof Boolean) {
-            hideProgressDialog();
+            hideProgressBar();
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
             displayWorkoutList();
         } else {
-            hideProgressDialog();
+            hideProgressBar();
             displayGeneralWorkoutListError();
         }
     }
@@ -289,7 +288,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         if (rlDefault.getVisibility() == View.VISIBLE) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.no_workouts_to_delete));
         } else {
-            showProgressDialog();
+            showProgressBar();
             DbFunctionObject deleteWorkoutsDfo =
                     new DbFunctionObject(null, DbConstants.DELETE_ALL_WORKOUTS);
             new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(deleteWorkoutsDfo);
@@ -321,7 +320,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     @Override
     public void onAddWorkoutClick(AddWorkoutDialog dialog) {
-        showProgressDialog();
+        showProgressBar();
         reorderTriggeredByAddWorkout = true;
         reorderWorkouts();
         addedWorkoutName = Utils.ensureValidString(dialog.getAddWorkoutText().getText().toString());
@@ -354,15 +353,15 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         }
     }
 
-    void showProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.VISIBLE);
+    void showProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
         }
     }
 
-    void hideProgressDialog() {
-        if (isProgressDialogReady()) {
-            getRecyclerViewFrag().getProgressDialog().setVisibility(View.INVISIBLE);
+    void hideProgressBar() {
+        if (isProgressBarReady()) {
+            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
         }
     }
 

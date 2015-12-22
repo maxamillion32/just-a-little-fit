@@ -1,5 +1,6 @@
 package group.g203.justalittlefit.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +19,8 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     FrameLayout frameLayout;
     NavigationView navigationView;
-    boolean progressDialogReady;
+    boolean progressBarReady;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +62,12 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setProgressDialogReady(boolean progressDialogReady) {
-        this.progressDialogReady = progressDialogReady;
+    public void setProgressBarReady(boolean progressBarReady) {
+        this.progressBarReady = progressBarReady;
     }
 
-    public boolean isProgressDialogReady() {
-        return progressDialogReady;
+    public boolean isProgressBarReady() {
+        return progressBarReady;
     }
 }
 

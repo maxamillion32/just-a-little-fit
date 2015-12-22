@@ -32,7 +32,6 @@ import group.g203.justalittlefit.util.Utils;
 public class Home extends BaseNaviDrawerActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
-    private ProgressDialog progressDialog;
     @InjectViews({R.id.todayHomeText, R.id.createEditHomeText,
             R.id.assignHomeText, R.id.viewHomeText, R.id.homeLogoText})
     List<TextView> homeTextViews;
@@ -89,7 +88,6 @@ public class Home extends BaseNaviDrawerActivity {
     public void onResume() {
         super.onResume();
         getHelper();
-        dismissProgressDialog();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
         selectedItem.setChecked(true);
     }
@@ -97,7 +95,6 @@ public class Home extends BaseNaviDrawerActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        dismissProgressDialog();
     }
 
     @Override
@@ -142,7 +139,6 @@ public class Home extends BaseNaviDrawerActivity {
 
     @OnClick(R.id.createEditHomeOption)
     void startCreateEditActivity() {
-        progressDialog = Utils.showProgressDialog(this);
         Intent intent = new Intent(this, CreateEditWorkout.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
@@ -150,7 +146,6 @@ public class Home extends BaseNaviDrawerActivity {
 
     @OnClick(R.id.assignHomeOption)
     void startAssignActivity() {
-        progressDialog = Utils.showProgressDialog(this);
         Intent intent = new Intent(this, Assign.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
@@ -158,16 +153,9 @@ public class Home extends BaseNaviDrawerActivity {
 
     @OnClick(R.id.viewHomeOption)
     void startViewWorkoutActivity() {
-        progressDialog = Utils.showProgressDialog(this);
         Intent intent = new Intent(this, ChooseWorkoutDate.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
-    }
-
-    void dismissProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
     }
 
     private void displayInfoDialog() {
