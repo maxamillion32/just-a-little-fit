@@ -155,7 +155,7 @@
     <string name="selectViewOrTodayDialog_Title">View Today\'s Workout</string>
     <string name="selectViewOption">View</string>
     <string name="selectTodayOption">Today</string>
-    <string name="selectInfo">This is today\'s date. You can view this workout(s) in either of two ways.</string>
+    <string name="selectInfo">This is today\'s date. If there are workout(s) scheduled, you can view this workout(s) in either of two ways.</string>
     <string name="selectViewInfo">- Select the \"View\" option to view this workout(s) in a recap fashion. You can delete the workout(s) but otherwise, they aren\'t editable.</string>
     <string name="selectTodayInfo">- Select the \"Today\" option to view this workout(s) in a modifiable, on-the-go state.</string>
     <string name="selectViewOrTodayDialogTag">Select View Or Today Dialog Tag</string>
