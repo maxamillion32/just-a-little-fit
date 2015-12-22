@@ -219,6 +219,25 @@ public class Utils {
         return progressDialog;
     }
 
+    public static void setupProgressDialog(ProgressDialog dialog, Context context) {
+       if (dialog == null) {
+           dialog = new ProgressDialog(context);
+           dialog.setMessage(Constants.LOADING);
+       }
+    }
+
+    public static void showProgressDialog(ProgressDialog dialog) {
+        if (dialog != null) {
+            dialog.show();
+        }
+    }
+
+    public static void hideProgressDialog(ProgressDialog dialog) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
     public static String returnStandardDateString(DateTime dateTime) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(Constants.STANDARD_DATE_PATTERN);
         return dateTimeFormatter.print(dateTime);

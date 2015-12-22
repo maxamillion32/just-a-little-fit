@@ -76,6 +76,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_today, null, false);
@@ -98,6 +99,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.workout_modify_error));
+            hideProgressDialog();
         }
     }
 
@@ -148,7 +150,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressBar();
         if (event == null || event.getResult() == null) {
             displayGeneralWorkoutListError();
         } else if (event.getResult() instanceof Workout) {
@@ -209,6 +210,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         } else {
             displayGeneralWorkoutListError();
         }
+        hideProgressDialog();
     }
 
     private void displayInfoDialog() {
@@ -395,18 +397,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         new DbAsyncTask(Constants.TODAY).execute(reorderExercisesAndSetsDfo);
     }
 
-    void showProgressBar() {
-        if (isProgressBarReady()) {
-            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
-        }
-    }
-
-    void hideProgressBar() {
-        if (isProgressBarReady()) {
-            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
-        }
-    }
-
     private void displayAddExerciseOrSetDialog() {
         FragmentManager fm = getSupportFragmentManager();
         if (Utils.collectionIsNullOrEmpty(todayWorkout.getExercises())) {
@@ -427,7 +417,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onAddExerciseClick(AddExerciseDialog dialog) {
-        showProgressBar();
+        showProgressDialog();
         reorderTriggeredByAdd = true;
         reorderWorkouts();
         addedExerciseName = Utils.ensureValidString(dialog.getAddExerciseText().getText().toString());
@@ -435,7 +425,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onAddSetClick(AddSetDialog dialog) {
-        showProgressBar();
+        showProgressDialog();
         reorderTriggeredByAdd = true;
         parentExercise = dialog.getExercise();
         if (dialog.getRbWeightedSet().isChecked()) {
@@ -462,7 +452,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     @Override
     public void onEditSetClick(AddSetDialog dialog) {
-        showProgressBar();
+        showProgressDialog();
         reorderTriggeredByEditSet = true;
         Set set = dialog.getSet();
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
@@ -517,9 +507,11 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 new DbAsyncTask(Constants.TODAY).execute(insertExercise);
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+                hideProgressDialog();
             }
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
+            hideProgressDialog();
         }
 
         if (dataProvider != null && dataProvider.getCount() >= 0 && addedSet != null) {
@@ -529,6 +521,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             new DbAsyncTask(Constants.TODAY).execute(insertWorkoutSet);
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
+            hideProgressDialog();
         }
     }
 

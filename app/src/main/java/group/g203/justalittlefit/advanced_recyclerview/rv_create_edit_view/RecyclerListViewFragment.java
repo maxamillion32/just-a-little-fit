@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
@@ -23,7 +22,6 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.BaseNaviDrawerActivity;
 import group.g203.justalittlefit.activity.CreateEditExercise;
 import group.g203.justalittlefit.activity.CreateEditSet;
 import group.g203.justalittlefit.activity.CreateEditWorkout;
@@ -37,7 +35,6 @@ public class RecyclerListViewFragment extends Fragment {
     private RecyclerViewDragDropManager mRecyclerViewDragDropManager;
     private RecyclerViewSwipeManager mRecyclerViewSwipeManager;
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
-    private ProgressBar progressBar;
     private Activity mActivity;
     private CreateEditWorkout createEditWorkoutActivity;
     private CreateEditExercise createEditExerciseActivity;
@@ -55,10 +52,6 @@ public class RecyclerListViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-        progressBar.bringToFront();
-        ((BaseNaviDrawerActivity)mActivity).setProgressBarReady(true);
         this.populateActivity();
 
         //noinspection ConstantConditions
@@ -178,7 +171,6 @@ public class RecyclerListViewFragment extends Fragment {
         }
         mAdapter = null;
         mLayoutManager = null;
-        ((BaseNaviDrawerActivity)mActivity).setProgressBarReady(false);
         mActivity = null;
         createEditWorkoutActivity = null;
         createEditExerciseActivity = null;
@@ -230,10 +222,6 @@ public class RecyclerListViewFragment extends Fragment {
     public void notifyItemInserted(int position) {
         mAdapter.notifyItemInserted(position);
         mRecyclerView.scrollToPosition(position);
-    }
-
-    public ProgressBar getProgressBar() {
-        return progressBar;
     }
 
     @Override

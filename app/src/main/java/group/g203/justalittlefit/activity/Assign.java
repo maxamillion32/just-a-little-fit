@@ -54,6 +54,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     protected void onCreate(Bundle savedInstanceState) {
         final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_assign, null, false);
@@ -62,6 +63,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         initCalendarPicker(activity);
         setupFloatingActionButton(activity);
         setTitle(R.string.assign_title_string);
+        hideProgressDialog();
     }
 
     @Override
@@ -156,6 +158,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     @Override
     public void onAssignWorkoutClick(AssignWorkoutDialog dialog) {
+        showProgressDialog();
         LinkedList<Object> dateTimeIdList = new LinkedList<>();
         dateTimeIdList.add(0, getDateTimes());
         dateTimeIdList.add(1, dialog.getSelectedWorkoutNames());
@@ -182,6 +185,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.assign_workout_error));
         }
+        hideProgressDialog();
     }
 
     private View.OnClickListener undoAssignListener(final List<Workout> workoutsToRemove) {

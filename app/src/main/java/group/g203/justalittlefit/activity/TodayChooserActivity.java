@@ -42,6 +42,7 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_today_chooser, null, false);
@@ -51,6 +52,7 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
         setTitle(R.string.today_title_string);
         setDisplayDate();
         setupRecyclerView();
+        hideProgressDialog();
     }
 
 

@@ -51,7 +51,6 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     @InjectView(R.id.circleIndicator)
     CircleIndicator circleIndicator;
     boolean busRegistered;
-    ProgressDialog progressDialog;
     DateTime dateTime;
     List<Workout> workouts;
 
@@ -59,13 +58,14 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     protected void onCreate(Bundle savedInstanceState) {
         final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_view, null, false);
         frameLayout.addView(contentView, 0);
         ButterKnife.inject(this, frameLayout);
         setTitle(R.string.view_title_string);
-        progressDialog = Utils.showProgressDialog(this);
+
         displayWorkoutViews();
     }
 
@@ -78,12 +78,12 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
                     .execute(getDatesWorkouts);
         } else {
             displayError();
+            hideProgressDialog();
         }
     }
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        dismissProgressDialog();
         if (event == null || event.getResult() == null) {
             displayError();
         } else if (event.getResult() instanceof List) {
@@ -112,6 +112,7 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
         } else {
             displayError();
         }
+        hideProgressDialog();
     }
 
     void displayError() {
@@ -227,12 +228,6 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     protected void onPause() {
         super.onPause();
         unregisterBus();
-    }
-
-    void dismissProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
     }
 
     @Override

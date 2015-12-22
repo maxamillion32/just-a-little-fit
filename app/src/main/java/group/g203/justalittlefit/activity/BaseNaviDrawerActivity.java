@@ -13,13 +13,13 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import group.g203.justalittlefit.R;
+import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 public class BaseNaviDrawerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     FrameLayout frameLayout;
     NavigationView navigationView;
-    boolean progressBarReady;
     ProgressDialog progressDialog;
 
     @Override
@@ -62,12 +62,18 @@ public class BaseNaviDrawerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setProgressBarReady(boolean progressBarReady) {
-        this.progressBarReady = progressBarReady;
+    public void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(Constants.LOADING);
+        }
+        progressDialog.show();
     }
 
-    public boolean isProgressBarReady() {
-        return progressBarReady;
+    public void hideProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 }
 

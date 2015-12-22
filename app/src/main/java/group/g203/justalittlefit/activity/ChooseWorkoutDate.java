@@ -41,6 +41,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
     protected void onCreate(Bundle savedInstanceState) {
         final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_choose_workout_date, null, false);
@@ -48,6 +49,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
         ButterKnife.inject(this, frameLayout);
         initCalendarPicker(activity);
         setTitle(R.string.view_title_string);
+        hideProgressDialog();
     }
 
     @Override

@@ -60,6 +60,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         registerBus();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,18 +77,20 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     }
 
     void displaySetList() {
-        showProgressBar();
+        showProgressDialog();
         parentExercise = getParentExercise();
         if (parentExercise != null) {
             DbFunctionObject getSetsByExercise = new DbFunctionObject(parentExercise, DbConstants.GET_SETS_BY_EXERCISE);
             new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(getSetsByExercise);
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
+            hideProgressDialog();
         }
 
         if (reorderTriggeredByEditSet) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
             reorderTriggeredByEditSet = false;
+            hideProgressDialog();
         }
     }
 
@@ -106,7 +109,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressBar();
         if (event == null || event.getResult() == null) {
             displayGeneralSetListError();
         } else if (event.getResult() instanceof List) {
@@ -157,6 +159,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         } else {
             displayGeneralSetListError();
         }
+        hideProgressDialog();
     }
 
     @Override
@@ -195,6 +198,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                     getResources().getColor(R.color.app_blue_gray));
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.set_modify_error));
+            hideProgressDialog();
         }
     }
 
@@ -277,18 +281,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                 new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(insertWorkoutSet);
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
-        }
-    }
-
-    void showProgressBar() {
-        if (isProgressBarReady()) {
-            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
-        }
-    }
-
-    void hideProgressBar() {
-        if (isProgressBarReady()) {
-            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
+            hideProgressDialog();
         }
     }
 
@@ -367,7 +360,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Override
     public void onAddSetClick(AddSetDialog dialog) {
-        showProgressBar();
         reorderTriggeredByAddSet = true;
         reorderSets();
         if (dialog.getRbWeightedSet().isChecked()) {
@@ -393,7 +385,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Override
     public void onEditSetClick(AddSetDialog dialog) {
-        showProgressBar();
+        showProgressDialog();
         reorderTriggeredByEditSet = true;
         Set set = dialog.getSet();
 

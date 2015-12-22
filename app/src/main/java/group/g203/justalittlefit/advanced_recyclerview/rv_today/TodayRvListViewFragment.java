@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
@@ -25,7 +24,6 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.BaseNaviDrawerActivity;
 import group.g203.justalittlefit.activity.TodayActivity;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
@@ -41,7 +39,6 @@ public class TodayRvListViewFragment extends Fragment {
     private RecyclerViewDragDropManager mRecyclerViewDragDropManager;
     private RecyclerViewSwipeManager mRecyclerViewSwipeManager;
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
-    private ProgressBar progressBar;
     private Activity mActivity;
     private TodayActivity todayActivity;
 
@@ -58,9 +55,6 @@ public class TodayRvListViewFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-        progressBar.bringToFront();
-        ((BaseNaviDrawerActivity)mActivity).setProgressBarReady(true);
         this.populateActivity();
 
         //noinspection ConstantConditions
@@ -204,8 +198,6 @@ public class TodayRvListViewFragment extends Fragment {
         }
         mAdapter = null;
         mLayoutManager = null;
-
-        ((BaseNaviDrawerActivity)mActivity).setProgressBarReady(false);
         mActivity = null;
 
         super.onDestroyView();
@@ -280,10 +272,6 @@ public class TodayRvListViewFragment extends Fragment {
         if (mActivity instanceof TodayActivity) {
             todayActivity = (TodayActivity) mActivity;
         }
-    }
-
-    public ProgressBar getProgressBar() {
-        return progressBar;
     }
 }
 

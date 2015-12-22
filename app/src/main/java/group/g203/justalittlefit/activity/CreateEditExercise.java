@@ -62,6 +62,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgressDialog();
         registerBus();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -77,19 +78,18 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     }
 
     void displayExerciseList() {
-        showProgressBar();
         parentWorkout = getParentWorkout();
         if (parentWorkout != null) {
             DbFunctionObject getExercisesByWorkout = new DbFunctionObject(parentWorkout, DbConstants.GET_EXERCISES_BY_WORKOUT);
             new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(getExercisesByWorkout);
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_list_error));
+            hideProgressDialog();
         }
     }
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
-        hideProgressBar();
         if (event == null || event.getResult() == null) {
             displayGeneralExerciseListError();
         } else if (event.getResult() instanceof Integer) {
@@ -137,6 +137,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         } else {
             displayGeneralExerciseListError();
         }
+        hideProgressDialog();
     }
 
     @Override
@@ -201,6 +202,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                     getResources().getColor(R.color.app_blue_gray));
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_modify_error));
+            hideProgressDialog();
         }
     }
 
@@ -313,18 +315,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         }
     }
 
-    void showProgressBar() {
-        if (isProgressBarReady()) {
-            getRecyclerViewFrag().getProgressBar().setVisibility(View.VISIBLE);
-        }
-    }
-
-    void hideProgressBar() {
-        if (isProgressBarReady()) {
-            getRecyclerViewFrag().getProgressBar().setVisibility(View.INVISIBLE);
-        }
-    }
-
     private void reorderExercises() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
@@ -339,7 +329,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     @Override
     public void onAddExerciseClick(AddExerciseDialog dialog) {
-        showProgressBar();
+        showProgressDialog();
         reorderTriggeredByAddExercise = true;
         reorderExercises();
         addedExerciseName = Utils.ensureValidString(dialog.getAddExerciseText().getText().toString());
