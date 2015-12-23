@@ -85,6 +85,12 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
         super.setupDrawerContent(navigationView);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideProgressDialog();
+    }
+
     private List<Workout> getWorkouts() {
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(Constants.WORKOUTS)) {

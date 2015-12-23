@@ -156,6 +156,12 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        hideProgressDialog();
+    }
+
+    @Override
     public void onSelectViewDialog(SelectViewOrTodayDialog dialog) {
         Utils.launchViewActivity(this, chosenDateTime);
     }

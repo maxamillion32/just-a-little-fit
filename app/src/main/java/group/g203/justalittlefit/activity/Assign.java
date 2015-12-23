@@ -232,5 +232,6 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     protected void onPause() {
         super.onPause();
         unregisterBus();
+        hideProgressDialog();
     }
 }

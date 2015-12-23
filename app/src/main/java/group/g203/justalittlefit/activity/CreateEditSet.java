@@ -340,6 +340,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         super.onPause();
         unregisterBus();
         reorderSets();
+        hideProgressDialog();
     }
 
     @Override

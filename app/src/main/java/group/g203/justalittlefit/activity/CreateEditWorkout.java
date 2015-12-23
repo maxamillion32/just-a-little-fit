@@ -248,6 +248,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         super.onPause();
         unregisterBus();
         reorderWorkouts();
+        hideProgressDialog();
     }
 
     @Override

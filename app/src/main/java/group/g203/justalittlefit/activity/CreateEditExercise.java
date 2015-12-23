@@ -267,6 +267,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         super.onPause();
         unregisterBus();
         reorderExercises();
+        hideProgressDialog();
     }
 
     @Override

@@ -366,6 +366,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         super.onPause();
         unregisterBus();
         reorderWorkouts();
+        hideProgressDialog();
     }
 
     public TodayRvListViewFragment getRecyclerViewFrag() {

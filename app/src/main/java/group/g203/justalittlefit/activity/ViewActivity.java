@@ -228,6 +228,7 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     protected void onPause() {
         super.onPause();
         unregisterBus();
+        hideProgressDialog();
     }
 
     @Override
