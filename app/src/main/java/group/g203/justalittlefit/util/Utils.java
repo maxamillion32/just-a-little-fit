@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -326,14 +327,13 @@ public class Utils {
         }
     }
 
-    public static Integer removeWorkout(CloseableIterator<Workout> iterator, String exerciseName) {
+    public static Integer removeWorkouts(CloseableIterator<Workout> iterator, HashSet<Workout> workouts) {
         Integer removedWorkout = 0;
         try {
             while (iterator.hasNext()) {
                 Workout workout = iterator.next();
-                if (ensureValidString(workout.getName()).trim().equals(exerciseName)) {
+                if (workouts.contains(workout)) {
                     iterator.remove();
-                    removedWorkout = Constants.INT_ONE;
                 }
             }
         } finally {

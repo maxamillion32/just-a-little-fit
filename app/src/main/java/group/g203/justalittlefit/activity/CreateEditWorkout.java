@@ -22,6 +22,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,6 +62,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     String addedWorkoutName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
+    HashSet<Workout> queuedWorkoutsToDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_create_edit_workout, null, false);
         frameLayout.addView(contentView, 0);
+        queuedWorkoutsToDelete = new HashSet<>();
         ButterKnife.inject(this, frameLayout);
 
         if (savedInstanceState == null) {
@@ -134,16 +137,10 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         determineDefaultStatus();
         Workout workoutToDelete = (Workout) dataObject;
 
-        Integer removeResult = Utils.removeWorkout(ciWorkouts,
-                Utils.ensureValidString(workoutToDelete.getName().trim()));
-
-        if (removeResult == Constants.INT_ONE) {
-            Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
-                    Constants.UNDO, undoWorkoutDelete(),
-                    getResources().getColor(R.color.app_blue_gray));
-        } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_modify_error));
-        }
+        queuedWorkoutsToDelete.add(workoutToDelete);
+        Utils.displayLongActionSnackbar(fab, getString(R.string.workout_deleted),
+                Constants.UNDO, undoWorkoutDelete(),
+                getResources().getColor(R.color.app_blue_gray));
     }
 
     @Subscribe
@@ -159,6 +156,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 // onPause result returned and data order saved, reset boolean trigger
                 reorderTriggeredByAddWorkout = false;
             }
+            dropQueuedWorkoutsToDelete();
         } else if (event.getResult() instanceof HashMap) {
             HashMap<String, Object> map = (HashMap<String, Object>) event.getResult();
             ciWorkouts = (CloseableIterator<Workout>) map.get(Constants.ITERATOR);
@@ -249,6 +247,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         unregisterBus();
         reorderWorkouts();
         hideProgressDialog();
+        dropQueuedWorkoutsToDelete();
     }
 
     @Override
@@ -302,7 +301,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                         getString(R.string.workout_removal_undone));
                 AbstractDataProvider.Data data = getDataProvider().getItem(position);
                 Workout workout = (Workout) data.getDataObject();
-                //workoutsToDelete.remove(workout);
+                queuedWorkoutsToDelete.remove(workout);
                 determineDefaultStatus();
             }
         };
@@ -338,6 +337,15 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
             hideProgressDialog();
+        }
+    }
+
+    void dropQueuedWorkoutsToDelete() {
+        Integer removeResult = Utils.removeWorkouts(ciWorkouts, queuedWorkoutsToDelete);
+        if (removeResult == Constants.INT_NEG_ONE) {
+            Log.e(LOG_TAG, getString(R.string.exercise_modify_error));
+        } else {
+            // do nothing, successful deletions
         }
     }
 
