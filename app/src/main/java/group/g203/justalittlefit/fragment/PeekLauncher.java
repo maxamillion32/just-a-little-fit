@@ -31,6 +31,7 @@ public class PeekLauncher extends Fragment {
     private final String LOG_TAG = getClass().getSimpleName();
     private ProgressDialog progressDialog = null;
     static boolean isTodayLauncher;
+    boolean busRegistered;
 
     public static final PeekLauncher getNewInstance(DateTime dateTime) {
         PeekLauncher peekLauncher = new PeekLauncher();
@@ -44,7 +45,7 @@ public class PeekLauncher extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        PeekLauncherBus.getInstance().register(this);
+        registerBus();
         progressDialog = Utils.showProgressDialog(getActivity());
         DateTime dateTime = (DateTime) getArguments().getSerializable(Constants.DATE_TIME);
         if (dateTime == null) {
@@ -129,9 +130,29 @@ public class PeekLauncher extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        unregisterBus();
+        super.onPause();
+    }
+
+    @Override
     public void onDestroy() {
-        PeekLauncherBus.getInstance().unregister(this);
+        unregisterBus();
         super.onDestroy();
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            PeekLauncherBus.getInstance().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            PeekLauncherBus.getInstance().unregister(this);
+            busRegistered = false;
+        }
     }
 
     void dismissProgressDialog() {
