@@ -282,12 +282,16 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     @Override
     public void onDeleteAllExercisesClick(AppBaseDialog dialog) {
-        DataProvider dataProvider =
-                (DataProvider) getDataProvider();
-        List<Exercise> exercises = (List<Exercise>) (Object) dataProvider.getDataObjects();
-        DbFunctionObject deleteExercises =
-                new DbFunctionObject(exercises, DbConstants.DELETE_ALL_EXERCISES);
-        new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteExercises);
+        if (rlDefault.getVisibility() == View.VISIBLE) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.no_exercises_to_delete));
+        } else {
+            DataProvider dataProvider =
+                    (DataProvider) getDataProvider();
+            List<Exercise> exercises = (List<Exercise>) (Object) dataProvider.getDataObjects();
+            DbFunctionObject deleteExercises =
+                    new DbFunctionObject(exercises, DbConstants.DELETE_ALL_EXERCISES);
+            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteExercises);
+        }
     }
 
 

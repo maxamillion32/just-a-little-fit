@@ -345,12 +345,16 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     @Override
     public void onDeleteAllSetsClick(AppBaseDialog dialog) {
-        DataProvider dataProvider =
-                (DataProvider) getDataProvider();
-        List<Set> sets = (List<Set>) (Object) dataProvider.getDataObjects();
-        DbFunctionObject deleteSets =
-                new DbFunctionObject(sets, DbConstants.DELETE_ALL_SETS);
-        new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSets);
+        if (rlDefault.getVisibility() == View.VISIBLE) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.no_sets_to_delete));
+        } else {
+            DataProvider dataProvider =
+                    (DataProvider) getDataProvider();
+            List<Set> sets = (List<Set>) (Object) dataProvider.getDataObjects();
+            DbFunctionObject deleteSets =
+                    new DbFunctionObject(sets, DbConstants.DELETE_ALL_SETS);
+            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSets);
+        }
     }
 
     void displayGeneralSetListError() {

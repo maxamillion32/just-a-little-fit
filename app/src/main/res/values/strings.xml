@@ -107,6 +107,8 @@
     <string name="confirmDeleteExerciseDialog_success">Exercise(s) deleted successfully</string>
     <string name="confirmDeleteSetDialog_success">Set(s) deleted successfully</string>
     <string name="no_workouts_to_delete">There are no workouts to delete</string>
+    <string name="no_sets_to_delete">There are no sets to delete</string>
+    <string name="no_exercises_to_delete">There are no exercises to delete</string>
     <string name="confirmDeleteWorkoutDialog_selectAll_bool">Title Boolean</string>
     <string name="noImplementsConfirmDeletionListener">doesn\'t implement ConfirmWorkoutsDeletionListener.</string>
     <string name="noImplementsConfirmExerciseDeletionListener">doesn\'t implement ConfirmExercisesDeletionListener.</string>
@@ -155,7 +157,7 @@
     <string name="selectViewOrTodayDialog_Title">View Today\'s Workout</string>
     <string name="selectViewOption">View</string>
     <string name="selectTodayOption">Today</string>
-    <string name="selectInfo">This is today\'s date. If there are workout(s) scheduled, you can view this workout(s) in either of two ways.</string>
+    <string name="selectInfo">This is today\'s date. If there are workout(s) scheduled, you can view this workout(s) in either of two ways...</string>
     <string name="selectViewInfo">- Select the \"View\" option to view this workout(s) in a recap fashion. You can delete the workout(s) but otherwise, they aren\'t editable.</string>
     <string name="selectTodayInfo">- Select the \"Today\" option to view this workout(s) in a modifiable, on-the-go state.</string>
     <string name="selectViewOrTodayDialogTag">Select View Or Today Dialog Tag</string>
@@ -247,8 +249,8 @@
     <string name="home_today_info">- Click the \"Today\" option to bring up any workouts you may have scheduled for
         today. You will be able to edit them on the go.</string>
     <string name="home_view_info">- Click the \"View\" option to bring up any workouts you may have scheduled for
-        a date. They will not be editable unless you have chosen today\'s date in which you may opt to modify the workout(s).</string>
-    <string name="home_create_edit_info">- Click the \"Create/Edit\" option to create a workouts.</string>
+        a date. You can delete these workouts but they will not be editable otherwise unless you have chosen today\'s date in which you may opt to modify the workout(s).</string>
+    <string name="home_create_edit_info">- Click the \"Create/Edit\" option to create workouts.</string>
     <string name="home_assign_info">- Click the \"Assign\" option to assign workouts you created inside the app to specific dates.</string>
 
     <!--Open Source Library Credits Dialog messages-->
