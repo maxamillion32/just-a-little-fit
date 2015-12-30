@@ -166,6 +166,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
     protected void onPause() {
         super.onPause();
         hideProgressDialog();
+        frameLayout.removeAllViews();
     }
 
     @Override

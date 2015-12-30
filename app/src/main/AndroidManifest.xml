@@ -50,6 +50,7 @@
         <activity
             android:name="group.g203.justalittlefit.activity.ViewActivity"
             android:label="@string/title_activity_view"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -61,6 +62,7 @@
         <activity
             android:name="group.g203.justalittlefit.activity.TodayChooserActivity"
             android:label="@string/title_activity_today_chooser"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
     </application>

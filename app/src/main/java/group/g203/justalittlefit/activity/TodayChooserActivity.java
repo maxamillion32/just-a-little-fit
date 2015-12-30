@@ -84,7 +84,7 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
     protected void onPause() {
         super.onPause();
         hideProgressDialog();
-        this.finish();
+        frameLayout.removeAllViews();
     }
 
     private List<Workout> getWorkouts() {
@@ -134,10 +134,5 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
         hideProgressDialog();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
         selectedItem.setChecked(true);
-    }
-
-    @Override
-    public void onBackPressed() {
-        this.finish();
     }
 }
