@@ -63,25 +63,24 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
     HashSet<Workout> queuedWorkoutsToDelete;
+    Bundle savedBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        registerBus();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_create_edit_workout, null, false);
-        frameLayout.addView(contentView, 0);
-        queuedWorkoutsToDelete = new HashSet<>();
-        ButterKnife.inject(this, frameLayout);
-
-        if (savedInstanceState == null) {
-            displayWorkoutList();
+        if (savedInstanceState != null) {
+            getIntent().getExtras().putBundle(Constants.SAVED_BUNDLE, savedInstanceState);
         }
+    }
 
-        setupFloatingActionButton(this);
-        setTitle(R.string.create_edit_title_string);
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+            savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
+        }
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     void displayWorkoutList() {
@@ -253,9 +252,21 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     public void onResume() {
         super.onResume();
-        if (!busRegistered) {
-            registerBus();
+        showProgressDialog();
+        registerBus();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_create_edit_workout, null, false);
+        frameLayout.addView(contentView, 0);
+        queuedWorkoutsToDelete = new HashSet<>();
+        ButterKnife.inject(this, frameLayout);
+
+        if (savedBundle == null) {
+            displayWorkoutList();
         }
+
+        setupFloatingActionButton(this);
+        setTitle(R.string.create_edit_title_string);
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
         selectedItem.setChecked(true);
     }

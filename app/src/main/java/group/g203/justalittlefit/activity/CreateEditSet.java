@@ -1,6 +1,7 @@
 package group.g203.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -56,24 +57,24 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     Set addedSet;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
+    Bundle savedBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        registerBus();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_create_edit_set, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-
-        if (savedInstanceState == null) {
-           displaySetList();
+        if (savedInstanceState != null) {
+            getIntent().getExtras().putBundle(Constants.SAVED_BUNDLE, savedInstanceState);
         }
+    }
 
-        setupFloatingActionButton(this);
-        setTitle(R.string.create_edit_set_title_string);
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+            savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
+        }
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     void displaySetList() {
@@ -328,9 +329,18 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     @Override
     public void onResume() {
         super.onResume();
-        if (!busRegistered) {
-            registerBus();
+        showProgressDialog();
+        registerBus();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_create_edit_set, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        if (savedBundle == null) {
+            displaySetList();
         }
+        setupFloatingActionButton(this);
+        setTitle(R.string.create_edit_set_title_string);
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
         selectedItem.setChecked(true);
     }

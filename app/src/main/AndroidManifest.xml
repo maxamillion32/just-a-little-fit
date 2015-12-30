@@ -26,16 +26,19 @@
         <activity
             android:name="group.g203.justalittlefit.activity.CreateEditWorkout"
             android:label="@string/title_activity_create_edit_workout"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="group.g203.justalittlefit.activity.CreateEditExercise"
             android:label="@string/title_activity_create_edit_exercise"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="group.g203.justalittlefit.activity.CreateEditSet"
             android:label="@string/title_activity_create_edit_set"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity

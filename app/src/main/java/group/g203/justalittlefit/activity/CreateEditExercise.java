@@ -58,23 +58,24 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     String addedExerciseName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
+    Bundle savedBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        registerBus();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_create_edit_exercise, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        setupFloatingActionButton(this);
-        setTitle(R.string.create_edit_exercise_title_string);
-
-        if (savedInstanceState == null) {
-            displayExerciseList();
+        if (savedInstanceState != null) {
+            getIntent().getExtras().putBundle(Constants.SAVED_BUNDLE, savedInstanceState);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+            savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
+        }
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     void displayExerciseList() {
@@ -273,8 +274,17 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     @Override
     public void onResume() {
         super.onResume();
-        if (!busRegistered) {
-            registerBus();
+        showProgressDialog();
+        registerBus();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_create_edit_exercise, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        setupFloatingActionButton(this);
+        setTitle(R.string.create_edit_exercise_title_string);
+        if (savedBundle == null) {
+            displayExerciseList();
         }
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
         selectedItem.setChecked(true);
