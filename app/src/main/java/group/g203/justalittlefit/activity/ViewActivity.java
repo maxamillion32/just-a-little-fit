@@ -59,12 +59,6 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-    }
-
     private void displayWorkoutViews() {
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(Constants.DATE)) {
@@ -229,8 +223,8 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterBus();
         hideProgressDialog();
+        this.finish();
     }
 
     @Override
@@ -246,5 +240,10 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     void handleDeleteViewWorkouts(List<Workout> workouts) {
         DbFunctionObject deleteWorkoutsDfo = new DbFunctionObject(workouts, DbConstants.DELETE_WORKOUTS);
         new DbAsyncTask(Constants.VIEW_TEXT).execute(deleteWorkoutsDfo);
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 }
