@@ -44,6 +44,12 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_info, menu);
         return true;

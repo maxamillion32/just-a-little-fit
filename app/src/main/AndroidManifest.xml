@@ -40,6 +40,7 @@
         </activity>
         <activity
             android:name="group.g203.justalittlefit.activity.ChooseWorkoutDate"
+            android:launchMode="singleTask"
             android:label="@string/view_title_string"
             android:screenOrientation="portrait" >
         </activity>
