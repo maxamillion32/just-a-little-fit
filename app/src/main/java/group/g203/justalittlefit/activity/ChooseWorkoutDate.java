@@ -1,6 +1,7 @@
 package group.g203.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -39,17 +40,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_choose_workout_date, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        initCalendarPicker(activity);
-        setTitle(R.string.view_title_string);
-        hideProgressDialog();
     }
 
     @Override
@@ -150,6 +141,16 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
     @Override
     public void onResume() {
         super.onResume();
+        final BaseNaviDrawerActivity activity = this;
+        showProgressDialog();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_choose_workout_date, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        initCalendarPicker(activity);
+        setTitle(R.string.view_title_string);
+        hideProgressDialog();
         resetCalendarView();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
         selectedItem.setChecked(true);

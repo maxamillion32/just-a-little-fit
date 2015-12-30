@@ -1,6 +1,7 @@
 package group.g203.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -42,19 +43,13 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_today_chooser, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        workouts = getWorkouts();
-        setTitle(R.string.today_title_string);
-        setDisplayDate();
-        setupRecyclerView();
-        hideProgressDialog();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,6 +120,17 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
     @Override
     public void onResume() {
         super.onResume();
+        showProgressDialog();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_today_chooser, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        workouts = getWorkouts();
+        setTitle(R.string.today_title_string);
+        setDisplayDate();
+        setupRecyclerView();
+        hideProgressDialog();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
         selectedItem.setChecked(true);
     }

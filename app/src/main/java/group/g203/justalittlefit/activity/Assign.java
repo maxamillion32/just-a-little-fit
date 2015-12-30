@@ -1,6 +1,7 @@
 package group.g203.justalittlefit.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -52,18 +53,13 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_assign, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        initCalendarPicker(activity);
-        setupFloatingActionButton(activity);
-        setTitle(R.string.assign_title_string);
-        hideProgressDialog();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override
@@ -207,9 +203,18 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     @Override
     public void onResume() {
         super.onResume();
-        if (!busRegistered) {
-            registerBus();
-        }
+        final BaseNaviDrawerActivity activity = this;
+        showProgressDialog();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_assign, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        initCalendarPicker(activity);
+        setupFloatingActionButton(activity);
+        setTitle(R.string.assign_title_string);
+        registerBus();
+        hideProgressDialog();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
         selectedItem.setChecked(true);
     }

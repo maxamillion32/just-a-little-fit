@@ -38,14 +38,12 @@ public class Home extends BaseNaviDrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_home, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        setTitle(Constants.EMPTY_STRING);
-        getHelper();
-        this.formatHomeTextViews();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override
@@ -86,7 +84,14 @@ public class Home extends BaseNaviDrawerActivity {
     @Override
     public void onResume() {
         super.onResume();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_home, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        setTitle(Constants.EMPTY_STRING);
         getHelper();
+        this.formatHomeTextViews();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
         selectedItem.setChecked(true);
     }
