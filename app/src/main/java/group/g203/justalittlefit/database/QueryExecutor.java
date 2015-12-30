@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
+import group.g203.justalittlefit.util.Utils;
 
 /**
  * Helper class that will handle database functionality on objects of type
@@ -182,42 +183,45 @@ public class QueryExecutor {
 
     public static List<Workout> assignDatesToWorkouts(LinkedList<Object> list) throws SQLException {
         try {
+            List<Workout> unAssignedWorkouts = getUnassignedWorkouts();
+            HashMap<String, Workout> workoutMap = Utils.makeNameWorkoutMap(unAssignedWorkouts);
+
             List<DateTime> dateTimes = (List<DateTime>) list.get(0);
             List<String> workoutNames = (List<String>) list.get(1);
-            List<Workout> workoutsToAssign = new ArrayList<>();
 
-            List<Workout> workouts = getWorkoutsByName(workoutNames);
+            List<Workout> assignedWorkouts = new ArrayList<>();
+            List<group.g203.justalittlefit.model.Set> sets;
 
             for (DateTime dateTime : dateTimes) {
-                for (Workout workout : workouts) {
-                    if (getWorkoutByNameAndDate(workout.getName(), dateTime) == null) {
-                        workout.setWorkoutDate(dateTime);
-                        workoutsToAssign.add(workout);
+                for (String name : workoutNames) {
+                    Workout actualWorkout = workoutMap.get(Utils.ensureValidString(name));
+                    Workout newWorkout = new Workout(name, dateTime);
+
+                    Boolean workoutCommitSuccessful = createWorkout(newWorkout);
+
+                    if (workoutCommitSuccessful) {
+
+                        for (Exercise exercise : actualWorkout.getExercises()) {
+                            Exercise newExercise = new Exercise(newWorkout,
+                                    Utils.ensureValidString(exercise.getName()), exercise.getOrderNumber(),
+                                    exercise.isComplete());
+
+                            Boolean exerciseCommitSuccessful = createExercise(newExercise);
+
+                            if (exerciseCommitSuccessful) {
+                                for (group.g203.justalittlefit.model.Set set : exercise.getSets()) {
+                                    group.g203.justalittlefit.model.Set newSet =
+                                            new group.g203.justalittlefit.model.Set(newExercise,
+                                                    set.isComplete(), set.getReps(), set.getWeight(), set.getHours(),
+                                                    set.getMinutes(), set.getSeconds(), Utils.ensureValidString(set.getWeightTypeCode()),
+                                                    set.getExerciseTypeCode(), set.getOrderNumber());
+
+                                    createSet(newSet);
+                                }
+                            }
+                        }
                     }
-                }
-            }
-
-            List<Workout> assignedWorkouts = createWorkouts(workoutsToAssign);
-            List<Workout> completeDbWorkouts = addExercisesToWorkouts(assignedWorkouts);
-
-            HashMap<Integer, List<group.g203.justalittlefit.model.Set>> mapOfSets =
-                    new HashMap<>();
-
-            int count = 0;
-
-            for (Workout assignedWorkout : assignedWorkouts) {
-                for (Exercise exercise : assignedWorkout.getExercises()) {
-                    mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
-                    count++;
-                }
-            }
-
-            count = 0;
-            for (Workout completeDbWorkout : completeDbWorkouts) {
-                for (Exercise exercise : completeDbWorkout.getExercises()) {
-                    addSetsToExercises(exercise.getExerciseId(), mapOfSets.get(count));
-                    mapOfSets.put(count, new ArrayList<>(exercise.getSets()));
-                    count++;
+                    assignedWorkouts.add(newWorkout);
                 }
             }
 

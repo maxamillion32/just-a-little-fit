@@ -51,6 +51,13 @@ public class Exercise implements Comparable<Exercise>, Parcelable {
         this.orderNumber = orderNumber;
     }
 
+    public Exercise(Workout workout, String name, int orderNumber, boolean isComplete) {
+        this.workout = workout;
+        this.name = name;
+        this.orderNumber = orderNumber;
+        this.isComplete = isComplete;
+    }
+
     public Workout getWorkout() {
         return workout;
     }

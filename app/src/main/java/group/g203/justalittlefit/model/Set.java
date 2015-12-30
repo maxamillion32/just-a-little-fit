@@ -94,8 +94,23 @@ public class Set implements Comparable<Set>, Parcelable {
         this.hours = hours;
     }
 
-    public Set(boolean isComplete, int reps, Integer weight, Integer hours, Integer minutes, Integer seconds, String weightTypeCode, String exerciseTypeCode, int orderNumber) {
+    public Set(boolean isComplete, int reps, Integer weight, Integer hours, Integer minutes,
+               Integer seconds, String weightTypeCode, String exerciseTypeCode, int orderNumber) {
         this.isComplete = isComplete;
+        this.reps = reps;
+        this.weight = weight;
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+        this.weightTypeCode = weightTypeCode;
+        this.exerciseTypeCode = exerciseTypeCode;
+        this.orderNumber = orderNumber;
+    }
+
+    public Set(Exercise exercise, boolean isComplete, int reps, Integer weight, Integer hours,
+               Integer minutes, Integer seconds, String weightTypeCode, String exerciseTypeCode, int orderNumber) {
+        this.isComplete = isComplete;
+        this.exercise = exercise;
         this.reps = reps;
         this.weight = weight;
         this.hours = hours;

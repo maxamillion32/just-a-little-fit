@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -387,5 +388,19 @@ public class Utils {
             }
         }
         return removedSets;
+    }
+
+    public static HashMap<String, Workout> makeNameWorkoutMap(List<Workout> workouts) {
+        if (!Utils.collectionIsNullOrEmpty(workouts)) {
+            HashMap<String, Workout> map = new HashMap<>(workouts.size());
+
+            for (Workout workout : workouts) {
+                map.put(ensureValidString(workout.getName()), workout);
+            }
+
+            return map;
+        } else {
+            return new HashMap<>(Constants.INT_ONE);
+        }
     }
 }

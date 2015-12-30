@@ -32,6 +32,7 @@ public class PeekLauncher extends Fragment {
     private ProgressDialog progressDialog = null;
     static boolean isTodayLauncher;
     boolean busRegistered;
+    DateTime dateTime;
 
     public static final PeekLauncher getNewInstance(DateTime dateTime) {
         PeekLauncher peekLauncher = new PeekLauncher();
@@ -47,7 +48,7 @@ public class PeekLauncher extends Fragment {
         setRetainInstance(true);
         registerBus();
         progressDialog = Utils.showProgressDialog(getActivity());
-        DateTime dateTime = (DateTime) getArguments().getSerializable(Constants.DATE_TIME);
+        dateTime = (DateTime) getArguments().getSerializable(Constants.DATE_TIME);
         if (dateTime == null) {
             isTodayLauncher = true;
             getTodaysWorkouts();
@@ -106,8 +107,7 @@ public class PeekLauncher extends Fragment {
                     Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_to_view));
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constants.DATE, workouts.get(0).getWorkoutDate());
-
+                    bundle.putSerializable(Constants.DATE, dateTime);
                     Intent intent = new Intent(getActivity(), ViewActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtras(bundle);

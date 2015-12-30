@@ -56,17 +56,13 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final BaseNaviDrawerActivity activity = this;
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_view, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        setTitle(R.string.view_title_string);
+    }
 
-        displayWorkoutViews();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     private void displayWorkoutViews() {
@@ -217,9 +213,15 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
     @Override
     public void onResume() {
         super.onResume();
-        if (!busRegistered) {
-            registerBus();
-        }
+        showProgressDialog();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_view, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        setTitle(R.string.view_title_string);
+        displayWorkoutViews();
+        registerBus();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
         selectedItem.setChecked(true);
     }
