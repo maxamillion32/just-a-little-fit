@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -184,44 +185,48 @@ public class QueryExecutor {
     public static List<Workout> assignDatesToWorkouts(LinkedList<Object> list) throws SQLException {
         try {
             List<Workout> unAssignedWorkouts = getUnassignedWorkouts();
-            HashMap<String, Workout> workoutMap = Utils.makeNameWorkoutMap(unAssignedWorkouts);
+            Map<String, Workout> workoutMap = Utils.makeNameWorkoutMap(unAssignedWorkouts);
 
             List<DateTime> dateTimes = (List<DateTime>) list.get(0);
             List<String> workoutNames = (List<String>) list.get(1);
 
             List<Workout> assignedWorkouts = new ArrayList<>();
-            List<group.g203.justalittlefit.model.Set> sets;
 
             for (DateTime dateTime : dateTimes) {
+                List<Workout> workoutsByDate = getWorkoutsByDate(dateTime);
+                List<String> workoutNameList = Utils.getWorkoutNameList(workoutsByDate);
+
                 for (String name : workoutNames) {
-                    Workout actualWorkout = workoutMap.get(Utils.ensureValidString(name));
-                    Workout newWorkout = new Workout(name, dateTime);
+                    if (!workoutNameList.contains(Utils.ensureValidString(name))) {
+                        Workout actualWorkout = workoutMap.get(Utils.ensureValidString(name));
+                        Workout newWorkout = new Workout(name, dateTime);
 
-                    Boolean workoutCommitSuccessful = createWorkout(newWorkout);
+                        Boolean workoutCommitSuccessful = createWorkout(newWorkout);
 
-                    if (workoutCommitSuccessful) {
+                        if (workoutCommitSuccessful) {
 
-                        for (Exercise exercise : actualWorkout.getExercises()) {
-                            Exercise newExercise = new Exercise(newWorkout,
-                                    Utils.ensureValidString(exercise.getName()), exercise.getOrderNumber(),
-                                    exercise.isComplete());
+                            for (Exercise exercise : actualWorkout.getExercises()) {
+                                Exercise newExercise = new Exercise(newWorkout,
+                                        Utils.ensureValidString(exercise.getName()), exercise.getOrderNumber(),
+                                        exercise.isComplete());
 
-                            Boolean exerciseCommitSuccessful = createExercise(newExercise);
+                                Boolean exerciseCommitSuccessful = createExercise(newExercise);
 
-                            if (exerciseCommitSuccessful) {
-                                for (group.g203.justalittlefit.model.Set set : exercise.getSets()) {
-                                    group.g203.justalittlefit.model.Set newSet =
-                                            new group.g203.justalittlefit.model.Set(newExercise,
-                                                    set.isComplete(), set.getReps(), set.getWeight(), set.getHours(),
-                                                    set.getMinutes(), set.getSeconds(), Utils.ensureValidString(set.getWeightTypeCode()),
-                                                    set.getExerciseTypeCode(), set.getOrderNumber());
+                                if (exerciseCommitSuccessful) {
+                                    for (group.g203.justalittlefit.model.Set set : exercise.getSets()) {
+                                        group.g203.justalittlefit.model.Set newSet =
+                                                new group.g203.justalittlefit.model.Set(newExercise,
+                                                        set.isComplete(), set.getReps(), set.getWeight(), set.getHours(),
+                                                        set.getMinutes(), set.getSeconds(), Utils.ensureValidString(set.getWeightTypeCode()),
+                                                        set.getExerciseTypeCode(), set.getOrderNumber());
 
-                                    createSet(newSet);
+                                        createSet(newSet);
+                                    }
                                 }
                             }
                         }
+                        assignedWorkouts.add(newWorkout);
                     }
-                    assignedWorkouts.add(newWorkout);
                 }
             }
 

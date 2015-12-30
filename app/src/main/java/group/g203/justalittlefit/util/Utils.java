@@ -31,11 +31,13 @@ import org.joda.time.format.DateTimeFormatter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.Assign;
@@ -390,7 +392,7 @@ public class Utils {
         return removedSets;
     }
 
-    public static HashMap<String, Workout> makeNameWorkoutMap(List<Workout> workouts) {
+    public static Map<String, Workout> makeNameWorkoutMap(List<Workout> workouts) {
         if (!Utils.collectionIsNullOrEmpty(workouts)) {
             HashMap<String, Workout> map = new HashMap<>(workouts.size());
 
@@ -400,7 +402,20 @@ public class Utils {
 
             return map;
         } else {
-            return new HashMap<>(Constants.INT_ONE);
+            return Collections.emptyMap();
+        }
+    }
+
+    public static List<String> getWorkoutNameList(List<Workout> workouts) {
+        if (!Utils.collectionIsNullOrEmpty(workouts)) {
+            List<String> names = new ArrayList<>(workouts.size());
+
+            for (Workout workout : workouts) {
+                names.add(ensureValidString(workout.getName()));
+            }
+            return names;
+        } else {
+            return Collections.emptyList();
         }
     }
 }
