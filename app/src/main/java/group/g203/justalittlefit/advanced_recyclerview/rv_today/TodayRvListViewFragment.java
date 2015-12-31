@@ -28,7 +28,6 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.TodayActivity;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
-import group.g203.justalittlefit.util.Utils;
 
 public class TodayRvListViewFragment extends Fragment {
     private static final String SAVED_STATE_EXPANDABLE_ITEM_MANAGER = "RecyclerViewExpandableItemManager";

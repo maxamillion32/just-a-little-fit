@@ -15,7 +15,6 @@ import android.widget.EditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.listener.AddWorkoutDialogListener;
 import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
