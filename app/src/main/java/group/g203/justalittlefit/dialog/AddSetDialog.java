@@ -150,11 +150,8 @@ public class AddSetDialog extends DialogFragment {
                                     } else {
                                         errMsg += "\n" + timedErr;
                                     }
-                                    handleDismissOrErrDisplay(errMsg, createSetDialog);
-                                } else {
-                                    listener.onAddSetClick(AddSetDialog.this);
-                                    createSetDialog.dismiss();
                                 }
+                                handleDismissOrErrDisplay(errMsg, createSetDialog);
                             } else {
                                 listener.onAddSetClick(AddSetDialog.this);
                                 createSetDialog.dismiss();
@@ -242,7 +239,7 @@ public class AddSetDialog extends DialogFragment {
         boolean checked = ((RadioButton) view).isChecked();
 
         // Check which radio button was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.rbWeightType:
                 if (checked) {
                     displayWeightedView();

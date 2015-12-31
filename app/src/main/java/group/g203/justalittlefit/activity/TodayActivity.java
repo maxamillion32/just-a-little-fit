@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -216,6 +217,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             startActivity(intent);
         } else if (event.getResult() instanceof Double) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
+        } else if (event.getResult() instanceof Map) {
+            // Data order saved and onPause returned with data updated on screen
         } else {
             displayGeneralWorkoutListError();
         }
