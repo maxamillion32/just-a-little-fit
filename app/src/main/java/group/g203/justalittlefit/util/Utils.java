@@ -61,14 +61,6 @@ public class Utils {
         }
     }
 
-    public static boolean isCurrentActivity(String currentActivity, String requestedActivity) {
-        String trimmedCurrentActivity =
-                Utils.ensureValidString((currentActivity)).trim();
-        String trimmedRequestedActivity =
-                Utils.ensureValidString((requestedActivity)).trim();
-        return (trimmedCurrentActivity.equals(trimmedRequestedActivity));
-    }
-
     public static boolean collectionIsNullOrEmpty(Collection collection) {
         return (collection == null || collection.isEmpty());
     }
@@ -79,27 +71,6 @@ public class Utils {
 
     public static void displayShortToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public static boolean androidIsLessThanThisVersion(int version) {
-        if (Constants.ANDROID_SDK_INT >= version) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public static int getNumberOfDigits(int number) {
-        return (int)Math.floor(Math.log10(number) + 1);
-    }
-
-    public static void reorderWorkouts(List<Workout> workouts) {
-        Iterator<Workout> iterator = workouts.iterator();
-
-        while(iterator.hasNext()) {
-            Workout w = iterator.next();
-            w.setOrderNumber(workouts.indexOf(w));
-        }
     }
 
     public static ArrayList<DateTime> dateListToDateTimeList(List<Date> dates) {
@@ -223,25 +194,6 @@ public class Utils {
         return progressDialog;
     }
 
-    public static void setupProgressDialog(ProgressDialog dialog, Context context) {
-       if (dialog == null) {
-           dialog = new ProgressDialog(context);
-           dialog.setMessage(Constants.LOADING);
-       }
-    }
-
-    public static void showProgressDialog(ProgressDialog dialog) {
-        if (dialog != null) {
-            dialog.show();
-        }
-    }
-
-    public static void hideProgressDialog(ProgressDialog dialog) {
-        if (dialog != null) {
-            dialog.dismiss();
-        }
-    }
-
     public static String returnStandardDateString(DateTime dateTime) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(Constants.STANDARD_DATE_PATTERN);
         return dateTimeFormatter.print(dateTime);
@@ -256,10 +208,6 @@ public class Utils {
         final int bottom = v.getBottom() + ty;
 
         return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
-    }
-
-    public static void underlineText(TextView textView) {
-        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     public static void strikeThroughText(TextView textView) {
