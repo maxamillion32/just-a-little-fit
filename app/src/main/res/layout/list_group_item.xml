@@ -53,6 +53,17 @@
                 android:layout_height="match_parent"
                 android:gravity="center" />
 
+            <ImageView
+                android:id="@+id/ivRename"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:src="@drawable/ic_pencil_box_outline"
+                tools:ignore="RtlHardcoded"
+                android:textStyle="bold" />
+
             </LinearLayout>
 
     </RelativeLayout>

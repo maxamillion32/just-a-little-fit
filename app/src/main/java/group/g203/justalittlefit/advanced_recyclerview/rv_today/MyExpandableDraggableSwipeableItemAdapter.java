@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
@@ -37,6 +38,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
     private AbstractExpandableDataProvider mProvider;
     private EventListener mEventListener;
     private View.OnClickListener mItemViewOnClickListener;
+    private View.OnClickListener mImageViewOnClickListener;
     private View.OnClickListener mSwipeableViewContainerOnClickListener;
     HashMap<Exercise, View> exerciseViewMap = new HashMap<>();
     HashMap<Exercise, Integer> exerciseCountMap = new HashMap<>();
@@ -51,6 +53,8 @@ public class MyExpandableDraggableSwipeableItemAdapter
         void onChildItemPinned(int groupPosition, int childPosition);
 
         void onItemViewClicked(View v, boolean pinned);
+
+        void onImageViewClicked(View v);
     }
 
     public static abstract class MyBaseViewHolder extends AbstractDraggableSwipeableItemViewHolder implements ExpandableItemViewHolder {
@@ -58,6 +62,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
         public View mDragHandle;
         public TextView mTextView;
         public TextView mTvExpand;
+        public ImageView mImageView;
         public CheckBox mItemCb;
         private int mExpandStateFlags;
 
@@ -66,6 +71,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
             mContainer = (ViewGroup) v.findViewById(R.id.container);
             mDragHandle = v.findViewById(R.id.drag_handle);
             mTextView = (TextView) v.findViewById(android.R.id.text1);
+            mImageView = (ImageView) v.findViewById(R.id.ivRename);
             mTvExpand = (TextView) v.findViewById(R.id.tvExpand);
             mItemCb = (CheckBox) v.findViewById(R.id.itemCb);
         }
@@ -111,6 +117,12 @@ public class MyExpandableDraggableSwipeableItemAdapter
                 onItemViewClick(v);
             }
         };
+        mImageViewOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onImageViewClick(v);
+            }
+        };
         mSwipeableViewContainerOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +138,12 @@ public class MyExpandableDraggableSwipeableItemAdapter
     private void onItemViewClick(View v) {
         if (mEventListener != null) {
             mEventListener.onItemViewClicked(v, true);  // true --- pinned
+        }
+    }
+
+    private void onImageViewClick(View v) {
+        if (mEventListener != null) {
+            mEventListener.onImageViewClicked(v);
         }
     }
 
@@ -190,6 +208,8 @@ public class MyExpandableDraggableSwipeableItemAdapter
 
         // set listeners
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
+        holder.mImageView.setOnClickListener(mImageViewOnClickListener);
+        holder.mImageView.setTag(holder.exercise);
 
         // set text
         holder.mTextView.setText(item.getText());

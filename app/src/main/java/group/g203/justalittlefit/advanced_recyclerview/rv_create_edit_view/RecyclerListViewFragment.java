@@ -94,6 +94,11 @@ public class RecyclerListViewFragment extends Fragment {
             public void onItemViewClicked(View v, boolean pinned) {
                 onItemViewClick(v, pinned);
             }
+
+            @Override
+            public boolean onItemViewLongClicked(View v) {
+                return onItemViewLongClick(v);
+            }
         });
 
         mAdapter = myItemAdapter;
@@ -194,6 +199,20 @@ public class RecyclerListViewFragment extends Fragment {
                 createEditSetActivity.onItemClicked(position);
             }
         }
+    }
+
+    private boolean onItemViewLongClick(View v) {
+        int position = mRecyclerView.getChildPosition(v);
+        if (createEditWorkoutActivity != null) {
+            if (position != RecyclerView.NO_POSITION) {
+                createEditWorkoutActivity.onItemLongClicked(position);
+            }
+        } else if (createEditWorkoutActivity == null && createEditSetActivity == null) {
+            if (createEditExerciseActivity != null && position != RecyclerView.NO_POSITION) {
+                createEditExerciseActivity.onItemLongClicked(position);
+            }
+        }
+        return true;
     }
 
     private boolean supportsViewElevation() {

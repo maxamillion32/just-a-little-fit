@@ -36,6 +36,7 @@ public class InformationDialog extends AppBaseDialog {
                 setDialogMessage(getString(R.string.deleteBySwipe_exercise) + Constants.NEWLINE
                         + Constants.NEWLINE + getString(R.string.dragSort_exercise)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onClick_exercise)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onLongClick_exercise)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onSave));
                 break;
             case Constants.SETS_NORM_CASE:
@@ -48,6 +49,7 @@ public class InformationDialog extends AppBaseDialog {
                 setDialogMessage(getString(R.string.deleteBySwipe) + Constants.NEWLINE
                         + Constants.NEWLINE + getString(R.string.dragSort)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onClick)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onLongClick)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onSave));
                 break;
             case Constants.ASSIGN:
@@ -67,6 +69,7 @@ public class InformationDialog extends AppBaseDialog {
             case Constants.TODAY:
                 setDialogMessage(getString(R.string.view_today_workout_info) + Constants.NEWLINE
                         + Constants.NEWLINE + getString(R.string.today_expand_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_rename_workout)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_check_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_delete_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_drag_info)

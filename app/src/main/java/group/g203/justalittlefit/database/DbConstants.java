@@ -81,6 +81,12 @@ public class DbConstants {
     /** An int representation for for updating a {@link group.g203.justalittlefit.model.Set} object in the db */
     public static final int UPDATE_SET = 23;
 
+    /** An int representation for for updating an {@link group.g203.justalittlefit.model.Exercise} object in the db */
+    public static final int UPDATE_EXERCISE = 24;
+
+    /** An int representation for for updating an {@link group.g203.justalittlefit.model.Workout} object in the db */
+    public static final int UPDATE_WORKOUT = 25;
+
     /** The column name for the id field of {@link group.g203.justalittlefit.model.Workout} */
     public static final String WORKOUT_ID_COLUMN_NAME = "workout_id";
 

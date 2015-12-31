@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
@@ -27,6 +28,7 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.TodayActivity;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
+import group.g203.justalittlefit.util.Utils;
 
 public class TodayRvListViewFragment extends Fragment {
     private static final String SAVED_STATE_EXPANDABLE_ITEM_MANAGER = "RecyclerViewExpandableItemManager";
@@ -110,6 +112,11 @@ public class TodayRvListViewFragment extends Fragment {
             @Override
             public void onItemViewClicked(View v, boolean pinned) {
                 onItemViewClick(v, pinned);
+            }
+
+            @Override
+            public void onImageViewClicked(View v) {
+                onImageViewClick(v);
             }
         });
 
@@ -219,6 +226,12 @@ public class TodayRvListViewFragment extends Fragment {
         } else {
             todayActivity.onChildItemClicked(groupPosition, childPosition);
         }
+    }
+
+    private void onImageViewClick(View v) {
+        ImageView imageView = (ImageView) v;
+        Exercise exercise = (Exercise) imageView.getTag();
+        todayActivity.renameExercise(exercise);
     }
 
     private boolean supportsViewElevation() {

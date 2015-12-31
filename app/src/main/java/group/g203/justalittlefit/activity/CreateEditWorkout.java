@@ -43,14 +43,16 @@ import group.g203.justalittlefit.dialog.AddWorkoutDialog;
 import group.g203.justalittlefit.dialog.AppBaseDialog;
 import group.g203.justalittlefit.dialog.ConfirmDeleteWorkoutsDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
+import group.g203.justalittlefit.dialog.RenameDialog;
 import group.g203.justalittlefit.listener.AddWorkoutDialogListener;
 import group.g203.justalittlefit.listener.ConfirmWorkoutsDeletionListener;
+import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutsDeletionListener,
-        AddWorkoutDialogListener {
+        AddWorkoutDialogListener, RenameDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -132,6 +134,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         startActivity(createEditExercise);
     }
 
+    public void onItemLongClicked(int position) {
+        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        Workout workout = (Workout) data.getDataObject();
+        FragmentManager fm = getSupportFragmentManager();
+        RenameDialog dialog = RenameDialog.newInstance(workout);
+        dialog.show(fm, getString(R.string.renameDialog_Tag));
+    }
+
     public void onItemRemoved(Object dataObject) {
         determineDefaultStatus();
         Workout workoutToDelete = (Workout) dataObject;
@@ -188,6 +198,9 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder workouts before leaving activity
             reorderWorkouts();
+        } else if (event.getResult() instanceof Workout) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.renameDialog_WorkoutSuccess));
+            displayWorkoutList();
         } else if (event.getResult() instanceof Boolean) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addWorkout_success));
             displayWorkoutList();
@@ -382,5 +395,13 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             CreateEditWorkoutBus.getInstance().unregister(this);
             busRegistered = false;
         }
+    }
+
+    @Override
+    public void onRenameClick(RenameDialog dialog) {
+        Workout workout = dialog.getWorkout();
+        workout.setName(Utils.ensureValidString(dialog.getRenameText().getText().toString()));
+        DbFunctionObject updateWorkout = new DbFunctionObject(workout, DbConstants.UPDATE_WORKOUT);
+        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(updateWorkout);
     }
 }

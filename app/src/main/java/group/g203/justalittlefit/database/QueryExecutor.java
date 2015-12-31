@@ -153,12 +153,23 @@ public class QueryExecutor {
         return workouts;
     }
 
-    public static Boolean updateWorkout(Workout workout) {
+    public static Workout updateWorkout(Workout workout) {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
         try {
             dao.update(workout);
-            return true;
+            return workout;
         } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static ArrayList<Workout> updateTodayWorkout(Workout workout) {
+        Workout workoutObj = updateWorkout(workout);
+        if (workoutObj != null) {
+            ArrayList<Workout> workouts = new ArrayList<>(Constants.INT_ONE);
+            workouts.add(workoutObj);
+            return workouts;
+        } else {
             return null;
         }
     }
@@ -326,12 +337,23 @@ public class QueryExecutor {
         }
     }
 
-    public static Boolean updateExercise(Exercise exercise) {
+    public static Exercise updateExercise(Exercise exercise) {
         Dao<Exercise, Integer> dao = DaoHelper.getInstance().getExerciseDao();
         try {
             dao.update(exercise);
-            return true;
+            return exercise;
         } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public static LinkedList<Exercise> updateTodayExercise(Exercise exercise) {
+        Exercise ex = updateExercise(exercise);
+        if (exercise != null) {
+            LinkedList<Exercise> exercises = new LinkedList<>();
+            exercises.add(ex);
+            return exercises;
+        } else {
             return null;
         }
     }

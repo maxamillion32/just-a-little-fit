@@ -38,15 +38,17 @@ import group.g203.justalittlefit.dialog.AddExerciseDialog;
 import group.g203.justalittlefit.dialog.AppBaseDialog;
 import group.g203.justalittlefit.dialog.ConfirmDeleteExercisesDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
+import group.g203.justalittlefit.dialog.RenameDialog;
 import group.g203.justalittlefit.listener.AddExerciseDialogListener;
 import group.g203.justalittlefit.listener.ConfirmExercisesDeletionListener;
+import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener,
-        AddExerciseDialogListener {
+        AddExerciseDialogListener, RenameDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -131,6 +133,9 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             }
         } else if (event.getResult() instanceof Boolean) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
+            displayExerciseList();
+        } else if (event.getResult() instanceof Exercise) {
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.renameDialog_ExerciseSuccess));
             displayExerciseList();
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder exercises before leaving activity
@@ -217,6 +222,14 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         bundle.putParcelable(Constants.EXERCISE, exercise);
         createEditSet.putExtras(bundle);
         startActivity(createEditSet);
+    }
+
+    public void onItemLongClicked(int position) {
+        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        Exercise exercise = (Exercise) data.getDataObject();
+        FragmentManager fm = getSupportFragmentManager();
+        RenameDialog dialog = RenameDialog.newInstance(exercise);
+        dialog.show(fm, getString(R.string.renameDialog_Tag));
     }
 
     private View.OnClickListener undoExerciseDelete() {
@@ -381,5 +394,13 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         String errorMsg = getString(R.string.exercise_list_error);
         Log.e(LOG_TAG, errorMsg);
         Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), errorMsg);
+    }
+
+    @Override
+    public void onRenameClick(RenameDialog dialog) {
+        Exercise exercise = dialog.getExercise();
+        exercise.setName(Utils.ensureValidString(dialog.getRenameText().getText().toString()));
+        DbFunctionObject updateExercise = new DbFunctionObject(exercise, DbConstants.UPDATE_EXERCISE);
+        new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(updateExercise);
     }
 }

@@ -22,6 +22,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,16 +44,19 @@ import group.g203.justalittlefit.dialog.AddSetDialog;
 import group.g203.justalittlefit.dialog.AppBaseDialog;
 import group.g203.justalittlefit.dialog.ConfirmDeleteTodayWorkoutDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
+import group.g203.justalittlefit.dialog.RenameDialog;
 import group.g203.justalittlefit.listener.AddExerciseDialogListener;
 import group.g203.justalittlefit.listener.AddSetDialogListener;
 import group.g203.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
+import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
-public class TodayActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener, AddSetDialogListener, ConfirmDeleteTodayWorkoutListener {
+public class TodayActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener,
+        AddSetDialogListener, ConfirmDeleteTodayWorkoutListener, RenameDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -117,6 +121,9 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 return true;
             case R.id.action_delete:
                 displayConfirmDeleteWorkoutDialog();
+                break;
+            case R.id.action_rename:
+                displayRenameWorkoutDialog();
                 break;
             case R.id.action_info:
                 displayInfoDialog();
@@ -188,6 +195,25 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 // onPause result returned and data order saved, reset boolean trigger
                 reorderTriggeredByAdd = false;
             }
+        } else if (event.getResult() instanceof ArrayList) {
+            ArrayList<Workout> workouts = (ArrayList<Workout>) event.getResult();
+            if (!Utils.collectionIsNullOrEmpty(workouts)) {
+                Workout workout = workouts.get(0);
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.renameDialog_WorkoutSuccess));
+                setTitle(Utils.returnStandardDateString(workout.getWorkoutDate()) + Constants.COLON +
+                        Constants.SPACE + Utils.ensureValidString(workout.getName()));
+            } else {
+                displayGeneralWorkoutListError();
+            }
+        } else if (event.getResult() instanceof LinkedList) {
+            LinkedList<Exercise> exercises = (LinkedList<Exercise>) event.getResult();
+            if (!Utils.collectionIsNullOrEmpty(exercises)) {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.renameDialog_ExerciseSuccess));
+                DbFunctionObject getFullWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.GET_FULL_WORKOUT);
+                new DbAsyncTask(Constants.TODAY).execute(getFullWorkoutDfo);
+            } else {
+                displayGeneralWorkoutListError();
+            }
         } else if (event.getResult() instanceof Exercise) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.addExercise_success));
             recentlyAddedExercise = true;
@@ -217,6 +243,18 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.TODAY);
         dialog.show(fm, getString(R.string.infoDialogTagToday));
+    }
+
+    private void displayRenameWorkoutDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        RenameDialog dialog = RenameDialog.newInstance(todayWorkout);
+        dialog.show(fm, getString(R.string.renameDialog_Tag));
+    }
+
+    private void displayRenameExerciseDialog(Exercise exercise) {
+        FragmentManager fm = getSupportFragmentManager();
+        RenameDialog dialog = RenameDialog.newInstance(exercise);
+        dialog.show(fm, getString(R.string.renameDialog_Tag));
     }
 
     private void displayConfirmDeleteWorkoutDialog() {
@@ -337,6 +375,10 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         editedGroupPosition = groupPosition;
         Set set = data.getSet();
         displayAddSetDialogUponEdit(set);
+    }
+
+    public void renameExercise(Exercise exercise) {
+        displayRenameExerciseDialog(exercise);
     }
 
     private void displayAddSetDialogUponEdit(Set set) {
@@ -530,5 +572,21 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     public void onDeleteTodayWorkoutClick(AppBaseDialog dialog) {
         DbFunctionObject deleteWorkoutDfo = new DbFunctionObject(todayWorkout, DbConstants.DELETE_WORKOUT);
         new DbAsyncTask(Constants.TODAY).execute(deleteWorkoutDfo);
+    }
+
+    @Override
+    public void onRenameClick(RenameDialog dialog) {
+        Workout workout = dialog.getWorkout();
+        Exercise exercise = dialog.getExercise();
+        if (workout != null && exercise == null) {
+            workout.setName(Utils.ensureValidString(dialog.getRenameText().getText().toString()));
+            DbFunctionObject updateWorkout = new DbFunctionObject(workout, DbConstants.UPDATE_WORKOUT);
+            new DbAsyncTask(Constants.TODAY).execute(updateWorkout);
+        } else if (workout == null && exercise != null) {
+            reorderTriggeredByEditSet = true;
+            exercise.setName(Utils.ensureValidString(dialog.getRenameText().getText().toString()));
+            DbFunctionObject updateExercise = new DbFunctionObject(exercise, DbConstants.UPDATE_EXERCISE);
+            new DbAsyncTask(Constants.TODAY).execute(updateExercise);
+        }
     }
 }

@@ -56,6 +56,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.createWorkout((Workout) dfo.getDbObject());
                         case DbConstants.UPDATE_WORKOUTS:
                             return QueryExecutor.updateWorkouts((List<Workout>) dfo.getDbObject());
+                        case DbConstants.UPDATE_WORKOUT:
+                            return QueryExecutor.updateWorkout((Workout) dfo.getDbObject());
                     }
                 }
                 break;
@@ -72,6 +74,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.getExercisesByWorkout((Workout) dfo.getDbObject());
                         case DbConstants.DELETE_EXERCISES:
                             return QueryExecutor.deleteExercises((List<Exercise>) dfo.getDbObject());
+                        case DbConstants.UPDATE_EXERCISE:
+                            return QueryExecutor.updateExercise((Exercise) dfo.getDbObject());
                     }
                 }
                 break;
@@ -169,6 +173,10 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         return QueryExecutor.deleteTodayWorkout((Workout) dfo.getDbObject());
                         case DbConstants.UPDATE_SET:
                             return QueryExecutor.updateSet((Set) dfo.getDbObject());
+                        case DbConstants.UPDATE_WORKOUT:
+                            return QueryExecutor.updateTodayWorkout((Workout) dfo.getDbObject());
+                        case DbConstants.UPDATE_EXERCISE:
+                            return QueryExecutor.updateTodayExercise((Exercise) dfo.getDbObject());
                     }
                 }
                 break;
