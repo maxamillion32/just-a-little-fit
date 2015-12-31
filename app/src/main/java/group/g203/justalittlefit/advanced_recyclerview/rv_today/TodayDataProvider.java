@@ -11,6 +11,8 @@ import java.util.List;
 
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
+import group.g203.justalittlefit.util.Constants;
+import group.g203.justalittlefit.util.Utils;
 
 public class TodayDataProvider extends AbstractExpandableDataProvider {
     private List<Pair<GroupData, List<ChildData>>> mData;
@@ -227,6 +229,32 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
         return dataObjs;
     }
 
+    public int getExerciseDataCount() {
+        int count = 0;
+        for (Pair<GroupData, List<ChildData>> data : mData) {
+            count++;
+        }
+        return count;
+    }
+
+    public int getSetDataCount(Exercise ex) {
+        int count = 0;
+        if (ex != null) {
+            for (Pair<GroupData, List<ChildData>> data : mData) {
+                Exercise exercise = data.first.getExercise();
+                if (Utils.ensureValidString(ex.getName()).equals(
+                        Utils.ensureValidString(exercise.getName())
+                )) {
+                    List<ChildData> childDataList = data.second;
+                    for (ChildData childData : childDataList) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     public List<String> getExerciseDisplayNames() {
         List<String> exerciseNames = new ArrayList<>();
         for (Pair<GroupData, List<ChildData>> data : mData) {
@@ -238,6 +266,14 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
 
     public int getCount() {
         return getDataObjects().size();
+    }
+
+    public int getExerciseCount() {
+        return getExerciseDataCount() + Constants.INT_ONE;
+    }
+
+    public int getSetCount(Exercise exercise) {
+        return getSetDataCount(exercise) + Constants.INT_ONE;
     }
 
     public List<Object> getOrderedDataObjects() {
