@@ -24,6 +24,8 @@ import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeMana
 import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
+import java.util.TreeMap;
+
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.TodayActivity;
 import group.g203.justalittlefit.model.Exercise;
@@ -229,8 +231,16 @@ public class TodayRvListViewFragment extends Fragment {
 
     private void onImageViewClick(View v) {
         ImageView imageView = (ImageView) v;
-        Exercise exercise = (Exercise) imageView.getTag();
+        TreeMap<Integer, Exercise> map = (TreeMap<Integer, Exercise>) imageView.getTag();
+        Exercise exercise = map.firstEntry().getValue();
         todayActivity.renameExercise(exercise);
+
+        Integer groupPosition = map.firstKey();
+        if (mRecyclerViewExpandableItemManager.isGroupExpanded(groupPosition)) {
+            mRecyclerViewExpandableItemManager.collapseGroup(groupPosition);
+        } else {
+           mRecyclerViewExpandableItemManager.expandGroup(groupPosition);
+        }
     }
 
     private boolean supportsViewElevation() {

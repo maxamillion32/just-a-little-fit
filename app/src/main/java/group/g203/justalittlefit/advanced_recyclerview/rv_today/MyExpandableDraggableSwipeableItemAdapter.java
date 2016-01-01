@@ -21,6 +21,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractExpandableItemAda
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.model.Exercise;
@@ -94,6 +95,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
 
     public static class MyGroupViewHolder extends MyBaseViewHolder {
         Exercise exercise;
+        Integer groupPosition;
         public MyGroupViewHolder(View v) {
             super(v);
         }
@@ -202,6 +204,7 @@ public class MyExpandableDraggableSwipeableItemAdapter
         // group item
         final AbstractExpandableDataProvider.GroupData item = mProvider.getGroupItem(groupPosition);
         holder.exercise = item.getExercise();
+        holder.groupPosition = new Integer(groupPosition);
 
         exerciseViewMap.put(holder.exercise, holder.mTextView);
         exerciseCountMap.put(holder.exercise, holder.exercise.getSets().size());
@@ -209,7 +212,9 @@ public class MyExpandableDraggableSwipeableItemAdapter
         // set listeners
         holder.itemView.setOnClickListener(mItemViewOnClickListener);
         holder.mImageView.setOnClickListener(mImageViewOnClickListener);
-        holder.mImageView.setTag(holder.exercise);
+        TreeMap<Integer, Exercise> exMap = new TreeMap<>();
+        exMap.put(holder.groupPosition, holder.exercise);
+        holder.mImageView.setTag(exMap);
 
         // set text
         holder.mTextView.setText(item.getText());
