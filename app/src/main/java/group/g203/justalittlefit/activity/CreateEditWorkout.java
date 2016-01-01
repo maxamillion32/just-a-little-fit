@@ -117,11 +117,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         return ((DataProviderFragment) fragment).getDataProvider();
     }
 
-    public RecyclerListViewFragment getRecyclerViewFrag() {
-        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-        return ((RecyclerListViewFragment) fragment);
-    }
-
     public void onItemClicked(int position) {
         AbstractDataProvider.Data data = getDataProvider().getItem(position);
         Workout workout = (Workout) data.getDataObject();

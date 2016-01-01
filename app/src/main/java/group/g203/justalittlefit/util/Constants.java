@@ -1,7 +1,5 @@
 package group.g203.justalittlefit.util;
 
-import android.os.Build;
-
 /**
  * Constants class for app logic.
  */

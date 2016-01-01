@@ -324,11 +324,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         dialog.show(fm, getString(R.string.addExerciseDialogTag));
     }
 
-    public RecyclerListViewFragment getRecyclerViewFrag() {
-        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-        return ((RecyclerListViewFragment) fragment);
-    }
-
     private void registerBus() {
         if (!busRegistered) {
             CreateEditExerciseBus.getInstance().register(this);

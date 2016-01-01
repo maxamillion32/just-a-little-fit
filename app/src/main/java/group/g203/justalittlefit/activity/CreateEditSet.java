@@ -254,11 +254,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         }
     }
 
-    public RecyclerListViewFragment getRecyclerViewFrag() {
-        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-        return ((RecyclerListViewFragment) fragment);
-    }
-
     private void reorderSets() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
