@@ -543,7 +543,9 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             getDataProvider().setChildItem(editedGroupPosition, editedChildPosition, set);
             ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
             ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
+            DbFunctionObject editSetDfo =
+                    new DbFunctionObject(set, DbConstants.UPDATE_SET);
+            new DbAsyncTask(Constants.TODAY).execute(editSetDfo);
         } else {
             Utils.displayLongToast(this, errMsg);
         }
