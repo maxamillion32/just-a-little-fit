@@ -65,6 +65,10 @@ public class Utils {
         return (collection == null || collection.isEmpty());
     }
 
+    public static boolean isEmptyString(String string) {
+        return string.trim().isEmpty();
+    }
+
     public static void displayLongToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
@@ -365,5 +369,38 @@ public class Utils {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    public static String returnTodayEditSetErrorString(Set set) {
+        String exerciseTypeCode = ensureValidString(set.getExerciseTypeCode());
+        String errMsg = Constants.EMPTY_STRING;
+        if (exerciseTypeCode.equals(Constants.WEIGHTS)) {
+            if (set.getReps() == 0) {
+                errMsg += "Please enter in a rep count greater than 0";
+            }
+            if (ensureNonNullInteger(set.getWeight()) == 0) {
+                String weightErr = "Please enter in a weight amount greater than 0";
+                if (errMsg.trim().isEmpty()) {
+                    errMsg += weightErr;
+                } else {
+                    errMsg += "\n" + weightErr;
+                }
+            }
+        } else if (exerciseTypeCode.equals(Constants.LOGGED_TIMED)) {
+            if (set.getReps() == 0) {
+                errMsg += "Please enter in a rep count greater than 0";
+            }
+            if (ensureNonNullInteger(set.getHours()) == 0 &&
+                    ensureNonNullInteger(set.getMinutes()) == 0 &&
+                    ensureNonNullInteger(set.getSeconds()) == 0) {
+                String timedErr = "Please enter in at least one value for hours, minutes, or seconds";
+                if (errMsg.trim().isEmpty()) {
+                    errMsg += timedErr;
+                } else {
+                    errMsg += "\n" + timedErr;
+                }
+            }
+        }
+        return errMsg;
     }
 }

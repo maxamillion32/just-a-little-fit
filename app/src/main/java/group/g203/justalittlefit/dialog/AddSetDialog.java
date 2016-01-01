@@ -169,11 +169,11 @@ public class AddSetDialog extends DialogFragment {
                 }
             }
         });
-        displayAndEnableEditingForUi(set, createSetDialog);
+        displayAndEnableEditingForUi(set);
         return createSetDialog;
     }
 
-    void displayAndEnableEditingForUi(Set set, AlertDialog dialog) {
+    void displayAndEnableEditingForUi(Set set) {
         if (set != null) {
             if (set.getExerciseTypeCode().equals(Constants.LOGGED_TIMED)) {
                 rbTimedSet.setChecked(true);

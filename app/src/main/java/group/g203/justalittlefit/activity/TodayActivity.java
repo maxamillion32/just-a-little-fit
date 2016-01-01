@@ -397,11 +397,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         hideProgressDialog();
     }
 
-    public TodayRvListViewFragment getRecyclerViewFrag() {
-        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-        return ((TodayRvListViewFragment) fragment);
-    }
-
     private void reorderWorkouts() {
         TodayDataProvider dataProvider =
                 (TodayDataProvider) getDataProvider();
@@ -542,45 +537,19 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             set.setSeconds(seconds);
         }
 
+        String errMsg = Utils.returnTodayEditSetErrorString(set);
+
+        if (Utils.isEmptyString(errMsg)) {
+            getDataProvider().setChildItem(editedGroupPosition, editedChildPosition, set);
+            ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
+            ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
+            Utils.displayLongSimpleSnackbar(fab, getString(R.string.editSet_success));
+        } else {
+            Utils.displayLongToast(this, errMsg);
+        }
+
         dialog.dismiss();
-
-        getDataProvider().setChildItem(editedGroupPosition, editedChildPosition, set);
-        ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
-        ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
-
-        DbFunctionObject editSetDfo =
-                new DbFunctionObject(set, DbConstants.UPDATE_SET);
-        new DbAsyncTask(Constants.TODAY).execute(editSetDfo);
-    }
-
-    private void addExerciseOrSetToUI() {
-        TodayDataProvider dataProvider =
-                (TodayDataProvider)getDataProvider();
-
-        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getExerciseDisplayNames() != null
-                && addedExerciseName != null) {
-            if (!dataProvider.getExerciseDisplayNames().contains(addedExerciseName.trim())) {
-                Exercise newExercise = new Exercise(todayWorkout, addedExerciseName, dataProvider.getCount());
-                DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
-                new DbAsyncTask(Constants.TODAY).execute(insertExercise);
-            } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
-                hideProgressDialog();
-            }
-        } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
-            hideProgressDialog();
-        }
-
-        if (dataProvider != null && dataProvider.getCount() >= 0 && addedSet != null) {
-            addedSet.setExercise(parentExercise);
-            addedSet.setOrderNumber(dataProvider.getSetCount(parentExercise));
-            DbFunctionObject insertWorkoutSet = new DbFunctionObject(addedSet, DbConstants.INSERT_SET);
-            new DbAsyncTask(Constants.TODAY).execute(insertWorkoutSet);
-        } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
-            hideProgressDialog();
-        }
+        hideProgressDialog();
     }
 
     @Override
