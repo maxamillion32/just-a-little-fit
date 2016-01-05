@@ -96,25 +96,6 @@
             android:layout_weight="1"
             android:orientation="horizontal">
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/assignHomeOption"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/assignHomeIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/icon_assign" />
-
-                <TextView
-                    android:id="@+id/assignHomeText"
-                    style="@style/HomeScreenText"
-                    android:text="@string/assign_string"/>
-            </FrameLayout>
-
-            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/viewHomeOption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -132,8 +113,26 @@
                     style="@style/HomeScreenText"
                     android:text="@string/view_string"/>
             </FrameLayout>
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/assignHomeOption"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/assignHomeIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/icon_assign" />
+
+                <TextView
+                    android:id="@+id/assignHomeText"
+                    style="@style/HomeScreenText"
+                    android:text="@string/assign_string"/>
+            </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>
-
