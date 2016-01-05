@@ -5,12 +5,12 @@
         <item name="colorPrimary">@color/app_gray</item>
         <item name="colorPrimaryDark">@color/dark_app_gray</item>
         <item name="colorAccent">@color/app_blue_gray</item>
-        <item name="android:windowBackground">@color/fallback_gray</item>
+        <item name="android:windowBackground">@color/app_bg_gray</item>
     </style>
 
     <style name="HomeScreenTheme" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/fallback_gray</item>
+        <item name="android:windowBackground">@color/app_bg_gray</item>
     </style>
 
     <style name="HomeScreenText" parent="android:Widget.TextView">

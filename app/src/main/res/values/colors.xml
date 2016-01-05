@@ -3,6 +3,7 @@
 
     <!--Prime App Colors-->
     <color name="app_gray">#9E9E9E</color>
+    <color name="app_bg_gray">#EEEEEE</color>
     <color name="fallback_gray">#E0E0E0</color>
     <color name="dark_app_gray">#616161</color>
     <color name="darkest_gray">#212121</color>
@@ -31,6 +32,7 @@
     <color name="rv_blue_gray">#93B8C3</color>
     <color name="rv_light_gray">#F4F4F4</color>
     <color name="rv_gray">#6B6B6B</color>
+    <color name="rv_drag_gray">#D1D1D1</color>
 
     <!--Common Neutral Colors-->
     <color name="neutral_white">#ffffff</color>
