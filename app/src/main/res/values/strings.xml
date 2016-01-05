@@ -189,6 +189,7 @@
     <string name="confirmDeleteTodayWorkoutDialogTag">Confirm Delete Today Workout Dialog Tag</string>
 
     <!-- Error Messages -->
+    <string name="general_error">An error occurred. Please try again.</string>
     <string name="db_error">An error occurred. Please try again.</string>
     <string name="workout_view_error">An error occurred while you were trying to view your workout(s). Please try again.</string>
     <string name="workout_list_error">An error occurred in displaying your Workout list. Please try again.</string>

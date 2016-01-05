@@ -1,5 +1,6 @@
 package group.g203.justalittlefit.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,8 @@ import group.g203.justalittlefit.activity.Assign;
 import group.g203.justalittlefit.activity.ChooseWorkoutDate;
 import group.g203.justalittlefit.activity.CreateEditWorkout;
 import group.g203.justalittlefit.activity.Home;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
+import group.g203.justalittlefit.advanced_recyclerview.rv_today.AbstractExpandableDataProvider;
 import group.g203.justalittlefit.fragment.PeekLauncher;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
@@ -401,5 +404,19 @@ public class Utils {
             }
         }
         return errMsg;
+    }
+
+    public static void dataProviderCheck(AbstractExpandableDataProvider provider, Activity activity) {
+        if (provider == null) {
+            displayLongToast(activity, activity.getString(R.string.general_error));
+            activity.finish();
+        }
+    }
+
+    public static void dataProviderCheck(AbstractDataProvider provider, Activity activity) {
+        if (provider == null) {
+            displayLongToast(activity, activity.getString(R.string.general_error));
+            activity.finish();
+        }
     }
 }

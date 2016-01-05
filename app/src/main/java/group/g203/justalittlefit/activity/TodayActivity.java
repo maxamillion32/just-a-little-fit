@@ -293,8 +293,10 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     }
 
     private void onUndo() {
+        TodayDataProvider dataProvider =
+                (TodayDataProvider)getDataProvider();
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-        final long result = getDataProvider().undoLastRemoval();
+        final long result = dataProvider.undoLastRemoval();
 
         if (result == RecyclerViewExpandableItemManager.NO_EXPANDABLE_POSITION) {
             return;
@@ -306,7 +308,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         if (childPosition == RecyclerView.NO_POSITION) {
             // group item
             ((TodayRvListViewFragment) fragment).notifyGroupItemRestored(groupPosition);
-            AbstractExpandableDataProvider.GroupData data = getDataProvider().getGroupItem(groupPosition);
+            AbstractExpandableDataProvider.GroupData data = dataProvider.getGroupItem(groupPosition);
             Exercise exercise = data.getExercise();
             todayWorkout.getExercises().add(exercise);
             Utils.displayLongSimpleSnackbar(fab,
@@ -315,7 +317,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         } else {
             // child item
             ((TodayRvListViewFragment) fragment).notifyChildItemRestored(groupPosition, childPosition);
-            AbstractExpandableDataProvider.ChildData data = getDataProvider().getChildItem(groupPosition, childPosition);
+            AbstractExpandableDataProvider.ChildData data = dataProvider.getChildItem(groupPosition, childPosition);
             Set set = data.getSet();
             set.getExercise().getSets().add(set);
             Utils.displayLongSimpleSnackbar(fab,
@@ -324,14 +326,22 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         }
     }
 
+    // Null check
     public AbstractExpandableDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
-        return ((TodayDataProviderFragment) fragment).getDataProvider();
+        if (fragment != null) {
+            return ((TodayDataProviderFragment) fragment).getDataProvider();
+        } else {
+            return null;
+        }
     }
 
     void determineDefaultStatus() {
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
+
+        Utils.dataProviderCheck(dataProvider, this);
+
         if (dataProvider != null && dataProvider.getGroupCount() == 0) {
             rlDefault.setVisibility(View.VISIBLE);
         } else {
@@ -356,7 +366,10 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     public void onChildItemClicked(int groupPosition, int childPosition) {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
         ((TodayRvListViewFragment) fragment).notifyChildItemRestored(groupPosition, childPosition);
-        AbstractExpandableDataProvider.ChildData data = getDataProvider().getChildItem(groupPosition, childPosition);
+        TodayDataProvider dataProvider =
+                (TodayDataProvider)getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
+        AbstractExpandableDataProvider.ChildData data = dataProvider.getChildItem(groupPosition, childPosition);
         editedChildPosition = childPosition;
         editedGroupPosition = groupPosition;
         Set set = data.getSet();
@@ -400,6 +413,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     private void reorderWorkouts() {
         TodayDataProvider dataProvider =
                 (TodayDataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         List<Object> reorderedExercisesAndSets = dataProvider.getOrderedDataObjects();
         List<Exercise> reorderedExercises = new ArrayList<>();
         List<Set> reorderedSets = new ArrayList<>();
@@ -447,6 +461,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
 
+        Utils.dataProviderCheck(dataProvider, this);
+
         if (dataProvider != null && dataProvider.getExerciseDisplayNames() != null) {
             if (!dataProvider.getExerciseDisplayNames().contains(addedExerciseName.trim())) {
                 Exercise newExercise = new Exercise(todayWorkout, addedExerciseName, dataProvider.getExerciseCount());
@@ -469,6 +485,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
+
+        Utils.dataProviderCheck(dataProvider, this);
 
         if (dataProvider != null) {
             if (dialog.getRbWeightedSet().isChecked()) {
@@ -540,7 +558,10 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         String errMsg = Utils.returnTodayEditSetErrorString(set);
 
         if (Utils.isEmptyString(errMsg)) {
-            getDataProvider().setChildItem(editedGroupPosition, editedChildPosition, set);
+            TodayDataProvider dataProvider =
+                    (TodayDataProvider)getDataProvider();
+            Utils.dataProviderCheck(dataProvider, this);
+            dataProvider.setChildItem(editedGroupPosition, editedChildPosition, set);
             ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
             ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
             DbFunctionObject editSetDfo =

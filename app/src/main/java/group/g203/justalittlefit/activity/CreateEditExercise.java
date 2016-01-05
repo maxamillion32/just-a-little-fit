@@ -101,6 +101,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
+            Utils.dataProviderCheck(dataProvider, this);
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteExerciseDialog_success));
@@ -193,7 +194,11 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     public AbstractDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
-        return ((DataProviderFragment) fragment).getDataProvider();
+        if (fragment != null) {
+            return ((DataProviderFragment) fragment).getDataProvider();
+        } else {
+            return null;
+        }
     }
 
     public void onItemRemoved(Object dataObject) {
@@ -213,7 +218,10 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     }
 
     public void onItemClicked(int position) {
-        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
+        AbstractDataProvider.Data data = dataProvider.getItem(position);
         Exercise exercise = (Exercise) data.getDataObject();
         Intent createEditSet = new Intent(this, CreateEditSet.class);
         createEditSet.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -225,7 +233,10 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     }
 
     public void onItemLongClicked(int position) {
-        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
+        AbstractDataProvider.Data data = dataProvider.getItem(position);
         Exercise exercise = (Exercise) data.getDataObject();
         FragmentManager fm = getSupportFragmentManager();
         RenameDialog dialog = RenameDialog.newInstance(exercise);
@@ -236,12 +247,15 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = getDataProvider().undoLastRemoval();
+                DataProvider dataProvider =
+                        (DataProvider) getDataProvider();
+                Utils.dataProviderCheck(dataProvider, getParent());
+                int position = dataProvider.undoLastRemoval();
                 final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
                 ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
                 Utils.displayLongSimpleSnackbar(fab,
                         getString(R.string.exercise_removal_undone));
-                AbstractDataProvider.Data data = getDataProvider().getItem(position);
+                AbstractDataProvider.Data data = dataProvider.getItem(position);
                 Exercise exercise = (Exercise) data.getDataObject();
                 exercise.getWorkout().getExercises().add(exercise);
                 determineDefaultStatus();
@@ -310,6 +324,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         } else {
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
+            Utils.dataProviderCheck(dataProvider, this);
             List<Exercise> exercises = (List<Exercise>) (Object) dataProvider.getDataObjects();
             DbFunctionObject deleteExercises =
                     new DbFunctionObject(exercises, DbConstants.DELETE_ALL_EXERCISES);
@@ -341,6 +356,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     private void reorderExercises() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         List<Exercise> exercisesToSave = (List<Exercise>) (Object) dataProvider.getDataObjects();
         for (int i = 0; i < exercisesToSave.size(); i++) {
             exercisesToSave.get(i).setOrderNumber(i);
@@ -360,7 +376,8 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     private void addExerciseToUI() {
         DataProvider dataProvider =
-                (DataProvider)getDataProvider();
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
                 && addedExerciseName != null) {
             if (!dataProvider.getDisplayNames().contains(addedExerciseName.trim())) {
@@ -378,6 +395,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     void determineDefaultStatus() {
         DataProvider dataProvider =
                 (DataProvider)getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         if (dataProvider != null && dataProvider.getCount() == 0) {
             rlDefault.setVisibility(View.VISIBLE);
         } else {

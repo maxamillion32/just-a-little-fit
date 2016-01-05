@@ -114,11 +114,18 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     public AbstractDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
-        return ((DataProviderFragment) fragment).getDataProvider();
+        if (fragment != null) {
+            return ((DataProviderFragment) fragment).getDataProvider();
+        } else {
+            return null;
+        }
     }
 
     public void onItemClicked(int position) {
-        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
+        AbstractDataProvider.Data data = dataProvider.getItem(position);
         Workout workout = (Workout) data.getDataObject();
         Intent createEditExercise = new Intent(this, CreateEditExercise.class);
         createEditExercise.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -130,7 +137,10 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     }
 
     public void onItemLongClicked(int position) {
-        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
+        AbstractDataProvider.Data data = dataProvider.getItem(position);
         Workout workout = (Workout) data.getDataObject();
         FragmentManager fm = getSupportFragmentManager();
         RenameDialog dialog = RenameDialog.newInstance(workout);
@@ -183,6 +193,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
+            Utils.dataProviderCheck(dataProvider, this);
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteWorkoutDialog_success));
@@ -282,6 +293,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private void reorderWorkouts() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         List<Workout> workoutsToSave = (List<Workout>) (Object) dataProvider.getDataObjects();
         for (int i = 0; i < workoutsToSave.size(); i++) {
             workoutsToSave.get(i).setOrderNumber(i);
@@ -313,12 +325,15 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = getDataProvider().undoLastRemoval();
+                DataProvider dataProvider =
+                        (DataProvider) getDataProvider();
+                Utils.dataProviderCheck(dataProvider, getParent());
+                int position = dataProvider.undoLastRemoval();
                 final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
                 ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
                 Utils.displayLongSimpleSnackbar(fab,
                         getString(R.string.workout_removal_undone));
-                AbstractDataProvider.Data data = getDataProvider().getItem(position);
+                AbstractDataProvider.Data data = dataProvider.getItem(position);
                 Workout workout = (Workout) data.getDataObject();
                 queuedWorkoutsToDelete.remove(workout);
                 determineDefaultStatus();
@@ -342,7 +357,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     private void addWorkoutToUI() {
         DataProvider dataProvider =
-                (DataProvider)getDataProvider();
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
                 && addedWorkoutName != null) {
             if (!dataProvider.getDisplayNames().contains(addedWorkoutName.trim())) {
@@ -370,7 +386,8 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
     void determineDefaultStatus() {
         DataProvider dataProvider =
-                (DataProvider)getDataProvider();
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         if (dataProvider != null && dataProvider.getCount() == 0) {
             rlDefault.setVisibility(View.VISIBLE);
         } else {

@@ -150,6 +150,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
+            Utils.dataProviderCheck(dataProvider, this);
             if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
                 adapter.removeAllItems(dataProvider.getCount() - 1);
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteSetDialog_success));
@@ -204,7 +205,10 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     }
 
     public void onItemClicked(int position) {
-        AbstractDataProvider.Data data = getDataProvider().getItem(position);
+        DataProvider dataProvider =
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
+        AbstractDataProvider.Data data = dataProvider.getItem(position);
         Set set = (Set) data.getDataObject();
         displayAddSetDialogUponEdit(set);
     }
@@ -213,12 +217,15 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = getDataProvider().undoLastRemoval();
+                DataProvider dataProvider =
+                        (DataProvider) getDataProvider();
+                Utils.dataProviderCheck(dataProvider, getParent());
+                int position = dataProvider.undoLastRemoval();
                 final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
                 ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
                 Utils.displayLongSimpleSnackbar(fab,
                         getString(R.string.exercise_removal_undone));
-                AbstractDataProvider.Data data = getDataProvider().getItem(position);
+                AbstractDataProvider.Data data = dataProvider.getItem(position);
                 Set set = (Set) data.getDataObject();
                 set.getExercise().getSets().add(set);
                 determineDefaultStatus();
@@ -237,7 +244,11 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     public AbstractDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
-        return ((DataProviderFragment) fragment).getDataProvider();
+        if (fragment != null) {
+            return ((DataProviderFragment) fragment).getDataProvider();
+        } else {
+            return null;
+        }
     }
 
     private void registerBus() {
@@ -257,6 +268,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     private void reorderSets() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         List<Set> setsToReorder = (List<Set>) (Object) dataProvider.getDataObjects();
         for (int i = 0; i < setsToReorder.size(); i++) {
             setsToReorder.get(i).setOrderNumber(i);
@@ -268,7 +280,8 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     private void addSetToUI() {
         DataProvider dataProvider =
-                (DataProvider)getDataProvider();
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
                 && addedSet != null) {
                 addedSet.setExercise(parentExercise);
@@ -283,7 +296,8 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     void determineDefaultStatus() {
         DataProvider dataProvider =
-                (DataProvider)getDataProvider();
+                (DataProvider) getDataProvider();
+        Utils.dataProviderCheck(dataProvider, this);
         if (dataProvider != null && dataProvider.getCount() == 0) {
             rlDefault.setVisibility(View.VISIBLE);
         } else {
@@ -355,6 +369,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         } else {
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
+            Utils.dataProviderCheck(dataProvider, this);
             List<Set> sets = (List<Set>) (Object) dataProvider.getDataObjects();
             DbFunctionObject deleteSets =
                     new DbFunctionObject(sets, DbConstants.DELETE_ALL_SETS);
