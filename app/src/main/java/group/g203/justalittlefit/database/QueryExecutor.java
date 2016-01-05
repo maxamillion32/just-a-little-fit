@@ -1,5 +1,7 @@
 package group.g203.justalittlefit.database;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.ForeignCollection;
@@ -194,6 +196,8 @@ public class QueryExecutor {
     }
 
     public static List<Workout> assignDatesToWorkouts(LinkedList<Object> list) throws SQLException {
+        String LOG_TAG = "QueryExecutor";
+        String DELETE_ERR_MSG = "Failed to delete existing Workout";
         try {
             List<Workout> unAssignedWorkouts = getUnassignedWorkouts();
             Map<String, Workout> workoutMap = Utils.makeNameWorkoutMap(unAssignedWorkouts);
@@ -205,39 +209,45 @@ public class QueryExecutor {
 
             for (DateTime dateTime : dateTimes) {
                 List<Workout> workoutsByDate = getWorkoutsByDate(dateTime);
-                List<String> workoutNameList = Utils.getWorkoutNameList(workoutsByDate);
+                Map<String, Workout> workoutsByDateMap = Utils.makeNameWorkoutMap(workoutsByDate);
 
                 for (String name : workoutNames) {
-                    if (!workoutNameList.contains(Utils.ensureValidString(name))) {
-                        Workout actualWorkout = workoutMap.get(Utils.ensureValidString(name));
-                        Workout newWorkout = new Workout(name, dateTime);
+                    Workout actualWorkout = workoutMap.get(Utils.ensureValidString(name));
+                    Workout newWorkout = new Workout(name, dateTime);
 
-                        Boolean workoutCommitSuccessful = createWorkout(newWorkout);
+                    if (workoutsByDateMap.containsKey(Utils.ensureValidString(name))) {
+                        Workout existingWorkout = workoutsByDateMap.get(Utils.ensureValidString(name));
+                        Workout deletedWorkout = deleteWorkout(existingWorkout);
+                        if (deletedWorkout == null) {
+                            Log.e(LOG_TAG, DELETE_ERR_MSG);
+                            return null;
+                        }
+                    }
 
-                        if (workoutCommitSuccessful) {
+                    Boolean workoutCommitSuccessful = createWorkout(newWorkout);
 
-                            for (Exercise exercise : actualWorkout.getExercises()) {
-                                Exercise newExercise = new Exercise(newWorkout,
-                                        Utils.ensureValidString(exercise.getName()), exercise.getOrderNumber(),
-                                        exercise.isComplete());
+                    if (workoutCommitSuccessful) {
+                        for (Exercise exercise : actualWorkout.getExercises()) {
+                            Exercise newExercise = new Exercise(newWorkout,
+                                    Utils.ensureValidString(exercise.getName()), exercise.getOrderNumber(),
+                                    exercise.isComplete());
 
-                                Boolean exerciseCommitSuccessful = createExercise(newExercise);
+                            Boolean exerciseCommitSuccessful = createExercise(newExercise);
 
-                                if (exerciseCommitSuccessful) {
-                                    for (group.g203.justalittlefit.model.Set set : exercise.getSets()) {
-                                        group.g203.justalittlefit.model.Set newSet =
-                                                new group.g203.justalittlefit.model.Set(newExercise,
-                                                        set.isComplete(), set.getReps(), set.getWeight(), set.getHours(),
-                                                        set.getMinutes(), set.getSeconds(), Utils.ensureValidString(set.getWeightTypeCode()),
-                                                        set.getExerciseTypeCode(), set.getOrderNumber());
+                            if (exerciseCommitSuccessful) {
+                                for (group.g203.justalittlefit.model.Set set : exercise.getSets()) {
+                                    group.g203.justalittlefit.model.Set newSet =
+                                            new group.g203.justalittlefit.model.Set(newExercise,
+                                                    set.isComplete(), set.getReps(), set.getWeight(), set.getHours(),
+                                                    set.getMinutes(), set.getSeconds(), Utils.ensureValidString(set.getWeightTypeCode()),
+                                                    set.getExerciseTypeCode(), set.getOrderNumber());
 
-                                        createSet(newSet);
-                                    }
+                                    createSet(newSet);
                                 }
                             }
                         }
-                        assignedWorkouts.add(newWorkout);
                     }
+                    assignedWorkouts.add(newWorkout);
                 }
             }
 
@@ -515,7 +525,7 @@ public class QueryExecutor {
 
     public static List<Workout> addExercisesToWorkouts(List<Workout> workouts) throws SQLException {
         List<Workout> workoutsWithExercises = new ArrayList<>(workouts.size());
-        Dao<Workout, Integer> workoutDao  = DaoHelper.getInstance().getWorkoutDao();
+        Dao<Workout, Integer> workoutDao = DaoHelper.getInstance().getWorkoutDao();
         for (Workout workout : workouts) {
             try {
                 Workout wo = workoutDao.queryForId(workout.getWorkoutId());
@@ -545,12 +555,12 @@ public class QueryExecutor {
     }
 
     private static void addSetsToFc(ForeignCollection<group.g203.justalittlefit.model.Set> setCollect,
-                                List<group.g203.justalittlefit.model.Set> sets) {
+                                    List<group.g203.justalittlefit.model.Set> sets) {
         for (group.g203.justalittlefit.model.Set set : sets) {
             group.g203.justalittlefit.model.Set newSet =
                     new group.g203.justalittlefit.model.Set(set.isComplete(), set.getReps(),
-                    set.getWeight(), set.getHours(), set.getMinutes(), set.getSeconds(), set.getWeightTypeCode(),
-                    set.getExerciseTypeCode(), set.getOrderNumber());
+                            set.getWeight(), set.getHours(), set.getMinutes(), set.getSeconds(), set.getWeightTypeCode(),
+                            set.getExerciseTypeCode(), set.getOrderNumber());
             setCollect.add(newSet);
         }
     }

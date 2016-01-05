@@ -243,6 +243,7 @@
     <string name="select_dates_info">- Select date(s) to assign to your Workout(s).</string>
     <string name="select_dates_today_info">- Today\'s date is highlighted in gray but it IS NOT selected by default.</string>
     <string name="mulitple_dates_info">- You can select multiple dates to assign to your workout(s) by clicking multiple calendar positions.</string>
+    <string name="duplicate_workout_assign_info">- Assigning a workout to a date or dates that already contains a workout with the same name will overwrite that workout.</string>
     <string name="emptyWorkoutViewText">Click the + button to add a Workout</string>
     <string name="emptyExerciseViewText">Click the + button to add an Exercise</string>
     <string name="emptyExerciseSetViewText">Click the + button to add an Exercise and Set(s)</string>
