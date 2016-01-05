@@ -73,23 +73,24 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     RelativeLayout rlDefault;
     Integer editedGroupPosition;
     Integer editedChildPosition;
+    Bundle savedBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgressDialog();
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_today, null, false);
-        frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
-        setTitle(R.string.today_title_string);
-        setupFloatingActionButton(this);
-        getWorkout();
-
-        if (savedInstanceState == null) {
-            displayTodayWorkout();
+        if (savedInstanceState != null) {
+            getIntent().getExtras().putBundle(Constants.SAVED_BUNDLE, savedInstanceState);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+            savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
+        }
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     void displayTodayWorkout() {
@@ -395,8 +396,19 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     @Override
     public void onResume() {
         super.onResume();
-        if (!busRegistered) {
-            registerBus();
+        showProgressDialog();
+        registerBus();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_today, null, false);
+        frameLayout.addView(contentView, 0);
+        ButterKnife.inject(this, frameLayout);
+        setTitle(R.string.today_title_string);
+        setupFloatingActionButton(this);
+        getWorkout();
+
+        if (savedBundle == null) {
+            displayTodayWorkout();
         }
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
         selectedItem.setChecked(true);
