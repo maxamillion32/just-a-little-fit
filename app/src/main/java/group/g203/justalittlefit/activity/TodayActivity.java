@@ -33,7 +33,6 @@ import group.g203.justalittlefit.advanced_recyclerview.rv_today.AbstractExpandab
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayDataProviderFragment;
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayRvListViewFragment;
-import group.g203.justalittlefit.bus.TodayBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -52,6 +51,7 @@ import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -352,14 +352,14 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
     private void registerBus() {
         if (!busRegistered) {
-            TodayBus.getInstance().register(this);
+            BusFactory.getTodayBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            TodayBus.getInstance().unregister(this);
+            BusFactory.getTodayBus().unregister(this);
             busRegistered = false;
         }
     }

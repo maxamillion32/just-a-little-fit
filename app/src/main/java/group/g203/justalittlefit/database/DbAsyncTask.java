@@ -9,18 +9,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import group.g203.justalittlefit.bus.AssignBus;
-import group.g203.justalittlefit.bus.AssignDialogBus;
-import group.g203.justalittlefit.bus.CreateEditExerciseBus;
-import group.g203.justalittlefit.bus.CreateEditSetBus;
-import group.g203.justalittlefit.bus.CreateEditWorkoutBus;
-import group.g203.justalittlefit.bus.PeekLauncherBus;
-import group.g203.justalittlefit.bus.SelectDialogBus;
-import group.g203.justalittlefit.bus.TodayBus;
-import group.g203.justalittlefit.bus.ViewBus;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 
 /**
@@ -196,29 +188,29 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
     @Override protected void onPostExecute(Object result) {
         switch (invokingClass) {
             case Constants.CREATE_EDIT_WORKOUT:
-                CreateEditWorkoutBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getCreateEditWorkoutBus().post(new DbTaskResult(result));
                 break;
             case Constants.CREATE_EDIT_EXERCISE:
-                CreateEditExerciseBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getCreateEditExerciseBus().post(new DbTaskResult(result));
                 break;
             case Constants.CREATE_EDIT_SET:
-                CreateEditSetBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getCreateEditSetBus().post(new DbTaskResult(result));
                 break;
             case Constants.ASSIGN_DIALOG:
-                AssignDialogBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getAssignDialogBus().post(new DbTaskResult(result));
                 break;
             case Constants.ASSIGN:
-                AssignBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getAssignBus().post(new DbTaskResult(result));
                 break;
             case Constants.PEEK_LAUNCHER:
-                PeekLauncherBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getPeekLauncherBus().post(new DbTaskResult(result));
                 break;
             case Constants.VIEW_TEXT:
-                ViewBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getViewBus().post(new DbTaskResult(result));
             case Constants.TODAY:
-                TodayBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getTodayBus().post(new DbTaskResult(result));
             case Constants.SELECT_DIALOG:
-                SelectDialogBus.getInstance().post(new DbTaskResult(result));
+                BusFactory.getSelectDialogBus().post(new DbTaskResult(result));
                 break;
         }
     }

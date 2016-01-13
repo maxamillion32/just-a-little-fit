@@ -22,7 +22,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.bus.SelectDialogBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -30,6 +29,7 @@ import group.g203.justalittlefit.database.DbTaskResult;
 import group.g203.justalittlefit.listener.SelectExerciseDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 
 public class SelectExerciseDialog extends DialogFragment {
@@ -135,14 +135,14 @@ public class SelectExerciseDialog extends DialogFragment {
 
     private void registerBus() {
         if (!busRegistered) {
-            SelectDialogBus.getInstance().register(this);
+            BusFactory.getSelectDialogBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            SelectDialogBus.getInstance().unregister(this);
+            BusFactory.getSelectDialogBus().unregister(this);
             busRegistered = false;
         }
     }

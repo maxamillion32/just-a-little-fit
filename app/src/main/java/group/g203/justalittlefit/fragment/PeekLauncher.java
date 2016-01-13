@@ -18,12 +18,12 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.TodayActivity;
 import group.g203.justalittlefit.activity.TodayChooserActivity;
 import group.g203.justalittlefit.activity.ViewActivity;
-import group.g203.justalittlefit.bus.PeekLauncherBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
 import group.g203.justalittlefit.database.DbTaskResult;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -143,14 +143,14 @@ public class PeekLauncher extends Fragment {
 
     private void registerBus() {
         if (!busRegistered) {
-            PeekLauncherBus.getInstance().register(this);
+            BusFactory.getPeekLauncherBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            PeekLauncherBus.getInstance().unregister(this);
+            BusFactory.getPeekLauncherBus().unregister(this);
             busRegistered = false;
         }
     }

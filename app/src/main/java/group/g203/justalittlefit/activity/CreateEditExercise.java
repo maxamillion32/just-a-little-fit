@@ -29,7 +29,6 @@ import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataP
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProviderFragment;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.MyDraggableSwipeableItemAdapter;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.RecyclerListViewFragment;
-import group.g203.justalittlefit.bus.CreateEditExerciseBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -44,6 +43,7 @@ import group.g203.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -341,14 +341,14 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     private void registerBus() {
         if (!busRegistered) {
-            CreateEditExerciseBus.getInstance().register(this);
+            BusFactory.getCreateEditExerciseBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            CreateEditExerciseBus.getInstance().unregister(this);
+            BusFactory.getCreateEditExerciseBus().unregister(this);
             busRegistered = false;
         }
     }

@@ -25,13 +25,13 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.bus.AssignDialogBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
 import group.g203.justalittlefit.database.DbTaskResult;
 import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -131,14 +131,14 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
 
     private void registerBus() {
         if (!busRegistered) {
-            AssignDialogBus.getInstance().register(this);
+            BusFactory.getAssignDialogBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            AssignDialogBus.getInstance().unregister(this);
+            BusFactory.getAssignDialogBus().unregister(this);
             busRegistered = false;
         }
     }
