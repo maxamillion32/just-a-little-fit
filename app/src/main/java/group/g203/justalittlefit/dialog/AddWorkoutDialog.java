@@ -20,7 +20,7 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Dialog to display when adding a workout.
+ * Dialog to display when adding a {@link group.g203.justalittlefit.model.Workout}.
  */
 public class AddWorkoutDialog extends DialogFragment {
     private AddWorkoutDialogListener listener;

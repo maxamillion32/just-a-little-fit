@@ -32,6 +32,11 @@ import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
+/**
+ * Dialog that allows users to select an {@link group.g203.justalittlefit.model.Exercise} when
+ * adding a {@link group.g203.justalittlefit.model.Set} to a workout from the
+ * {@link group.g203.justalittlefit.activity.TodayActivity}.
+ */
 public class SelectExerciseDialog extends DialogFragment {
 
     private SelectExerciseDialogListener listener;

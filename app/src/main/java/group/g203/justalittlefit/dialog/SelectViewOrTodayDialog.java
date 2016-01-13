@@ -13,6 +13,10 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.listener.SelectViewOrTodayDialogListener;
 import group.g203.justalittlefit.util.Constants;
 
+/**
+ * Dialog that displays when user selects today's date when in
+ * {@link group.g203.justalittlefit.activity.ChooseWorkoutDate} activity.
+ */
 public class SelectViewOrTodayDialog extends DialogFragment {
     private SelectViewOrTodayDialogListener listener;
 

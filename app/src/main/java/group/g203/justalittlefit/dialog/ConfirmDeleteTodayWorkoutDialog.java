@@ -9,6 +9,10 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
 import group.g203.justalittlefit.util.Constants;
 
+/**
+ * Dialog that confirms if the user wants to delete the {@link group.g203.justalittlefit.model.Workout}
+ * associated to today's date.
+ */
 public class ConfirmDeleteTodayWorkoutDialog extends AppBaseDialog {
     private static final String DELETE_TODAY_WORKOUT_TITLE = "Delete This Workout for today?";
     private static final String DELETE_WORKOUT_TITLE = "Delete This Workout?";

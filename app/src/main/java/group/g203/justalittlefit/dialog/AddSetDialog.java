@@ -26,7 +26,7 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Dialog to display when adding a Set.
+ * Dialog to display when adding a {@link group.g203.justalittlefit.model.Set}.
  */
 public class AddSetDialog extends DialogFragment {
     private AddSetDialogListener listener;

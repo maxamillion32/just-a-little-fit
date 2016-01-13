@@ -27,7 +27,8 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Created by s536564 on 12/8/2015.
+ * Dialog that allows user to delete {@link group.g203.justalittlefit.model.Workout} objects
+ * while they are in the {@link group.g203.justalittlefit.activity.ViewActivity}.
  */
 public class DeleteWorkoutsFromViewDialog extends DialogFragment implements CompoundButton.OnCheckedChangeListener {
     List<Workout> selectedWorkouts;

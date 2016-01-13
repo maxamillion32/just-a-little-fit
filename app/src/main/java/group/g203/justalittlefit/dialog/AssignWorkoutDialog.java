@@ -36,7 +36,7 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Dialog to display when assigning a workout.
+ * Dialog to display when assigning a {@link group.g203.justalittlefit.model.Workout}.
  */
 public class AssignWorkoutDialog extends DialogFragment implements CompoundButton.OnCheckedChangeListener {
     private AssignWorkoutDialogListener listener;

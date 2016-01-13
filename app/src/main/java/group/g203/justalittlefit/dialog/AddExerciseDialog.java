@@ -20,7 +20,7 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Dialog to display when adding an exercise.
+ * Dialog to display when adding an {@link group.g203.justalittlefit.model.Exercise}.
  */
 public class AddExerciseDialog extends DialogFragment {
     private AddExerciseDialogListener listener;

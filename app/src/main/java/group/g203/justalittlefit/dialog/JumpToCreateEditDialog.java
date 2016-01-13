@@ -12,6 +12,10 @@ import android.view.ContextThemeWrapper;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.CreateEditWorkout;
 
+/**
+ * Dialog that can take user to the
+ * {@link group.g203.justalittlefit.activity.CreateEditWorkout} activity.
+ */
 public class JumpToCreateEditDialog extends DialogFragment {
 
     @Override

@@ -15,6 +15,10 @@ import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
+/**
+ * Dialog that displays when user clicks on the floating action button in
+ * {@link group.g203.justalittlefit.activity.TodayActivity}.
+ */
 public class AddExerciseOrSetDialog extends DialogFragment {
 
     Workout workout;

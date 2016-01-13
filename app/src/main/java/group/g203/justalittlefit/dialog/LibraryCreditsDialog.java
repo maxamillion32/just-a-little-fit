@@ -12,6 +12,9 @@ import android.view.View;
 import butterknife.ButterKnife;
 import group.g203.justalittlefit.R;
 
+/**
+ * Dialog that displays the libraries used in the app and their respective licenses.
+ */
 public class LibraryCreditsDialog extends DialogFragment {
 
     private static final String TITLE = "Open Source Library Credits";

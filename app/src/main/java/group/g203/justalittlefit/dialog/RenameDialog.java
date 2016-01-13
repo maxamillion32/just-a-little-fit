@@ -22,7 +22,8 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Dialog to display when renaming a Workout or Exercise.
+ * Dialog to display when renaming a {@link group.g203.justalittlefit.model.Workout}
+ * or {@link group.g203.justalittlefit.model.Exercise}.
  */
 public class RenameDialog extends DialogFragment {
     private RenameDialogListener listener;
