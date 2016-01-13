@@ -1,10 +1,8 @@
 package group.g203.justalittlefit.dialog;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -29,7 +27,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Created by s536564 on 12/8/2015.
  */
-public class DeleteWorkoutsFromViewDialog extends DialogFragment implements CompoundButton.OnCheckedChangeListener {
+public class DeleteWorkoutsFromViewDialog extends AppBaseDialog implements CompoundButton.OnCheckedChangeListener {
     List<Workout> selectedWorkouts;
     List<Workout> workouts;
     DeleteWorkoutsFromViewDialogListener listener;
@@ -46,7 +44,8 @@ public class DeleteWorkoutsFromViewDialog extends DialogFragment implements Comp
         return dialog;
     }
 
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @Override
+    public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         Bundle args = getArguments();
         selectedWorkouts = new ArrayList<>();

@@ -112,6 +112,6 @@ public class InformationDialog extends AppBaseDialog {
                 // onClick will close dialog
             }
         });
-        return this.confirmDialog;
+        return this.alertDialog;
     }
 }

@@ -1,14 +1,11 @@
 package group.g203.justalittlefit.dialog;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,7 +35,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Dialog to display when assigning a workout.
  */
-public class AssignWorkoutDialog extends DialogFragment implements CompoundButton.OnCheckedChangeListener {
+public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton.OnCheckedChangeListener {
     private AssignWorkoutDialogListener listener;
     private List<String> selectedWorkoutNames;
     @InjectView(R.id.workoutContainer)
@@ -46,9 +43,8 @@ public class AssignWorkoutDialog extends DialogFragment implements CompoundButto
     boolean busRegistered;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(
-                new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
+    public AlertDialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
         ButterKnife.inject(this, view);
