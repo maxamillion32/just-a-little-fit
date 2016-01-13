@@ -39,6 +39,9 @@ import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Assigns {@link group.g203.justalittlefit.model.Workout} objects to dates.
+ */
 public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialogListener {
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";

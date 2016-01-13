@@ -44,6 +44,9 @@ import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Creates a {@link group.g203.justalittlefit.model.Set} in the app.
+ */
 public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSetsDeletionListener, AddSetDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";

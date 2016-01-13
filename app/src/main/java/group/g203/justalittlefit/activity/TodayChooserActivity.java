@@ -29,6 +29,10 @@ import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
+/**
+ * The activity that displays when there are multiple
+ * {@link group.g203.justalittlefit.model.Workout} objects assigned to Today's date.
+ */
 public class TodayChooserActivity extends BaseNaviDrawerActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";

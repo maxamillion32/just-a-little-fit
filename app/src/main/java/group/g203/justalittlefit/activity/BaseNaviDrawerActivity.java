@@ -16,6 +16,9 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Navigation Drawer based activity from which all other app activities derive.
+ */
 public class BaseNaviDrawerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     FrameLayout frameLayout;

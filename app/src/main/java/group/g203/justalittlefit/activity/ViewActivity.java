@@ -42,6 +42,9 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 import me.relex.circleindicator.CircleIndicator;
 
+/**
+ * Allows a user to view their {@link group.g203.justalittlefit.model.Workout}.
+ */
 public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDeleteTodayWorkoutListener, DeleteWorkoutsFromViewDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();

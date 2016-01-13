@@ -27,7 +27,9 @@ import group.g203.justalittlefit.dialog.LibraryCreditsDialog;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
-
+/**
+ * Home screen activity.
+ */
 public class Home extends BaseNaviDrawerActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;

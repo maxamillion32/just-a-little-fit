@@ -28,6 +28,9 @@ import group.g203.justalittlefit.listener.SelectViewOrTodayDialogListener;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Activity that displays calendar to choose date to view a {@link group.g203.justalittlefit.model.Workout}
+ */
 public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectViewOrTodayDialogListener {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";

@@ -47,6 +47,9 @@ import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Creates an {@link group.g203.justalittlefit.model.Exercise} in the app.
+ */
 public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener,
         AddExerciseDialogListener, RenameDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();

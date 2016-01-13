@@ -55,6 +55,10 @@ import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Actiity that displays a {@link group.g203.justalittlefit.model.Workout} in the
+ * Today view which allows a user to fully edit said {@link group.g203.justalittlefit.model.Workout}.
+ */
 public class TodayActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener,
         AddSetDialogListener, ConfirmDeleteTodayWorkoutListener, RenameDialogListener {
 
