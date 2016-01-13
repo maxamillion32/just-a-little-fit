@@ -20,6 +20,9 @@ import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Fragments used in {@link group.g203.justalittlefit.activity.ViewActivity}.
+ */
 public class ViewWorkoutFragment extends Fragment {
 
     @InjectView(R.id.tvWorkoutName)

@@ -27,6 +27,10 @@ import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * Headless fragment used to check if a date contains any
+ * {@link group.g203.justalittlefit.model.Workout} objects.
+ */
 public class PeekLauncher extends Fragment {
     private final String LOG_TAG = getClass().getSimpleName();
     private ProgressDialog progressDialog = null;
