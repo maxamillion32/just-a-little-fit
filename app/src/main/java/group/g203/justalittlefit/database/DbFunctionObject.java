@@ -4,8 +4,9 @@ package group.g203.justalittlefit.database;
  * Object that encapsulates either a single
  * {@link group.g203.justalittlefit.model.Workout},
  * {@link group.g203.justalittlefit.model.Exercise},
- * {@link group.g203.justalittlefit.model.Set} or
- * list of these objects and an int that represents a CRUD database action.
+ * {@link group.g203.justalittlefit.model.Set} or some form of
+ * list/collection/implementation of these objects and an int that represents
+ * a CRUD database action.
  */
 public class DbFunctionObject {
 

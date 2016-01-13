@@ -26,8 +26,7 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
- * Helper class that will handle database functionality on objects of type
- * {@link group.g203.justalittlefit.model.Workout}
+ * Helper class that will handle database queries in the app.
  */
 public class QueryExecutor {
 

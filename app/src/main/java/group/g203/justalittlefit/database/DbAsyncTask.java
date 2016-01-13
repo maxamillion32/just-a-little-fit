@@ -24,7 +24,7 @@ import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
 /**
- * Runs database logic asynchronously using a {@link group.g203.justalittlefit.database.DbFunctionObject}
+ * Runs database logic asynchronously using a {@link group.g203.justalittlefit.database.DbFunctionObject}.
  */
 public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
     private final String LOG_TAG = getClass().getSimpleName();

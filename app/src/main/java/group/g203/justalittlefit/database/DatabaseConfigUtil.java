@@ -17,6 +17,7 @@ public class DatabaseConfigUtil extends OrmLiteConfigUtil {
             Workout.class, Exercise.class, Set.class
     };
 
+    // File path will need to be changed based on local config
     public static void main(String[] args) throws Exception {
         writeConfigFile(new File("C:\\Users\\s536564\\AndroidStudioProjects\\just-a-little-fit\\app\\src\\main\\res\\raw\\ormlite_config.txt"), classes);
     }
