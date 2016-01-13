@@ -18,6 +18,9 @@ import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * RecyclerView adapter for {@link group.g203.justalittlefit.fragment.ViewWorkoutFragment}.
+ */
 public class WorkoutRvAdapter extends RecyclerView.Adapter<WorkoutRvAdapter.ViewHolder> {
 
     private List<Exercise> exercises;

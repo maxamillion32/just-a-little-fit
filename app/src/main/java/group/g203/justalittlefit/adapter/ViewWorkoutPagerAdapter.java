@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+/**
+ * Pager adapter for {@link group.g203.justalittlefit.activity.ViewActivity}.
+ */
 public class ViewWorkoutPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> viewWorkoutFragments;

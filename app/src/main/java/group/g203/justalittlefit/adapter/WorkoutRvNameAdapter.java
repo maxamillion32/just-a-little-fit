@@ -17,6 +17,9 @@ import group.g203.justalittlefit.activity.TodayActivity;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
+/**
+ * RecyclerView adapter for {@link group.g203.justalittlefit.activity.TodayChooserActivity}.
+ */
 public class WorkoutRvNameAdapter extends RecyclerView.Adapter<WorkoutRvNameAdapter.ViewHolder> {
 
     private List<Workout> workouts;
