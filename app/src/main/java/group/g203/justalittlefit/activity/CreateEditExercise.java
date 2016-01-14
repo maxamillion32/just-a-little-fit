@@ -141,9 +141,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         } else if (event.getResult() instanceof Exercise) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.renameDialog_ExerciseSuccess));
             displayExerciseList();
-        } else if (event.getResult() instanceof String) {
-            // onPause delete returned, reorder exercises before leaving activity
-            reorderExercises();
         } else {
             displayGeneralExerciseListError();
         }
@@ -296,8 +293,8 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterBus();
         reorderExercises();
+        unregisterBus();
         hideProgressDialog();
     }
 
