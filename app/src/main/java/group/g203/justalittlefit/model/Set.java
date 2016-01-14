@@ -9,7 +9,8 @@ import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.util.Constants;
 
 /**
- * Class that represents a single set within an {@link Exercise)
+ * Class that represents a single set within an
+ * {@link group.g203.justalittlefit.model.Exercise}.
  */
 public class Set implements Comparable<Set>, Parcelable {
 

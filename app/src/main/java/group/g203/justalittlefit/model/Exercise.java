@@ -10,7 +10,8 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import group.g203.justalittlefit.database.DbConstants;
 
 /**
- * Class that represents a single exercise within a {@link Workout)
+ * Class that represents a single exercise within a
+ * {@link group.g203.justalittlefit.model.Workout}
  */
 public class Exercise implements Comparable<Exercise>, Parcelable {
 

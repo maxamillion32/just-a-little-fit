@@ -13,7 +13,8 @@ import org.joda.time.DateTime;
 import group.g203.justalittlefit.database.DbConstants;
 
 /**
- * Class that represents a workout within the application.
+ * Class that represents a {@link group.g203.justalittlefit.model.Workout}
+ * within the application.
  */
 public class Workout implements Comparable<Workout>, Parcelable {
 
