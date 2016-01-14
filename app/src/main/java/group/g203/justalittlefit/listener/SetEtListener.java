@@ -7,6 +7,10 @@ import android.widget.TextView;
 
 import group.g203.justalittlefit.util.Utils;
 
+/**
+ * EditText listener implementation inside of
+ * {@link group.g203.justalittlefit.dialog.AddSetDialog}.
+ */
 public class SetEtListener implements EditText.OnEditorActionListener {
 
     private EditText editText;
