@@ -15,7 +15,6 @@ public class SelectViewOrTodayDialog extends AppBaseDialog {
  * Dialog that displays when user selects today's date when in
  * {@link group.g203.justalittlefit.activity.ChooseWorkoutDate} activity.
  */
-public class SelectViewOrTodayDialog extends DialogFragment {
     private SelectViewOrTodayDialogListener listener;
 
     @Override
