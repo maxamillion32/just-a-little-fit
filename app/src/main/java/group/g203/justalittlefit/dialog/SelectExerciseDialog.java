@@ -84,7 +84,7 @@ public class SelectExerciseDialog extends AppBaseDialog {
             Snackbar.make(getActivity().findViewById(R.id.fab),
                     getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
                     .show();
-        } else {
+        } else if (event.getResult() instanceof Workout) {
             Workout workout = (Workout) event.getResult();
             if (workout == null) {
                 Snackbar.make(getActivity().findViewById(R.id.fab),
@@ -99,6 +99,7 @@ public class SelectExerciseDialog extends AppBaseDialog {
     private void createExerciseRadioGroup(Workout workout) {
         int count = 0;
         List<Exercise> exercises = new ArrayList<>(workout.getExercises());
+        exerciseRadioGroup.removeAllViews();
         for (final Exercise exercise : exercises) {
             TableRow row = new TableRow(getActivity());
             row.setId(count);
