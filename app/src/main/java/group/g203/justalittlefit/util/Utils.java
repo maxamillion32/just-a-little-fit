@@ -406,15 +406,24 @@ public class Utils {
         return errMsg;
     }
 
-    public static void dataProviderCheck(AbstractExpandableDataProvider provider, Activity activity) {
+    public static boolean dataProviderIsValid(AbstractExpandableDataProvider provider) {
         if (provider == null) {
-            displayLongToast(activity, activity.getString(R.string.general_error));
-            activity.finish();
+            return false;
+        } else {
+            return true;
         }
     }
 
-    public static void dataProviderCheck(AbstractDataProvider provider, Activity activity) {
+    public static boolean dataProviderIsValid(AbstractDataProvider provider) {
         if (provider == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static void exitActivityOnError(Activity activity) {
+        if (activity != null) {
             displayLongToast(activity, activity.getString(R.string.general_error));
             activity.finish();
         }

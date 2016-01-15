@@ -124,27 +124,33 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     public void onItemClicked(int position) {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        AbstractDataProvider.Data data = dataProvider.getItem(position);
-        Workout workout = (Workout) data.getDataObject();
-        Intent createEditExercise = new Intent(this, CreateEditExercise.class);
-        createEditExercise.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            AbstractDataProvider.Data data = dataProvider.getItem(position);
+            Workout workout = (Workout) data.getDataObject();
+            Intent createEditExercise = new Intent(this, CreateEditExercise.class);
+            createEditExercise.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.WORKOUT, workout);
-        createEditExercise.putExtras(bundle);
-        startActivity(createEditExercise);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.WORKOUT, workout);
+            createEditExercise.putExtras(bundle);
+            startActivity(createEditExercise);
+        } else {
+            Utils.exitActivityOnError(this);
+        }
     }
 
     public void onItemLongClicked(int position) {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        AbstractDataProvider.Data data = dataProvider.getItem(position);
-        Workout workout = (Workout) data.getDataObject();
-        FragmentManager fm = getSupportFragmentManager();
-        RenameDialog dialog = RenameDialog.newInstance(workout);
-        dialog.show(fm, getString(R.string.renameDialog_Tag));
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            AbstractDataProvider.Data data = dataProvider.getItem(position);
+            Workout workout = (Workout) data.getDataObject();
+            FragmentManager fm = getSupportFragmentManager();
+            RenameDialog dialog = RenameDialog.newInstance(workout);
+            dialog.show(fm, getString(R.string.renameDialog_Tag));
+        } else {
+            Utils.exitActivityOnError(this);
+        }
     }
 
     public void onItemRemoved(Object dataObject) {
@@ -193,13 +199,16 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
-            Utils.dataProviderCheck(dataProvider, this);
-            if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
-                adapter.removeAllItems(dataProvider.getCount() - 1);
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteWorkoutDialog_success));
-                rlDefault.setVisibility(View.VISIBLE);
+            if (Utils.dataProviderIsValid(dataProvider)) {
+                if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
+                    adapter.removeAllItems(dataProvider.getCount() - 1);
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteWorkoutDialog_success));
+                    rlDefault.setVisibility(View.VISIBLE);
+                } else {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
+                }
             } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_workout_error));
+                Utils.exitActivityOnError(this);
             }
         } else if (event.getResult() instanceof String) {
             // onPause delete returned, reorder workouts before leaving activity
@@ -293,14 +302,17 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private void reorderWorkouts() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        List<Workout> workoutsToSave = (List<Workout>) (Object) dataProvider.getDataObjects();
-        for (int i = 0; i < workoutsToSave.size(); i++) {
-            workoutsToSave.get(i).setOrderNumber(i);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            List<Workout> workoutsToSave = (List<Workout>) (Object) dataProvider.getDataObjects();
+            for (int i = 0; i < workoutsToSave.size(); i++) {
+                workoutsToSave.get(i).setOrderNumber(i);
+            }
+            DbFunctionObject saveWorkoutsDfo =
+                    new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
+            new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
+        } else {
+            Utils.exitActivityOnError(this);
         }
-        DbFunctionObject saveWorkoutsDfo =
-                new DbFunctionObject(workoutsToSave, DbConstants.UPDATE_WORKOUTS);
-        new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(saveWorkoutsDfo);
     }
 
     @Override
@@ -327,16 +339,19 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             public void onClick(View v) {
                 DataProvider dataProvider =
                         (DataProvider) getDataProvider();
-                Utils.dataProviderCheck(dataProvider, getParent());
-                int position = dataProvider.undoLastRemoval();
-                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-                ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
-                Utils.displayLongSimpleSnackbar(fab,
-                        getString(R.string.workout_removal_undone));
-                AbstractDataProvider.Data data = dataProvider.getItem(position);
-                Workout workout = (Workout) data.getDataObject();
-                queuedWorkoutsToDelete.remove(workout);
-                determineDefaultStatus();
+                if (Utils.dataProviderIsValid(dataProvider)) {
+                    int position = dataProvider.undoLastRemoval();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                    ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                    Utils.displayLongSimpleSnackbar(fab,
+                            getString(R.string.workout_removal_undone));
+                    AbstractDataProvider.Data data = dataProvider.getItem(position);
+                    Workout workout = (Workout) data.getDataObject();
+                    queuedWorkoutsToDelete.remove(workout);
+                    determineDefaultStatus();
+                } else {
+                    Utils.exitActivityOnError(getParent());
+                }
             }
         };
     }
@@ -358,20 +373,23 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     private void addWorkoutToUI() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
-                && addedWorkoutName != null) {
-            if (!dataProvider.getDisplayNames().contains(addedWorkoutName.trim())) {
-                Workout newWorkout = new Workout(addedWorkoutName, dataProvider.getCount());
-                DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
-                new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
+                    && addedWorkoutName != null) {
+                if (!dataProvider.getDisplayNames().contains(addedWorkoutName.trim())) {
+                    Workout newWorkout = new Workout(addedWorkoutName, dataProvider.getCount());
+                    DbFunctionObject insertWorkout = new DbFunctionObject(newWorkout, DbConstants.INSERT_WORKOUT);
+                    new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(insertWorkout);
+                } else {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error_already_exists));
+                    hideProgressDialog();
+                }
             } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error_already_exists));
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
                 hideProgressDialog();
             }
         } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_workout_error));
-            hideProgressDialog();
+            Utils.exitActivityOnError(this);
         }
     }
 
@@ -387,11 +405,14 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     void determineDefaultStatus() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        if (dataProvider != null && dataProvider.getCount() == 0) {
-            rlDefault.setVisibility(View.VISIBLE);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            if (dataProvider != null && dataProvider.getCount() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
         } else {
-            rlDefault.setVisibility(View.INVISIBLE);
+            Utils.exitActivityOnError(this);
         }
     }
 
