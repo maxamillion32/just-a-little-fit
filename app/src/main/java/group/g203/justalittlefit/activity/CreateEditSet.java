@@ -28,7 +28,6 @@ import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataP
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProviderFragment;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.MyDraggableSwipeableItemAdapter;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.RecyclerListViewFragment;
-import group.g203.justalittlefit.bus.CreateEditSetBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -41,6 +40,7 @@ import group.g203.justalittlefit.listener.AddSetDialogListener;
 import group.g203.justalittlefit.listener.ConfirmSetsDeletionListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -153,13 +153,16 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
-            Utils.dataProviderCheck(dataProvider, this);
-            if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
-                adapter.removeAllItems(dataProvider.getCount() - 1);
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteSetDialog_success));
-                rlDefault.setVisibility(View.VISIBLE);
+            if (Utils.dataProviderIsValid(dataProvider)) {
+                if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
+                    adapter.removeAllItems(dataProvider.getCount() - 1);
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteSetDialog_success));
+                    rlDefault.setVisibility(View.VISIBLE);
+                } else {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_set_error));
+                }
             } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_set_error));
+                Utils.exitActivityOnError(this);
             }
         } else {
             displayGeneralSetListError();
@@ -210,10 +213,13 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     public void onItemClicked(int position) {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        AbstractDataProvider.Data data = dataProvider.getItem(position);
-        Set set = (Set) data.getDataObject();
-        displayAddSetDialogUponEdit(set);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            AbstractDataProvider.Data data = dataProvider.getItem(position);
+            Set set = (Set) data.getDataObject();
+            displayAddSetDialogUponEdit(set);
+        } else {
+            Utils.exitActivityOnError(this);
+        }
     }
 
     private View.OnClickListener undoSetDelete() {
@@ -222,16 +228,19 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
             public void onClick(View v) {
                 DataProvider dataProvider =
                         (DataProvider) getDataProvider();
-                Utils.dataProviderCheck(dataProvider, getParent());
-                int position = dataProvider.undoLastRemoval();
-                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-                ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
-                Utils.displayLongSimpleSnackbar(fab,
-                        getString(R.string.exercise_removal_undone));
-                AbstractDataProvider.Data data = dataProvider.getItem(position);
-                Set set = (Set) data.getDataObject();
-                set.getExercise().getSets().add(set);
-                determineDefaultStatus();
+                if (Utils.dataProviderIsValid(dataProvider)) {
+                    int position = dataProvider.undoLastRemoval();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                    ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                    Utils.displayLongSimpleSnackbar(fab,
+                            getString(R.string.exercise_removal_undone));
+                    AbstractDataProvider.Data data = dataProvider.getItem(position);
+                    Set set = (Set) data.getDataObject();
+                    set.getExercise().getSets().add(set);
+                    determineDefaultStatus();
+                } else {
+                    Utils.exitActivityOnError(getParent());
+                }
             }
         };
     }
@@ -256,14 +265,14 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     private void registerBus() {
         if (!busRegistered) {
-            CreateEditSetBus.getInstance().register(this);
+            BusFactory.getCreateEditSetBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            CreateEditSetBus.getInstance().unregister(this);
+            BusFactory.getCreateEditSetBus().unregister(this);
             busRegistered = false;
         }
     }
@@ -271,40 +280,49 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     private void reorderSets() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        List<Set> setsToReorder = (List<Set>) (Object) dataProvider.getDataObjects();
-        for (int i = 0; i < setsToReorder.size(); i++) {
-            setsToReorder.get(i).setOrderNumber(i);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            List<Set> setsToReorder = (List<Set>) (Object) dataProvider.getDataObjects();
+            for (int i = 0; i < setsToReorder.size(); i++) {
+                setsToReorder.get(i).setOrderNumber(i);
+            }
+            DbFunctionObject reorderSetsDfo =
+                    new DbFunctionObject(setsToReorder, DbConstants.UPDATE_SETS);
+            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(reorderSetsDfo);
+        } else {
+            Utils.exitActivityOnError(this);
         }
-        DbFunctionObject reorderSetsDfo =
-                new DbFunctionObject(setsToReorder, DbConstants.UPDATE_SETS);
-        new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(reorderSetsDfo);
     }
 
     private void addSetToUI() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
-                && addedSet != null) {
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
+                    && addedSet != null) {
                 addedSet.setExercise(parentExercise);
                 addedSet.setOrderNumber(dataProvider.getCount());
                 DbFunctionObject insertWorkoutSet = new DbFunctionObject(addedSet, DbConstants.INSERT_SET);
                 new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(insertWorkoutSet);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
+                hideProgressDialog();
+            }
         } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
-            hideProgressDialog();
+            Utils.exitActivityOnError(this);
         }
     }
 
     void determineDefaultStatus() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        if (dataProvider != null && dataProvider.getCount() == 0) {
-            rlDefault.setVisibility(View.VISIBLE);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            if (dataProvider != null && dataProvider.getCount() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
         } else {
-            rlDefault.setVisibility(View.INVISIBLE);
+            Utils.exitActivityOnError(this);
         }
     }
 
@@ -372,11 +390,14 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         } else {
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
-            Utils.dataProviderCheck(dataProvider, this);
-            List<Set> sets = (List<Set>) (Object) dataProvider.getDataObjects();
-            DbFunctionObject deleteSets =
-                    new DbFunctionObject(sets, DbConstants.DELETE_ALL_SETS);
-            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSets);
+            if (Utils.dataProviderIsValid(dataProvider)) {
+                List<Set> sets = (List<Set>) (Object) dataProvider.getDataObjects();
+                DbFunctionObject deleteSets =
+                        new DbFunctionObject(sets, DbConstants.DELETE_ALL_SETS);
+                new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(deleteSets);
+            } else {
+                Utils.exitActivityOnError(this);
+            }
         }
     }
 

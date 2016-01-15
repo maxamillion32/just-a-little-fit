@@ -1,12 +1,9 @@
 package group.g203.justalittlefit.dialog;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +25,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Dialog to display when adding a {@link group.g203.justalittlefit.model.Set}.
  */
-public class AddSetDialog extends DialogFragment {
+public class AddSetDialog extends AppBaseDialog {
     private AddSetDialogListener listener;
     @InjectView(R.id.rbWeightType)
     RadioButton rbWeightedSet;
@@ -78,9 +75,8 @@ public class AddSetDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
+    public AlertDialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_set_dialog_view, null);
         ButterKnife.inject(this, view);

@@ -16,14 +16,16 @@ import group.g203.justalittlefit.R;
  * Base dialog class.
  */
 public class AppBaseDialog extends DialogFragment {
-    AlertDialog confirmDialog;
+    AlertDialog alertDialog;
+    AlertDialog.Builder builder;
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
-        confirmDialog = builder.create();
-        return confirmDialog;
+        builder = alertBuilder;
+        alertDialog = alertBuilder.create();
+        return alertDialog;
     }
 
     public void setPositiveButton(String btnText, DialogInterface.OnClickListener onClickListener) {
@@ -35,16 +37,24 @@ public class AppBaseDialog extends DialogFragment {
     }
 
     public void setTitle(String title) {
-        confirmDialog.setTitle(title);
+        alertDialog.setTitle(title);
     }
 
     public void setDialogMessage(String msg) {
-        confirmDialog.setMessage(msg);
+        alertDialog.setMessage(msg);
     }
 
     private void setButton(String btnText, DialogInterface.OnClickListener onClickListener, boolean isPositiveBtn) {
         int btnType = (isPositiveBtn) ? DialogInterface.BUTTON_POSITIVE : DialogInterface.BUTTON_NEGATIVE;
-        confirmDialog.setButton(btnType, btnText, (DialogInterface.OnClickListener) onClickListener);
+        alertDialog.setButton(btnType, btnText, (DialogInterface.OnClickListener) onClickListener);
+    }
+
+    public AlertDialog getAlertDialog() {
+        return alertDialog;
+    }
+
+    public AlertDialog.Builder getBuilder() {
+        return builder;
     }
 }
 

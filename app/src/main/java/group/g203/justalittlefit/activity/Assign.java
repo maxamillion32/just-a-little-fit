@@ -27,7 +27,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.bus.AssignBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -36,6 +35,7 @@ import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -224,14 +224,14 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     private void registerBus() {
         if (!busRegistered) {
-            AssignBus.getInstance().register(this);
+            BusFactory.getAssignBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            AssignBus.getInstance().unregister(this);
+            BusFactory.getAssignBus().unregister(this);
             busRegistered = false;
         }
     }

@@ -33,7 +33,6 @@ import group.g203.justalittlefit.advanced_recyclerview.rv_today.AbstractExpandab
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayDataProviderFragment;
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayRvListViewFragment;
-import group.g203.justalittlefit.bus.TodayBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -52,6 +51,7 @@ import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -345,25 +345,28 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
 
-        Utils.dataProviderCheck(dataProvider, this);
+        if (Utils.dataProviderIsValid(dataProvider)) {
 
-        if (dataProvider != null && dataProvider.getGroupCount() == 0) {
-            rlDefault.setVisibility(View.VISIBLE);
+            if (dataProvider != null && dataProvider.getGroupCount() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
         } else {
-            rlDefault.setVisibility(View.INVISIBLE);
+            Utils.exitActivityOnError(this);
         }
     }
 
     private void registerBus() {
         if (!busRegistered) {
-            TodayBus.getInstance().register(this);
+            BusFactory.getTodayBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            TodayBus.getInstance().unregister(this);
+            BusFactory.getTodayBus().unregister(this);
             busRegistered = false;
         }
     }
@@ -373,12 +376,15 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         ((TodayRvListViewFragment) fragment).notifyChildItemRestored(groupPosition, childPosition);
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        AbstractExpandableDataProvider.ChildData data = dataProvider.getChildItem(groupPosition, childPosition);
-        editedChildPosition = childPosition;
-        editedGroupPosition = groupPosition;
-        Set set = data.getSet();
-        displayAddSetDialogUponEdit(set);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            AbstractExpandableDataProvider.ChildData data = dataProvider.getChildItem(groupPosition, childPosition);
+            editedChildPosition = childPosition;
+            editedGroupPosition = groupPosition;
+            Set set = data.getSet();
+            displayAddSetDialogUponEdit(set);
+        } else {
+            Utils.exitActivityOnError(this);
+        }
     }
 
     public void renameExercise(Exercise exercise) {
@@ -429,26 +435,29 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     private void reorderWorkouts() {
         TodayDataProvider dataProvider =
                 (TodayDataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        List<Object> reorderedExercisesAndSets = dataProvider.getOrderedDataObjects();
-        List<Exercise> reorderedExercises = new ArrayList<>();
-        List<Set> reorderedSets = new ArrayList<>();
-        HashMap<String, Object> reorderedExercisesAndSetsMap = new HashMap<>();
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            List<Object> reorderedExercisesAndSets = dataProvider.getOrderedDataObjects();
+            List<Exercise> reorderedExercises = new ArrayList<>();
+            List<Set> reorderedSets = new ArrayList<>();
+            HashMap<String, Object> reorderedExercisesAndSetsMap = new HashMap<>();
 
-        for (Object object : reorderedExercisesAndSets) {
-            if (object instanceof Set) {
-                reorderedSets.add((Set) object);
-            } else if (object instanceof Exercise) {
-                reorderedExercises.add((Exercise) object);
+            for (Object object : reorderedExercisesAndSets) {
+                if (object instanceof Set) {
+                    reorderedSets.add((Set) object);
+                } else if (object instanceof Exercise) {
+                    reorderedExercises.add((Exercise) object);
+                }
             }
+
+            reorderedExercisesAndSetsMap.put(Constants.EXERCISES, reorderedExercises);
+            reorderedExercisesAndSetsMap.put(Constants.SETS_NORM_CASE, reorderedSets);
+
+            DbFunctionObject reorderExercisesAndSetsDfo =
+                    new DbFunctionObject(reorderedExercisesAndSetsMap, DbConstants.UPDATE_EXERCISES_AND_SETS);
+            new DbAsyncTask(Constants.TODAY).execute(reorderExercisesAndSetsDfo);
+        } else {
+            Utils.exitActivityOnError(this);
         }
-
-        reorderedExercisesAndSetsMap.put(Constants.EXERCISES, reorderedExercises);
-        reorderedExercisesAndSetsMap.put(Constants.SETS_NORM_CASE, reorderedSets);
-
-        DbFunctionObject reorderExercisesAndSetsDfo =
-                new DbFunctionObject(reorderedExercisesAndSetsMap, DbConstants.UPDATE_EXERCISES_AND_SETS);
-        new DbAsyncTask(Constants.TODAY).execute(reorderExercisesAndSetsDfo);
     }
 
     private void displayAddExerciseOrSetDialog() {
@@ -477,20 +486,23 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
 
-        Utils.dataProviderCheck(dataProvider, this);
+        if (Utils.dataProviderIsValid(dataProvider)) {
 
-        if (dataProvider != null && dataProvider.getExerciseDisplayNames() != null) {
-            if (!dataProvider.getExerciseDisplayNames().contains(addedExerciseName.trim())) {
-                Exercise newExercise = new Exercise(todayWorkout, addedExerciseName, dataProvider.getExerciseCount());
-                DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
-                new DbAsyncTask(Constants.TODAY).execute(insertExercise);
+            if (dataProvider != null && dataProvider.getExerciseDisplayNames() != null) {
+                if (!dataProvider.getExerciseDisplayNames().contains(addedExerciseName.trim())) {
+                    Exercise newExercise = new Exercise(todayWorkout, addedExerciseName, dataProvider.getExerciseCount());
+                    DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
+                    new DbAsyncTask(Constants.TODAY).execute(insertExercise);
+                } else {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+                    hideProgressDialog();
+                }
             } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
                 hideProgressDialog();
             }
         } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
-            hideProgressDialog();
+            Utils.exitActivityOnError(this);
         }
     }
 
@@ -502,39 +514,42 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
         TodayDataProvider dataProvider =
                 (TodayDataProvider)getDataProvider();
 
-        Utils.dataProviderCheck(dataProvider, this);
+        if (Utils.dataProviderIsValid(dataProvider)) {
 
-        if (dataProvider != null) {
-            if (dialog.getRbWeightedSet().isChecked()) {
-                int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
-                String exerciseCd = Constants.WEIGHTS;
-                int weight = Utils.returnValidNumberFromEditText(dialog.getEtWeightAmount());
-                String weightCd;
-                if (dialog.getRbLbs().isChecked()) {
-                    weightCd = Constants.LBS;
+            if (dataProvider != null) {
+                if (dialog.getRbWeightedSet().isChecked()) {
+                    int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+                    String exerciseCd = Constants.WEIGHTS;
+                    int weight = Utils.returnValidNumberFromEditText(dialog.getEtWeightAmount());
+                    String weightCd;
+                    if (dialog.getRbLbs().isChecked()) {
+                        weightCd = Constants.LBS;
+                    } else {
+                        weightCd = Constants.KGS;
+                    }
+                    addedSet = new Set(parentExercise, reps, weightCd, exerciseCd, weight, dataProvider.getSetCount(parentExercise));
                 } else {
-                    weightCd = Constants.KGS;
+                    int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+                    Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
+                    Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
+                    Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
+                    String exerciseCd = Constants.LOGGED_TIMED;
+                    addedSet = new Set(parentExercise, reps, exerciseCd, hours, mins, seconds, dataProvider.getSetCount(parentExercise));
                 }
-                addedSet = new Set(parentExercise, reps, weightCd, exerciseCd, weight, dataProvider.getSetCount(parentExercise));
             } else {
-                int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
-                Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
-                Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
-                Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
-                String exerciseCd = Constants.LOGGED_TIMED;
-                addedSet = new Set(parentExercise, reps, exerciseCd, hours, mins, seconds, dataProvider.getSetCount(parentExercise));
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
+                hideProgressDialog();
             }
-        } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
-            hideProgressDialog();
-        }
 
-        if (dataProvider != null && addedSet != null) {
-            DbFunctionObject insertWorkoutSet = new DbFunctionObject(addedSet, DbConstants.INSERT_SET);
-            new DbAsyncTask(Constants.TODAY).execute(insertWorkoutSet);
-        } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
-            hideProgressDialog();
+            if (dataProvider != null && addedSet != null) {
+                DbFunctionObject insertWorkoutSet = new DbFunctionObject(addedSet, DbConstants.INSERT_SET);
+                new DbAsyncTask(Constants.TODAY).execute(insertWorkoutSet);
+            } else {
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
+                hideProgressDialog();
+            }
+        }  else {
+            Utils.exitActivityOnError(this);
         }
     }
 
@@ -575,16 +590,19 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
 
         if (Utils.isEmptyString(errMsg)) {
             TodayDataProvider dataProvider =
-                    (TodayDataProvider)getDataProvider();
-            Utils.dataProviderCheck(dataProvider, this);
-            dataProvider.setChildItem(editedGroupPosition, editedChildPosition, set);
-            ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
-            ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
-            DbFunctionObject editSetDfo =
-                    new DbFunctionObject(set, DbConstants.UPDATE_SET);
-            new DbAsyncTask(Constants.TODAY).execute(editSetDfo);
+                    (TodayDataProvider) getDataProvider();
+            if (Utils.dataProviderIsValid(dataProvider)) {
+                dataProvider.setChildItem(editedGroupPosition, editedChildPosition, set);
+                ((TodayRvListViewFragment) fragment).notifyChildItemChanged(editedGroupPosition, editedChildPosition);
+                ((TodayRvListViewFragment) fragment).notifyChildItemRestored(editedGroupPosition, editedChildPosition);
+                DbFunctionObject editSetDfo =
+                        new DbFunctionObject(set, DbConstants.UPDATE_SET);
+                new DbAsyncTask(Constants.TODAY).execute(editSetDfo);
+            } else {
+                Utils.displayLongToast(this, errMsg);
+            }
         } else {
-            Utils.displayLongToast(this, errMsg);
+            Utils.exitActivityOnError(this);
         }
 
         dialog.dismiss();

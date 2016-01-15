@@ -1,12 +1,9 @@
 package group.g203.justalittlefit.dialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextThemeWrapper;
 
 import java.util.ArrayList;
 
@@ -19,7 +16,7 @@ import group.g203.justalittlefit.util.Constants;
  * Dialog that displays when user clicks on the floating action button in
  * {@link group.g203.justalittlefit.activity.TodayActivity}.
  */
-public class AddExerciseOrSetDialog extends DialogFragment {
+public class AddExerciseOrSetDialog extends AppBaseDialog {
 
     Workout workout;
     ArrayList<Exercise> exercises;
@@ -37,10 +34,8 @@ public class AddExerciseOrSetDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
-
+    public AlertDialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
         Bundle args = getArguments();
         if (args != null && args.containsKey(Constants.WORKOUT)) {
             workout = args.getParcelable(Constants.WORKOUT);

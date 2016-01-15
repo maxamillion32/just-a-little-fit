@@ -29,7 +29,6 @@ import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataP
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProviderFragment;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.MyDraggableSwipeableItemAdapter;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.RecyclerListViewFragment;
-import group.g203.justalittlefit.bus.CreateEditExerciseBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -44,6 +43,7 @@ import group.g203.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -104,13 +104,16 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                     ((RecyclerListViewFragment) recyclerFrag).getAdapter();
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
-            Utils.dataProviderCheck(dataProvider, this);
-            if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
-                adapter.removeAllItems(dataProvider.getCount() - 1);
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteExerciseDialog_success));
-                rlDefault.setVisibility(View.VISIBLE);
+            if (Utils.dataProviderIsValid(dataProvider)) {
+                if (adapter != null && dataProvider != null && dataProvider.getCount() >= 0) {
+                    adapter.removeAllItems(dataProvider.getCount() - 1);
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.confirmDeleteExerciseDialog_success));
+                    rlDefault.setVisibility(View.VISIBLE);
+                } else {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_exercise_error));
+                }
             } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.deletion_exercise_error));
+                Utils.exitActivityOnError(this);
             }
         } else if (event.getResult() instanceof java.util.Set) {
             // Data order saved
@@ -220,27 +223,33 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     public void onItemClicked(int position) {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        AbstractDataProvider.Data data = dataProvider.getItem(position);
-        Exercise exercise = (Exercise) data.getDataObject();
-        Intent createEditSet = new Intent(this, CreateEditSet.class);
-        createEditSet.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            AbstractDataProvider.Data data = dataProvider.getItem(position);
+            Exercise exercise = (Exercise) data.getDataObject();
+            Intent createEditSet = new Intent(this, CreateEditSet.class);
+            createEditSet.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.EXERCISE, exercise);
-        createEditSet.putExtras(bundle);
-        startActivity(createEditSet);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constants.EXERCISE, exercise);
+            createEditSet.putExtras(bundle);
+            startActivity(createEditSet);
+        } else {
+            Utils.exitActivityOnError(this);
+        }
     }
 
     public void onItemLongClicked(int position) {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        AbstractDataProvider.Data data = dataProvider.getItem(position);
-        Exercise exercise = (Exercise) data.getDataObject();
-        FragmentManager fm = getSupportFragmentManager();
-        RenameDialog dialog = RenameDialog.newInstance(exercise);
-        dialog.show(fm, getString(R.string.renameDialog_Tag));
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            AbstractDataProvider.Data data = dataProvider.getItem(position);
+            Exercise exercise = (Exercise) data.getDataObject();
+            FragmentManager fm = getSupportFragmentManager();
+            RenameDialog dialog = RenameDialog.newInstance(exercise);
+            dialog.show(fm, getString(R.string.renameDialog_Tag));
+        } else {
+            Utils.exitActivityOnError(this);
+        }
     }
 
     private View.OnClickListener undoExerciseDelete() {
@@ -249,16 +258,19 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             public void onClick(View v) {
                 DataProvider dataProvider =
                         (DataProvider) getDataProvider();
-                Utils.dataProviderCheck(dataProvider, getParent());
-                int position = dataProvider.undoLastRemoval();
-                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
-                ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
-                Utils.displayLongSimpleSnackbar(fab,
-                        getString(R.string.exercise_removal_undone));
-                AbstractDataProvider.Data data = dataProvider.getItem(position);
-                Exercise exercise = (Exercise) data.getDataObject();
-                exercise.getWorkout().getExercises().add(exercise);
-                determineDefaultStatus();
+                if (Utils.dataProviderIsValid(dataProvider)) {
+                    int position = dataProvider.undoLastRemoval();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_LIST_VIEW);
+                    ((RecyclerListViewFragment) fragment).notifyItemInserted(position);
+                    Utils.displayLongSimpleSnackbar(fab,
+                            getString(R.string.exercise_removal_undone));
+                    AbstractDataProvider.Data data = dataProvider.getItem(position);
+                    Exercise exercise = (Exercise) data.getDataObject();
+                    exercise.getWorkout().getExercises().add(exercise);
+                    determineDefaultStatus();
+                } else {
+                    Utils.exitActivityOnError(getParent());
+                }
             }
         };
     }
@@ -324,11 +336,14 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         } else {
             DataProvider dataProvider =
                     (DataProvider) getDataProvider();
-            Utils.dataProviderCheck(dataProvider, this);
-            List<Exercise> exercises = (List<Exercise>) (Object) dataProvider.getDataObjects();
-            DbFunctionObject deleteExercises =
-                    new DbFunctionObject(exercises, DbConstants.DELETE_ALL_EXERCISES);
-            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteExercises);
+            if (Utils.dataProviderIsValid(dataProvider)) {
+                List<Exercise> exercises = (List<Exercise>) (Object) dataProvider.getDataObjects();
+                DbFunctionObject deleteExercises =
+                        new DbFunctionObject(exercises, DbConstants.DELETE_ALL_EXERCISES);
+                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(deleteExercises);
+            } else {
+                Utils.exitActivityOnError(this);
+            }
         }
     }
 
@@ -341,14 +356,14 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     private void registerBus() {
         if (!busRegistered) {
-            CreateEditExerciseBus.getInstance().register(this);
+            BusFactory.getCreateEditExerciseBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            CreateEditExerciseBus.getInstance().unregister(this);
+            BusFactory.getCreateEditExerciseBus().unregister(this);
             busRegistered = false;
         }
     }
@@ -356,14 +371,17 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     private void reorderExercises() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        List<Exercise> exercisesToSave = (List<Exercise>) (Object) dataProvider.getDataObjects();
-        for (int i = 0; i < exercisesToSave.size(); i++) {
-            exercisesToSave.get(i).setOrderNumber(i);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            List<Exercise> exercisesToSave = (List<Exercise>) (Object) dataProvider.getDataObjects();
+            for (int i = 0; i < exercisesToSave.size(); i++) {
+                exercisesToSave.get(i).setOrderNumber(i);
+            }
+            DbFunctionObject saveExercisesDfo =
+                    new DbFunctionObject(exercisesToSave, DbConstants.UPDATE_EXERCISES);
+            new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(saveExercisesDfo);
+        } else {
+            Utils.exitActivityOnError(this);
         }
-        DbFunctionObject saveExercisesDfo =
-                new DbFunctionObject(exercisesToSave, DbConstants.UPDATE_EXERCISES);
-        new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(saveExercisesDfo);
     }
 
     @Override
@@ -377,29 +395,35 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     private void addExerciseToUI() {
         DataProvider dataProvider =
                 (DataProvider) getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
-                && addedExerciseName != null) {
-            if (!dataProvider.getDisplayNames().contains(addedExerciseName.trim())) {
-                Exercise newExercise = new Exercise(parentWorkout, addedExerciseName, dataProvider.getCount());
-                DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
-                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(insertExercise);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            if (dataProvider != null && dataProvider.getCount() >= 0 && dataProvider.getDisplayNames() != null
+                    && addedExerciseName != null) {
+                if (!dataProvider.getDisplayNames().contains(addedExerciseName.trim())) {
+                    Exercise newExercise = new Exercise(parentWorkout, addedExerciseName, dataProvider.getCount());
+                    DbFunctionObject insertExercise = new DbFunctionObject(newExercise, DbConstants.INSERT_EXERCISE);
+                    new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(insertExercise);
+                } else {
+                    Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+                }
             } else {
-                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error_already_exists));
+                Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
             }
         } else {
-            Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_exercise_error));
+            Utils.exitActivityOnError(this);
         }
     }
 
     void determineDefaultStatus() {
         DataProvider dataProvider =
                 (DataProvider)getDataProvider();
-        Utils.dataProviderCheck(dataProvider, this);
-        if (dataProvider != null && dataProvider.getCount() == 0) {
-            rlDefault.setVisibility(View.VISIBLE);
+        if (Utils.dataProviderIsValid(dataProvider)) {
+            if (dataProvider != null && dataProvider.getCount() == 0) {
+                rlDefault.setVisibility(View.VISIBLE);
+            } else {
+                rlDefault.setVisibility(View.INVISIBLE);
+            }
         } else {
-            rlDefault.setVisibility(View.INVISIBLE);
+            Utils.exitActivityOnError(this);
         }
     }
 

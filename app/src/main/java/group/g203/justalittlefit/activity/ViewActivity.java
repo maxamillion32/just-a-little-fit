@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.adapter.ViewWorkoutPagerAdapter;
-import group.g203.justalittlefit.bus.ViewBus;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -38,6 +37,7 @@ import group.g203.justalittlefit.fragment.ViewWorkoutFragment;
 import group.g203.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
 import group.g203.justalittlefit.listener.DeleteWorkoutsFromViewDialogListener;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 import me.relex.circleindicator.CircleIndicator;
@@ -194,14 +194,14 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
 
     private void registerBus() {
         if (!busRegistered) {
-            ViewBus.getInstance().register(this);
+            BusFactory.getViewBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            ViewBus.getInstance().unregister(this);
+            BusFactory.getViewBus().unregister(this);
             busRegistered = false;
         }
     }
