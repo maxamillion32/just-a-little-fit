@@ -15,10 +15,8 @@ import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
-import java.util.List;
-
 import butterknife.ButterKnife;
-import butterknife.InjectViews;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DatabaseHelper;
@@ -33,9 +31,8 @@ import group.g203.justalittlefit.util.Utils;
 public class Home extends BaseNaviDrawerActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
-    @InjectViews({R.id.todayHomeText, R.id.createEditHomeText,
-            R.id.assignHomeText, R.id.viewHomeText, R.id.homeLogoText})
-    List<TextView> homeTextViews;
+    @InjectView(R.id.homeLogoText)
+    TextView homeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +90,7 @@ public class Home extends BaseNaviDrawerActivity {
         ButterKnife.inject(this, frameLayout);
         setTitle(Constants.EMPTY_STRING);
         getHelper();
-        this.formatHomeTextViews();
+        this.formatHomeTextView();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
         selectedItem.setChecked(true);
     }
@@ -131,11 +128,9 @@ public class Home extends BaseNaviDrawerActivity {
         }
     }
 
-    private void formatHomeTextViews() {
-        for (TextView tv : homeTextViews) {
+    private void formatHomeTextView() {
             Typeface face=Typeface.createFromAsset(getAssets(), Constants.CUSTOM_FONT_TTF);
-            tv.setTypeface(face);
-        }
+            homeTextView.setTypeface(face);
     }
 
     @OnClick(R.id.todayHomeOption)

@@ -8,35 +8,11 @@
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#eeeeee"
+        android:background="@color/app_bg_gray"
         android:gravity="center"
         android:orientation="vertical"
         android:textSize="50sp"
         android:textStyle="bold">
-
-        <TextView
-            android:id="@+id/homeLogoText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:textSize="70dp"
-            android:text="@string/title_name" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/black" />
-
-        <TextView
-            android:id="@+id/workoutNaviText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:background="@color/app_gray"
-            android:text="@string/workoutNavigation" />
 
         <View
             android:layout_width="match_parent"
@@ -48,8 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:background="@color/fallback_gray"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
 
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/todayHomeOption"
@@ -59,15 +36,11 @@
 
                 <ImageView
                     android:id="@+id/todayHomeIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_today" />
 
-                <TextView
-                    android:id="@+id/todayHomeText"
-                    style="@style/HomeScreenText"
-                    android:text="@string/today_string"/>
             </FrameLayout>
 
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -78,23 +51,13 @@
 
                 <ImageView
                     android:id="@+id/createEditHomeIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_create_edit" />
 
-                <TextView
-                    android:id="@+id/createEditHomeText"
-                    style="@style/HomeScreenText"
-                    android:text="@string/create_edit_string"/>
             </FrameLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/viewHomeOption"
                 android:layout_width="0dp"
@@ -103,15 +66,11 @@
 
                 <ImageView
                     android:id="@+id/viewHomeIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_view" />
 
-                <TextView
-                    android:id="@+id/viewHomeText"
-                    style="@style/HomeScreenText"
-                    android:text="@string/view_string"/>
             </FrameLayout>
 
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -122,17 +81,29 @@
 
                 <ImageView
                     android:id="@+id/assignHomeIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_assign" />
 
-                <TextView
-                    android:id="@+id/assignHomeText"
-                    style="@style/HomeScreenText"
-                    android:text="@string/assign_string"/>
             </FrameLayout>
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/homeLogoText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textSize="90dp"
+            android:text="@string/title_name"
+            android:layout_weight="6" />
 
     </LinearLayout>
 </FrameLayout>
