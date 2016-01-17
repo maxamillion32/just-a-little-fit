@@ -26,8 +26,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProvider;
@@ -65,7 +65,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     boolean reorderTriggeredByAddWorkout;
     CloseableIterator<Workout> ciWorkouts;
     String addedWorkoutName;
-    @InjectView(R.id.rlDefault)
+    @Bind(R.id.rlDefault)
     RelativeLayout rlDefault;
     HashSet<Workout> queuedWorkoutsToDelete;
     Bundle savedBundle;
@@ -290,7 +290,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         View contentView = inflater.inflate(R.layout.activity_create_edit_workout, null, false);
         frameLayout.addView(contentView, 0);
         queuedWorkoutsToDelete = new HashSet<>();
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
 
         if (savedBundle == null) {
             displayWorkoutList();

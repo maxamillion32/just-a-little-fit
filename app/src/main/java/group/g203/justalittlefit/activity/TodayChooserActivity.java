@@ -21,8 +21,8 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.adapter.WorkoutRvNameAdapter;
 import group.g203.justalittlefit.dialog.InformationDialog;
@@ -37,9 +37,9 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
 
-    @InjectView(R.id.tvDate)
+    @Bind(R.id.tvDate)
     TextView tvDate;
-    @InjectView(R.id.rvWorkoutName)
+    @Bind(R.id.rvWorkoutName)
     RecyclerView rvWorkoutName;
     WorkoutRvNameAdapter workoutRvNameAdapter;
     List<Workout> workouts;
@@ -130,7 +130,7 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_today_chooser, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         workouts = getWorkouts();
         setTitle(R.string.today_title_string);
         setDisplayDate();

@@ -19,8 +19,8 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
@@ -38,7 +38,7 @@ import group.g203.justalittlefit.util.Utils;
 public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton.OnCheckedChangeListener {
     private AssignWorkoutDialogListener listener;
     private List<String> selectedWorkoutNames;
-    @InjectView(R.id.workoutContainer)
+    @Bind(R.id.workoutContainer)
     LinearLayout workoutContainer;
     boolean busRegistered;
 
@@ -47,7 +47,7 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         selectedWorkoutNames = new ArrayList<>();
         registerBus();
         DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);

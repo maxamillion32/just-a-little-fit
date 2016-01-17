@@ -24,8 +24,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
@@ -47,7 +47,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
     private static final String AND = " and ";
 
-    @InjectView(R.id.assignCalendar)
+    @Bind(R.id.assignCalendar)
     CalendarPickerView assignCalendar;
     FloatingActionButton fab;
     CoordinatorLayout clFab;
@@ -212,7 +212,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_assign, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         initCalendarPicker(activity);
         setupFloatingActionButton(activity);
         setTitle(R.string.assign_title_string);

@@ -26,8 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.AbstractExpandableDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_today.TodayDataProvider;
@@ -73,7 +73,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
     String addedExerciseName;
     Exercise parentExercise;
     Set addedSet;
-    @InjectView(R.id.rlDefault)
+    @Bind(R.id.rlDefault)
     RelativeLayout rlDefault;
     Integer editedGroupPosition;
     Integer editedChildPosition;
@@ -412,7 +412,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_today, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         setTitle(R.string.today_title_string);
         setupFloatingActionButton(this);
         getWorkout();

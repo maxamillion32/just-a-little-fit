@@ -16,8 +16,8 @@ import android.widget.TableRow;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.listener.DeleteWorkoutsFromViewDialogListener;
 import group.g203.justalittlefit.model.Workout;
@@ -32,7 +32,7 @@ public class DeleteWorkoutsFromViewDialog extends AppBaseDialog implements Compo
     List<Workout> selectedWorkouts;
     List<Workout> workouts;
     DeleteWorkoutsFromViewDialogListener listener;
-    @InjectView(R.id.workoutContainer)
+    @Bind(R.id.workoutContainer)
     LinearLayout workoutContainer;
 
     public static DeleteWorkoutsFromViewDialog getInstance(ArrayList<Workout> workouts) {
@@ -60,7 +60,7 @@ public class DeleteWorkoutsFromViewDialog extends AppBaseDialog implements Compo
                 new ContextThemeWrapper(getActivity(), R.style.AppCompatAlertDialogStyle));
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         builder.setTitle(getString(R.string.deleteWorkoutsFromViewDialogTitle));
         builder.setView(view);
         builder.setPositiveButton(getString(R.string.delete_item), new DialogInterface.OnClickListener() {

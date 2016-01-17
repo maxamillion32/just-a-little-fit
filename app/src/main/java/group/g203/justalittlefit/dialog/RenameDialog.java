@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
@@ -24,7 +24,7 @@ import group.g203.justalittlefit.util.Utils;
  */
 public class RenameDialog extends AppBaseDialog {
     private RenameDialogListener listener;
-    @InjectView(R.id.etField)
+    @Bind(R.id.etField)
     EditText etRename;
     Workout workout;
     Exercise exercise;
@@ -50,7 +50,7 @@ public class RenameDialog extends AppBaseDialog {
         super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_workout_exercise_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         etRename.setText(Constants.EMPTY_STRING);
         if (getArguments().containsKey(Constants.WORKOUT)) {

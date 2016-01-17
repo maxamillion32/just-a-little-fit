@@ -16,8 +16,8 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
@@ -38,7 +38,7 @@ public class SelectExerciseDialog extends AppBaseDialog {
 
     private SelectExerciseDialogListener listener;
     private String selectedExercise;
-    @InjectView(R.id.rgExercises)
+    @Bind(R.id.rgExercises)
     RadioGroup exerciseRadioGroup;
     boolean busRegistered;
 
@@ -57,7 +57,7 @@ public class SelectExerciseDialog extends AppBaseDialog {
         super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.select_exercise_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         registerBus();
 
         Bundle args = getArguments();

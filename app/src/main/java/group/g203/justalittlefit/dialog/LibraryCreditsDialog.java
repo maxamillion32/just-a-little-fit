@@ -26,7 +26,7 @@ public class LibraryCreditsDialog extends AppBaseDialog {
         super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.library_credits_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         builder.setTitle(TITLE);
         builder.setView(view);

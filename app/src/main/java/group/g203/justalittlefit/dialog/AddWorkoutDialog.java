@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.listener.AddWorkoutDialogListener;
 import group.g203.justalittlefit.util.Constants;
@@ -21,7 +21,7 @@ import group.g203.justalittlefit.util.Utils;
  */
 public class AddWorkoutDialog extends AppBaseDialog {
     private AddWorkoutDialogListener listener;
-    @InjectView(R.id.etField)
+    @Bind(R.id.etField)
     EditText addWorkoutText;
 
     @Override
@@ -29,7 +29,7 @@ public class AddWorkoutDialog extends AppBaseDialog {
         super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_workout_exercise_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         builder.setTitle(getString(R.string.addWorkoutDialog_Title));
         builder.setView(view);
         builder.setPositiveButton(getString(R.string.addWorkoutDialog_add), new DialogInterface.OnClickListener() {

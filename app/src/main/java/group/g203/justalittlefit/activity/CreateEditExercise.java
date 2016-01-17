@@ -23,8 +23,8 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProvider;
@@ -63,11 +63,11 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     boolean busRegistered;
     boolean reorderTriggeredByAddExercise;
     String addedExerciseName;
-    @InjectView(R.id.rlDefault)
+    @Bind(R.id.rlDefault)
     RelativeLayout rlDefault;
-    @InjectView(R.id.tvWorkoutHeader)
+    @Bind(R.id.tvWorkoutHeader)
     TextView tvWorkoutHeader;
-    @InjectView(R.id.tvWorkoutName)
+    @Bind(R.id.tvWorkoutName)
     TextView tvWorkoutName;
     Bundle savedBundle;
 
@@ -325,7 +325,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_create_edit_exercise, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_exercise_title_string);
         if (savedBundle == null) {

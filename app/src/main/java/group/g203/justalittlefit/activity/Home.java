@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DatabaseHelper;
@@ -31,7 +31,7 @@ import group.g203.justalittlefit.util.Utils;
 public class Home extends BaseNaviDrawerActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
-    @InjectView(R.id.homeLogoText)
+    @Bind(R.id.homeLogoText)
     TextView homeTextView;
 
     @Override
@@ -87,7 +87,7 @@ public class Home extends BaseNaviDrawerActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_home, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         setTitle(Constants.EMPTY_STRING);
         getHelper();
         this.formatHomeTextView();

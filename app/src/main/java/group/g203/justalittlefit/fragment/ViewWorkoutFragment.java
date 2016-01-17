@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.adapter.WorkoutRvAdapter;
 import group.g203.justalittlefit.model.Workout;
@@ -25,9 +25,9 @@ import group.g203.justalittlefit.util.Utils;
  */
 public class ViewWorkoutFragment extends Fragment {
 
-    @InjectView(R.id.tvWorkoutName)
+    @Bind(R.id.tvWorkoutName)
     TextView tvWorkoutName;
-    @InjectView(R.id.rvWorkoutInfo)
+    @Bind(R.id.rvWorkoutInfo)
     RecyclerView rvWorkoutInfo;
     WorkoutRvAdapter workoutRvAdapter;
     Workout workout;
@@ -46,7 +46,7 @@ public class ViewWorkoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         workout = getArguments().getParcelable(Constants.WORKOUT);
         View v = inflater.inflate(R.layout.frag_view_workout, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         if (Utils.isWorkoutComplete(workout)) {
             Utils.strikeThroughText(tvWorkoutName);
         } else {

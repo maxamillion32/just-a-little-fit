@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.listener.AddSetDialogListener;
@@ -27,29 +27,29 @@ import group.g203.justalittlefit.util.Utils;
  */
 public class AddSetDialog extends AppBaseDialog {
     private AddSetDialogListener listener;
-    @InjectView(R.id.rbWeightType)
+    @Bind(R.id.rbWeightType)
     RadioButton rbWeightedSet;
-    @InjectView(R.id.rbLoggedTimeType)
+    @Bind(R.id.rbLoggedTimeType)
     RadioButton rbTimedSet;
-    @InjectView(R.id.rbLbs)
+    @Bind(R.id.rbLbs)
     RadioButton rbLbs;
-    @InjectView(R.id.rbKgs)
+    @Bind(R.id.rbKgs)
     RadioButton rbKgs;
-    @InjectView(R.id.etHours)
+    @Bind(R.id.etHours)
     EditText etHours;
-    @InjectView(R.id.etMins)
+    @Bind(R.id.etMins)
     EditText etMins;
-    @InjectView(R.id.etSeconds)
+    @Bind(R.id.etSeconds)
     EditText etSeconds;
-    @InjectView(R.id.llWeightedRepsOptions)
+    @Bind(R.id.llWeightedRepsOptions)
     LinearLayout llWeightedSetView;
-    @InjectView(R.id.llTimedOptions)
+    @Bind(R.id.llTimedOptions)
     LinearLayout llTimedSetView;
-    @InjectView(R.id.etRepCount)
+    @Bind(R.id.etRepCount)
     EditText etRepCount;
-    @InjectView(R.id.etWeightAmount)
+    @Bind(R.id.etWeightAmount)
     EditText etWeightAmount;
-    @InjectView(R.id.etTimedRepCount)
+    @Bind(R.id.etTimedRepCount)
     EditText etTimedRepCount;
     Exercise exercise;
     Set set;
@@ -79,7 +79,7 @@ public class AddSetDialog extends AppBaseDialog {
         super.onCreateDialog(savedInstanceState);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_set_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(Constants.EXERCISE)) {

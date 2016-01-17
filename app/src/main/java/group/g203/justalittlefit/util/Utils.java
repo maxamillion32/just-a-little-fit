@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
@@ -55,6 +56,8 @@ import group.g203.justalittlefit.model.Workout;
  * Class that houses common utility methods needed by app.
  */
 public class Utils {
+    private static final int[] EMPTY_STATE = new int[] {};
+
     public static String ensureValidString(String text) {
         if (text == null || text.isEmpty()) {
             return Constants.EMPTY_STRING;
@@ -426,6 +429,12 @@ public class Utils {
         if (activity != null) {
             displayLongToast(activity, activity.getString(R.string.general_error));
             activity.finish();
+        }
+    }
+
+    public static void clearState(Drawable drawable) {
+        if (drawable != null) {
+            drawable.setState(EMPTY_STATE);
         }
     }
 }

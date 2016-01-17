@@ -22,9 +22,8 @@ import com.squareup.otto.Subscribe;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.InjectViews;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProvider;
@@ -61,13 +60,13 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     boolean reorderTriggeredByAddSet;
     boolean reorderTriggeredByEditSet;
     Set addedSet;
-    @InjectView(R.id.rlDefault)
+    @Bind(R.id.rlDefault)
     RelativeLayout rlDefault;
-    @InjectViews({R.id.tvExerciseHeader, R.id.tvWorkoutHeader})
+    @Bind({R.id.tvExerciseHeader, R.id.tvWorkoutHeader})
     List<TextView> headerTextViews;
-    @InjectView(R.id.tvWorkoutName)
+    @Bind(R.id.tvWorkoutName)
     TextView tvWorkoutName;
-    @InjectView(R.id.tvExerciseName)
+    @Bind(R.id.tvExerciseName)
     TextView tvExerciseName;
     Bundle savedBundle;
 
@@ -385,7 +384,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_create_edit_set, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         if (savedBundle == null) {
             displaySetList();
         }

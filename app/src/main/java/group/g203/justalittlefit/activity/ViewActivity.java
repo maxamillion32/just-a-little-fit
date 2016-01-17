@@ -21,8 +21,8 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.adapter.ViewWorkoutPagerAdapter;
 import group.g203.justalittlefit.database.DbAsyncTask;
@@ -48,9 +48,9 @@ import me.relex.circleindicator.CircleIndicator;
 public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDeleteTodayWorkoutListener, DeleteWorkoutsFromViewDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    @InjectView(R.id.vpWorkouts)
+    @Bind(R.id.vpWorkouts)
     ViewPager vpWorkouts;
-    @InjectView(R.id.circleIndicator)
+    @Bind(R.id.circleIndicator)
     CircleIndicator circleIndicator;
     boolean busRegistered;
     DateTime dateTime;
@@ -220,7 +220,7 @@ public class ViewActivity extends BaseNaviDrawerActivity implements ConfirmDelet
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_view, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         setTitle(R.string.view_title_string);
         displayWorkoutViews();
         registerBus();

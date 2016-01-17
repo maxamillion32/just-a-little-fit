@@ -19,8 +19,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.dialog.SelectViewOrTodayDialog;
@@ -37,7 +37,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
     private static final String AND = " and ";
 
-    @InjectView(R.id.chooseCalendar)
+    @Bind(R.id.chooseCalendar)
     CalendarPickerView chooseCalendar;
     DateTime chosenDateTime;
 
@@ -156,7 +156,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_choose_workout_date, null, false);
         frameLayout.addView(contentView, 0);
-        ButterKnife.inject(this, frameLayout);
+        ButterKnife.bind(this, frameLayout);
         initCalendarPicker(activity);
         setTitle(R.string.view_title_string);
         hideProgressDialog();
