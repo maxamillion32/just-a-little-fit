@@ -18,6 +18,8 @@
     <string name="title_activity_assign">Assign</string>
     <string name="createEdit">CreateEdit</string>
     <string name="title_activity_create_edit_workout">CreateEditWorkout</string>
+    <string name="exerciseHeader">Exercise:</string>
+    <string name="workoutHeader">Workout:</string>
 
     <!-- General Strings -->
     <string name="home_string">Home</string>

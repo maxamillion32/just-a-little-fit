@@ -25,6 +25,7 @@ import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.CreateEditExercise;
 import group.g203.justalittlefit.activity.CreateEditSet;
 import group.g203.justalittlefit.activity.CreateEditWorkout;
+import group.g203.justalittlefit.util.Constants;
 
 public class RecyclerListViewFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
@@ -44,9 +45,27 @@ public class RecyclerListViewFragment extends Fragment {
         super();
     }
 
+    public static RecyclerListViewFragment newInstance(boolean isPaddedRvFrag) {
+        RecyclerListViewFragment rvFrag = new RecyclerListViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.IS_PADDED_RV_FRAG, isPaddedRvFrag);
+        rvFrag.setArguments(bundle);
+        return rvFrag;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recycler_list_view, container, false);
+        Bundle args = getArguments();
+        if (args != null) {
+            boolean isPaddedView = getArguments().getBoolean(Constants.IS_PADDED_RV_FRAG);
+            if (isPaddedView) {
+                return inflater.inflate(R.layout.padded_fragment_recycler_list_view, container, false);
+            } else {
+                return inflater.inflate(R.layout.fragment_recycler_list_view, container, false);
+            }
+        } else {
+            return inflater.inflate(R.layout.fragment_recycler_list_view, container, false);
+        }
     }
 
     @Override

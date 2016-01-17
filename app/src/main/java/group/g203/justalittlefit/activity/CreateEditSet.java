@@ -2,6 +2,7 @@ package group.g203.justalittlefit.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
@@ -22,6 +24,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.InjectViews;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProvider;
@@ -60,6 +63,12 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     Set addedSet;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
+    @InjectViews({R.id.tvExerciseHeader, R.id.tvWorkoutHeader})
+    List<TextView> headerTextViews;
+    @InjectView(R.id.tvWorkoutName)
+    TextView tvWorkoutName;
+    @InjectView(R.id.tvExerciseName)
+    TextView tvExerciseName;
     Bundle savedBundle;
 
     @Override
@@ -123,7 +132,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                             FRAGMENT_TAG_DATA_PROVIDER)
                     .commitAllowingStateLoss();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                    .replace(R.id.container, RecyclerListViewFragment.newInstance(true), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
             if (sets.size() == 0) {
                 rlDefault.setVisibility(View.VISIBLE);
@@ -350,6 +359,17 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         dialog.show(fm, getString(R.string.addSetDialogTag));
     }
 
+    void formatAndSetWorkoutHeaderTexts() {
+        for (TextView tv : headerTextViews) {
+            Typeface face=Typeface.createFromAsset(getAssets(), Constants.CUSTOM_FONT_TTF);
+            tv.setTypeface(face);
+        }
+        if (parentExercise != null && parentExercise.getWorkout() != null) {
+            tvWorkoutName.setText(Utils.ensureValidString(parentExercise.getWorkout().getName()));
+            tvExerciseName.setText(Utils.ensureValidString(parentExercise.getName()));
+        }
+    }
+
     @Override
     protected void onDestroy() {
         unregisterBus();
@@ -369,6 +389,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         if (savedBundle == null) {
             displaySetList();
         }
+        formatAndSetWorkoutHeaderTexts();
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_set_title_string);
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
