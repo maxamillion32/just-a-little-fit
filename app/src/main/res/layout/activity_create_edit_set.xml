@@ -4,6 +4,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/llWorkoutExerciseHeader"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/fallback_gray"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivDumbbell"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_dumbbell" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/tvWorkoutHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/workoutHeader"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tvWorkoutName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:layout_marginTop="-1dp"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="-10dp">
+                <TextView
+                    android:id="@+id/tvExerciseHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/exerciseHeader"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tvExerciseName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:layout_marginTop="-1dp"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/rlDefault"
         android:layout_width="match_parent"

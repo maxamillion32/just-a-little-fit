@@ -104,6 +104,8 @@ public class Constants {
 
     public static final String LIST = "List";
 
+    public static final String IS_PADDED_RV_FRAG = "isPaddedRvFrag";
+
     public static final String STANDARD_DATE_PATTERN = "MM/dd/yyyy";
 
     public static final String EXPAND_ICON = "[ + ]";

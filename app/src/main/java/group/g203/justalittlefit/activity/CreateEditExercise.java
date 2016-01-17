@@ -2,6 +2,7 @@ package group.g203.justalittlefit.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
@@ -60,6 +62,10 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     String addedExerciseName;
     @InjectView(R.id.rlDefault)
     RelativeLayout rlDefault;
+    @InjectView(R.id.tvWorkoutHeader)
+    TextView tvWorkoutHeader;
+    @InjectView(R.id.tvWorkoutName)
+    TextView tvWorkoutName;
     Bundle savedBundle;
 
     @Override
@@ -125,7 +131,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                             FRAGMENT_TAG_DATA_PROVIDER)
                     .commitAllowingStateLoss();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new RecyclerListViewFragment(), FRAGMENT_LIST_VIEW)
+                    .replace(R.id.container, RecyclerListViewFragment.newInstance(true), FRAGMENT_LIST_VIEW)
                     .commitAllowingStateLoss();
             if (exercises.size() == 0) {
                 rlDefault.setVisibility(View.VISIBLE);
@@ -313,6 +319,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         if (savedBundle == null) {
             displayExerciseList();
         }
+        formatAndSetWorkoutHeaderTexts();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
         selectedItem.setChecked(true);
     }
@@ -407,6 +414,12 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         String errorMsg = getString(R.string.exercise_list_error);
         Log.e(LOG_TAG, errorMsg);
         Utils.displayLongSimpleSnackbar(this.findViewById(R.id.fab), errorMsg);
+    }
+
+    void formatAndSetWorkoutHeaderTexts() {
+        Typeface face=Typeface.createFromAsset(getAssets(), Constants.CUSTOM_FONT_TTF);
+        tvWorkoutHeader.setTypeface(face);
+        tvWorkoutName.setText(Utils.ensureValidString(parentWorkout.getName()));
     }
 
     @Override
