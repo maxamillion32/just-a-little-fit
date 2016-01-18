@@ -405,6 +405,10 @@ public class Utils {
                     errMsg += "\n" + timedErr;
                 }
             }
+        } else if (exerciseTypeCode.equals(Constants.NA)) {
+            if (set.getReps() == 0) {
+                errMsg += "Please enter in a rep count greater than 0";
+            }
         }
         return errMsg;
     }

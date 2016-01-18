@@ -19,14 +19,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="@string/weighted_reps" />
+            android:text="@string/weighted_reps"
+            android:textSize="12dp"/>
+
+        <RadioButton
+            android:id="@+id/rbNonWeightType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/non_weighted_reps"
+            android:textSize="12dp"/>
 
         <RadioButton
             android:id="@+id/rbLoggedTimeType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="@string/timed_reps" />
+            android:text="@string/timed_reps"
+            android:textSize="12dp"/>
 
     </RadioGroup>
 
@@ -116,27 +126,6 @@
         android:gravity="center"
         android:visibility="gone"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/llTimedRepContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Number of Reps: " />
-
-            <EditText
-                android:id="@+id/etTimedRepCount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:inputType="number|numberDecimal" />
-
-        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

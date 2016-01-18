@@ -515,7 +515,6 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 (TodayDataProvider)getDataProvider();
 
         if (Utils.dataProviderIsValid(dataProvider)) {
-
             if (dataProvider != null) {
                 if (dialog.getRbWeightedSet().isChecked()) {
                     int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
@@ -528,13 +527,17 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                         weightCd = Constants.KGS;
                     }
                     addedSet = new Set(parentExercise, reps, weightCd, exerciseCd, weight, dataProvider.getSetCount(parentExercise));
-                } else {
-                    int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+                } else if (dialog.getRbTimedSet().isChecked()) {
+                    int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
                     Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
                     Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
                     Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
                     String exerciseCd = Constants.LOGGED_TIMED;
                     addedSet = new Set(parentExercise, reps, exerciseCd, hours, mins, seconds, dataProvider.getSetCount(parentExercise));
+                } else if (dialog.getRbNonWeightedSet().isChecked()) {
+                    int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+                    String exerciseCd = Constants.NA;
+                    addedSet = new Set(reps, exerciseCd);
                 }
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
@@ -549,7 +552,7 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 hideProgressDialog();
             }
         }  else {
-            Utils.exitActivityOnError(this);
+                Utils.exitActivityOnError(this);
         }
     }
 
@@ -573,8 +576,8 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             set.setWeightTypeCode(weightCd);
             set.setExerciseTypeCode(exerciseCd);
             set.setWeight(weight);
-        } else {
-            int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+        } else if (dialog.getRbTimedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
             Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
             Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
             Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
@@ -584,6 +587,11 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
             set.setMinutes(mins);
             set.setHours(hours);
             set.setSeconds(seconds);
+        } else if (dialog.getRbNonWeightedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+            String exerciseCd = Constants.NA;
+            set.setReps(reps);
+            set.setExerciseTypeCode(exerciseCd);
         }
 
         String errMsg = Utils.returnTodayEditSetErrorString(set);
@@ -598,14 +606,14 @@ public class TodayActivity extends BaseNaviDrawerActivity implements AddExercise
                 DbFunctionObject editSetDfo =
                         new DbFunctionObject(set, DbConstants.UPDATE_SET);
                 new DbAsyncTask(Constants.TODAY).execute(editSetDfo);
+                dialog.dismiss();
+                hideProgressDialog();
             } else {
-                Utils.displayLongToast(this, errMsg);
+                Utils.exitActivityOnError(this);
             }
         } else {
-            Utils.exitActivityOnError(this);
+            Utils.displayLongToast(this, errMsg);
         }
-
-        dialog.dismiss();
         hideProgressDialog();
     }
 

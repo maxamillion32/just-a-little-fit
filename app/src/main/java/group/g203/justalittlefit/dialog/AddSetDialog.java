@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +32,8 @@ public class AddSetDialog extends AppBaseDialog {
     RadioButton rbWeightedSet;
     @Bind(R.id.rbLoggedTimeType)
     RadioButton rbTimedSet;
+    @Bind(R.id.rbNonWeightType)
+    RadioButton rbNonWeightedSet;
     @Bind(R.id.rbLbs)
     RadioButton rbLbs;
     @Bind(R.id.rbKgs)
@@ -43,14 +46,16 @@ public class AddSetDialog extends AppBaseDialog {
     EditText etSeconds;
     @Bind(R.id.llWeightedRepsOptions)
     LinearLayout llWeightedSetView;
+    @Bind(R.id.llWeightedAmountEditField)
+    LinearLayout llWeightedAmountEditField;
     @Bind(R.id.llTimedOptions)
     LinearLayout llTimedSetView;
     @Bind(R.id.etRepCount)
     EditText etRepCount;
     @Bind(R.id.etWeightAmount)
     EditText etWeightAmount;
-    @Bind(R.id.etTimedRepCount)
-    EditText etTimedRepCount;
+    @Bind(R.id.rgRepOptions)
+    RadioGroup rgRepOptions;
     Exercise exercise;
     Set set;
 
@@ -134,7 +139,7 @@ public class AddSetDialog extends AppBaseDialog {
                                 handleDismissOrErrDisplay(errMsg, createSetDialog);
                             } else if (getRbTimedSet().isChecked()) {
                                 String errMsg = Constants.EMPTY_STRING;
-                                if (Utils.editableIsZeroOrNullOrEmpty(getEtTimedRepCount().getText())) {
+                                if (Utils.editableIsZeroOrNullOrEmpty(getEtRepCount().getText())) {
                                     errMsg += "Please enter in a rep count greater than 0";
                                 }
                                 if (Utils.editableIsZeroOrNullOrEmpty(getEtHours().getText()) &&
@@ -146,6 +151,12 @@ public class AddSetDialog extends AppBaseDialog {
                                     } else {
                                         errMsg += "\n" + timedErr;
                                     }
+                                }
+                                handleDismissOrErrDisplay(errMsg, createSetDialog);
+                            } else if (getRbNonWeightedSet().isChecked()) {
+                                String errMsg = Constants.EMPTY_STRING;
+                                if ((Utils.editableIsZeroOrNullOrEmpty(getEtRepCount().getText()))) {
+                                    errMsg += "Please enter in a rep count greater than 0";
                                 }
                                 handleDismissOrErrDisplay(errMsg, createSetDialog);
                             } else {
@@ -173,6 +184,7 @@ public class AddSetDialog extends AppBaseDialog {
         if (set != null) {
             if (set.getExerciseTypeCode().equals(Constants.LOGGED_TIMED)) {
                 rbTimedSet.setChecked(true);
+                rbNonWeightedSet.setChecked(false);
                 rbWeightedSet.setChecked(false);
                 displayTimedView();
                 Integer hours = Utils.ensureNonNullInteger(set.getHours());
@@ -182,11 +194,12 @@ public class AddSetDialog extends AppBaseDialog {
                 etHours.setText(Utils.returnTwoDigitString(hours.toString()));
                 etMins.setText(Utils.returnTwoDigitString(mins.toString()));
                 etSeconds.setText(Utils.returnTwoDigitString(secs.toString()));
-                etTimedRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
-            } else {
+                etRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
+            } else if (set.getExerciseTypeCode().equals(Constants.WEIGHTS)) {
                 rbTimedSet.setChecked(false);
+                rbNonWeightedSet.setChecked(false);
                 rbWeightedSet.setChecked(true);
-                displayWeightedView();
+                displayWeightedView(false);
                 Integer weight = Utils.ensureNonNullInteger(set.getWeight());
                 etRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
                 etWeightAmount.setText(Utils.ensureValidString(weight.toString()));
@@ -197,6 +210,14 @@ public class AddSetDialog extends AppBaseDialog {
                     rbLbs.setChecked(false);
                     rbKgs.setChecked(true);
                 }
+            } else if (set.getExerciseTypeCode().equals(Constants.NA)) {
+                rbTimedSet.setChecked(false);
+                rbNonWeightedSet.setChecked(true);
+                rbWeightedSet.setChecked(false);
+                etRepCount.setText(Utils.ensureValidString(set.getReps() + Constants.EMPTY_STRING));
+                displayWeightedView(true);
+                rbLbs.setChecked(true);
+                rbKgs.setChecked(false);
             }
         }
     }
@@ -229,7 +250,7 @@ public class AddSetDialog extends AppBaseDialog {
         }
     }
 
-    @OnClick({R.id.rbWeightType, R.id.rbLoggedTimeType})
+    @OnClick({R.id.rbWeightType, R.id.rbLoggedTimeType, R.id.rbNonWeightType})
     void onTypeClick(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
@@ -238,7 +259,12 @@ public class AddSetDialog extends AppBaseDialog {
         switch (view.getId()) {
             case R.id.rbWeightType:
                 if (checked) {
-                    displayWeightedView();
+                    displayWeightedView(false);
+                    break;
+                }
+            case R.id.rbNonWeightType:
+                if (checked) {
+                    displayWeightedView(true);
                     break;
                 }
             case R.id.rbLoggedTimeType:
@@ -249,14 +275,20 @@ public class AddSetDialog extends AppBaseDialog {
         }
     }
 
-    void displayWeightedView() {
+    void displayWeightedView(boolean isNonWeightType) {
+        int viewSetting = (isNonWeightType) ? View.GONE : View.VISIBLE;
+
         llTimedSetView.setVisibility(View.GONE);
         llWeightedSetView.setVisibility(View.VISIBLE);
+        llWeightedAmountEditField.setVisibility(viewSetting);
+        rgRepOptions.setVisibility(viewSetting);
+
     }
 
     void displayTimedView() {
         llTimedSetView.setVisibility(View.VISIBLE);
-        llWeightedSetView.setVisibility(View.GONE);
+        llWeightedAmountEditField.setVisibility(View.GONE);
+        rgRepOptions.setVisibility(View.GONE);
     }
 
     public RadioButton getRbLbs() {
@@ -295,8 +327,8 @@ public class AddSetDialog extends AppBaseDialog {
         return rbTimedSet;
     }
 
-    public EditText getEtTimedRepCount() {
-        return etTimedRepCount;
+    public RadioButton getRbNonWeightedSet() {
+        return rbNonWeightedSet;
     }
 
     public Exercise getExercise() {

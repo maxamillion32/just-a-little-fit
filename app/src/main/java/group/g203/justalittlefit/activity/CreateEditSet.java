@@ -442,13 +442,17 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                 weightCd = Constants.KGS;
             }
             addedSet = new Set(reps, weightCd, exerciseCd, weight);
-        } else {
-            int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+        } else if (dialog.getRbTimedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
             Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
             Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
             Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
             String exerciseCd = Constants.LOGGED_TIMED;
             addedSet = new Set(reps, exerciseCd, hours, mins, seconds);
+        } else if (dialog.getRbNonWeightedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+            String exerciseCd = Constants.NA;
+            addedSet = new Set(reps, exerciseCd);
         }
     }
 
@@ -472,8 +476,8 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
             set.setWeightTypeCode(weightCd);
             set.setExerciseTypeCode(exerciseCd);
             set.setWeight(weight);
-        } else {
-            int reps = Utils.returnValidNumberFromEditText(dialog.getEtTimedRepCount());
+        } else if (dialog.getRbTimedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
             Integer hours = Utils.returnValidNumberFromEditText(dialog.getEtHours());
             Integer mins = Utils.returnValidNumberFromEditText(dialog.getEtMins());
             Integer seconds = Utils.returnValidNumberFromEditText(dialog.getEtSeconds());
@@ -483,12 +487,23 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
             set.setMinutes(mins);
             set.setHours(hours);
             set.setSeconds(seconds);
+        } else if (dialog.getRbNonWeightedSet().isChecked()) {
+            int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
+            String exerciseCd = Constants.NA;
+            set.setReps(reps);
+            set.setExerciseTypeCode(exerciseCd);
         }
 
-        dialog.dismiss();
+        String errMsg = Utils.returnTodayEditSetErrorString(set);
 
-        DbFunctionObject editSetDfo =
-                new DbFunctionObject(set, DbConstants.UPDATE_SET);
-        new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(editSetDfo);
+        if (Utils.isEmptyString(errMsg)) {
+            dialog.dismiss();
+            DbFunctionObject editSetDfo =
+                    new DbFunctionObject(set, DbConstants.UPDATE_SET);
+            new DbAsyncTask(Constants.CREATE_EDIT_SET).execute(editSetDfo);
+        } else {
+            Utils.displayLongToast(this, errMsg);
+        }
+        hideProgressDialog();
     }
 }

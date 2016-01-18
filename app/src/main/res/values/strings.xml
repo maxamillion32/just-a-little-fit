@@ -253,10 +253,12 @@
     <string name="emptySetViewText">Click the + button to add a Set</string>
     <string name="title_activity_create_edit_exercise">CreateEditExercise</string>
     <string name="weighted_reps">Weighted Reps</string>
+    <string name="non_weighted_reps">Non-Weighted Reps</string>
     <string name="timed_reps">Timed Reps</string>
     <string name="in_kilograms">in kgs (kilograms)</string>
     <string name="in_pounds">in lbs (pounds)</string>
     <string name="no_weight">None (no weight)</string>
+    <string name="bodyweight">Body weight</string>
     <string name="title_activity_create_edit_set">CreateEditSet</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="title_activity_today">TodayActivity</string>

@@ -60,6 +60,11 @@ public class Set implements Comparable<Set>, Parcelable {
 
     public Set() {}
 
+    public Set(int reps, String exerciseTypeCode) {
+        this.reps = reps;
+        this.exerciseTypeCode = exerciseTypeCode;
+    }
+
     public Set(int reps, String weightTypeCode, String exerciseTypeCode, int orderNumber,
                Integer weight) {
         this.reps = reps;
@@ -147,9 +152,13 @@ public class Set implements Comparable<Set>, Parcelable {
     public String toString() {
         if (exerciseTypeCode.equals(Constants.WEIGHTS)) {
             return reps + " rep(s) of " + weight + Constants.SPACE + weightTypeCode.toLowerCase();
-        } else {
+        } else if (exerciseTypeCode.equals(Constants.LOGGED_TIMED)) {
             return reps + " rep(s) timed at " + forceTwoDigitTime(hours) + Constants.COLON
                     + forceTwoDigitTime(minutes) + Constants.COLON + forceTwoDigitTime(seconds);
+        } else if (exerciseTypeCode.equals(Constants.NA)) {
+            return reps + " rep(s)";
+        } else {
+            return Constants.EMPTY_STRING;
         }
     }
 

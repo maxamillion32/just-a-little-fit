@@ -216,6 +216,8 @@ public class DataProvider extends AbstractDataProvider {
             case Constants.LOGGED_TIMED:
                 return set.getReps() + " rep(s) timed at " + forceTwoDigitTime(set.getHours()) + Constants.COLON
                         + forceTwoDigitTime(set.getMinutes()) + Constants.COLON + forceTwoDigitTime(set.getSeconds());
+            case Constants.NA:
+                return set.getReps() + " rep(s)";
         }
         return null;
     }
