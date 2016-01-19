@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_today;
+package group.g203.justalittlefit.advanced_recyclerview.rv_view;
 
 import android.app.Activity;
 import android.graphics.drawable.NinePatchDrawable;
@@ -27,11 +27,11 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import java.util.TreeMap;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.TodayActivity;
+import group.g203.justalittlefit.activity.ViewActivity;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
 
-public class TodayRvListViewFragment extends Fragment {
+public class ViewRvListViewFragment extends Fragment {
     private static final String SAVED_STATE_EXPANDABLE_ITEM_MANAGER = "RecyclerViewExpandableItemManager";
 
     private RecyclerView mRecyclerView;
@@ -43,9 +43,9 @@ public class TodayRvListViewFragment extends Fragment {
     private RecyclerViewSwipeManager mRecyclerViewSwipeManager;
     private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
     private Activity mActivity;
-    private TodayActivity todayActivity;
+    private ViewActivity viewActivity;
 
-    public TodayRvListViewFragment() {
+    public ViewRvListViewFragment() {
         super();
     }
 
@@ -88,15 +88,15 @@ public class TodayRvListViewFragment extends Fragment {
 
             @Override
             public void onGroupItemRemoved(int groupPosition, Exercise exercise) {
-                if (todayActivity != null) {
-                    todayActivity.onGroupItemRemoved(exercise);
+                if (viewActivity != null) {
+                    viewActivity.onGroupItemRemoved(exercise);
                 }
             }
 
             @Override
             public void onChildItemRemoved(int groupPosition, int childPosition, Set set) {
-                if (todayActivity != null) {
-                    todayActivity.onChildItemRemoved(set);
+                if (viewActivity != null) {
+                    viewActivity.onChildItemRemoved(set);
                 }
             }
 
@@ -225,7 +225,7 @@ public class TodayRvListViewFragment extends Fragment {
         if (childPosition == RecyclerView.NO_POSITION) {
             //((ExpandableDraggableSwipeableExampleActivity) getActivity()).onGroupItemClicked(groupPosition);
         } else {
-            todayActivity.onChildItemClicked(groupPosition, childPosition);
+            viewActivity.onChildItemClicked(groupPosition, childPosition);
         }
     }
 
@@ -233,7 +233,7 @@ public class TodayRvListViewFragment extends Fragment {
         ImageView imageView = (ImageView) v;
         TreeMap<Integer, Exercise> map = (TreeMap<Integer, Exercise>) imageView.getTag();
         Exercise exercise = map.firstEntry().getValue();
-        todayActivity.renameExercise(exercise);
+        viewActivity.renameExercise(exercise);
 
         Integer groupPosition = map.firstKey();
         if (mRecyclerViewExpandableItemManager.isGroupExpanded(groupPosition)) {
@@ -248,8 +248,8 @@ public class TodayRvListViewFragment extends Fragment {
     }
 
     public AbstractExpandableDataProvider getDataProvider() {
-        if (todayActivity != null) {
-            return todayActivity.getDataProvider();
+        if (viewActivity != null) {
+            return viewActivity.getDataProvider();
         }
         return null;
     }
@@ -291,8 +291,8 @@ public class TodayRvListViewFragment extends Fragment {
     }
 
     private void populateActivity() {
-        if (mActivity instanceof TodayActivity) {
-            todayActivity = (TodayActivity) mActivity;
+        if (mActivity instanceof ViewActivity) {
+            viewActivity = (ViewActivity) mActivity;
         }
     }
 }

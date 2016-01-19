@@ -135,20 +135,6 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 break;
             case Constants.VIEW_TEXT:
                 for (DbFunctionObject dfo : params) {
-                    try {
-                        switch (dfo.getFunctionInt()) {
-                            case DbConstants.GET_WORKOUTS_BY_DATE:
-                                return QueryExecutor.getWorkoutsByDate((DateTime) dfo.getDbObject());
-                            case DbConstants.DELETE_WORKOUTS:
-                                return QueryExecutor.deleteViewWorkouts((List<Workout>) dfo.getDbObject());
-                        }
-                    } catch (SQLException e) {
-                        return null;
-                    }
-                }
-                break;
-            case Constants.TODAY:
-                for (DbFunctionObject dfo : params) {
                     switch (dfo.getFunctionInt()) {
                         case DbConstants.GET_FULL_WORKOUT:
                             return QueryExecutor.getWorkoutByNameAndDate(((Workout) dfo.getDbObject()).getName(),
@@ -158,17 +144,17 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         case DbConstants.UPDATE_EXERCISES_AND_SETS:
                             return QueryExecutor.updateExercisesAndSets((HashMap<String, Object>) dfo.getDbObject());
                         case DbConstants.INSERT_EXERCISE:
-                            return QueryExecutor.createExerciseForToday((Exercise) dfo.getDbObject());
+                            return QueryExecutor.createExerciseForADate((Exercise) dfo.getDbObject());
                         case DbConstants.INSERT_SET:
-                            return QueryExecutor.createSetForToday((Set) dfo.getDbObject());
+                            return QueryExecutor.createSetForADate((Set) dfo.getDbObject());
                         case DbConstants.DELETE_WORKOUT:
-                        return QueryExecutor.deleteTodayWorkout((Workout) dfo.getDbObject());
+                        return QueryExecutor.deleteWorkoutForADate((Workout) dfo.getDbObject());
                         case DbConstants.UPDATE_SET:
                             return QueryExecutor.updateSet((Set) dfo.getDbObject());
                         case DbConstants.UPDATE_WORKOUT:
-                            return QueryExecutor.updateTodayWorkout((Workout) dfo.getDbObject());
+                            return QueryExecutor.updateWorkoutForADate((Workout) dfo.getDbObject());
                         case DbConstants.UPDATE_EXERCISE:
-                            return QueryExecutor.updateTodayExercise((Exercise) dfo.getDbObject());
+                            return QueryExecutor.updateExerciseForADate((Exercise) dfo.getDbObject());
                     }
                 }
                 break;
@@ -207,8 +193,6 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 break;
             case Constants.VIEW_TEXT:
                 BusFactory.getViewBus().post(new DbTaskResult(result));
-            case Constants.TODAY:
-                BusFactory.getTodayBus().post(new DbTaskResult(result));
             case Constants.SELECT_DIALOG:
                 BusFactory.getSelectDialogBus().post(new DbTaskResult(result));
                 break;

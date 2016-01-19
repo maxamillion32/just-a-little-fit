@@ -8,13 +8,14 @@ import android.support.v7.app.AlertDialog;
 import java.util.ArrayList;
 
 import group.g203.justalittlefit.R;
+import group.g203.justalittlefit.activity.ViewActivity;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
 /**
  * Dialog that displays when user clicks on the floating action button in
- * {@link group.g203.justalittlefit.activity.TodayActivity}.
+ * {@link ViewActivity}.
  */
 public class AddExerciseOrSetDialog extends AppBaseDialog {
 

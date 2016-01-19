@@ -102,7 +102,7 @@ public class QueryExecutor {
         }
     }
 
-    public static Boolean deleteTodayWorkout(Workout workout) {
+    public static Boolean deleteWorkoutForADate(Workout workout) {
         try {
             Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
             dao.delete(workout);
@@ -164,7 +164,7 @@ public class QueryExecutor {
         }
     }
 
-    public static ArrayList<Workout> updateTodayWorkout(Workout workout) {
+    public static ArrayList<Workout> updateWorkoutForADate(Workout workout) {
         Workout workoutObj = updateWorkout(workout);
         if (workoutObj != null) {
             ArrayList<Workout> workouts = new ArrayList<>(Constants.INT_ONE);
@@ -338,7 +338,7 @@ public class QueryExecutor {
         }
     }
 
-    public static Exercise createExerciseForToday(Exercise exercise) {
+    public static Exercise createExerciseForADate(Exercise exercise) {
         if (createExercise(exercise) != null) {
             return exercise;
         } else {
@@ -356,7 +356,7 @@ public class QueryExecutor {
         }
     }
 
-    public static LinkedList<Exercise> updateTodayExercise(Exercise exercise) {
+    public static LinkedList<Exercise> updateExerciseForADate(Exercise exercise) {
         Exercise ex = updateExercise(exercise);
         if (exercise != null) {
             LinkedList<Exercise> exercises = new LinkedList<>();
@@ -473,7 +473,7 @@ public class QueryExecutor {
         }
     }
 
-    public static group.g203.justalittlefit.model.Set createSetForToday(group.g203.justalittlefit.model.Set set) {
+    public static group.g203.justalittlefit.model.Set createSetForADate(group.g203.justalittlefit.model.Set set) {
         if (createSet(set) != null) {
             return set;
         } else {

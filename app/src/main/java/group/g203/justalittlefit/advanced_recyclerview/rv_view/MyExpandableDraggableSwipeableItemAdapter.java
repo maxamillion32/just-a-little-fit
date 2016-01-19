@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_today;
+package group.g203.justalittlefit.advanced_recyclerview.rv_view;
 
 import android.support.v4.view.ViewCompat;
 import android.util.Log;

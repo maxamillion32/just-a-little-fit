@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_today;
+package group.g203.justalittlefit.advanced_recyclerview.rv_view;
 
 import android.support.v4.util.Pair;
 
@@ -14,7 +14,7 @@ import group.g203.justalittlefit.model.Set;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
-public class TodayDataProvider extends AbstractExpandableDataProvider {
+public class DataProviderForView extends AbstractExpandableDataProvider {
     private List<Pair<GroupData, List<ChildData>>> mData;
 
     // for undo group item
@@ -26,7 +26,7 @@ public class TodayDataProvider extends AbstractExpandableDataProvider {
     private long mLastRemovedChildParentGroupId = -1;
     private int mLastRemovedChildPosition = -1;
 
-    public TodayDataProvider(List<Exercise> exercises) {
+    public DataProviderForView(List<Exercise> exercises) {
         mData = new LinkedList<>();
 
         for (Exercise exercise : exercises) {

@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view;
+package group.g203.justalittlefit.advanced_recyclerview.rv_create_edit;
 
 import android.app.Activity;
 import android.graphics.drawable.NinePatchDrawable;

@@ -20,8 +20,6 @@ public class Constants {
     /** String code for logged time reps */
     public static final String LOGGED_TIMED = "LT";
 
-    public static final String TODAY = "Today";
-
     public static final String HOME = "Home";
 
     public static final String LIBS = "Libs";

@@ -64,26 +64,21 @@ public class InformationDialog extends AppBaseDialog {
                 break;
             case Constants.VIEW_TEXT:
                 setDialogMessage(getString(R.string.view_workout_info) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.view_multiple_workout_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.view_workout_strikethrough));
-                break;
-            case Constants.TODAY:
-                setDialogMessage(getString(R.string.view_today_workout_info) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.today_expand_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_rename_workout)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_check_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_delete_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.today_drag_info)
+                        + Constants.NEWLINE + getString(R.string.expand_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.rename_workout)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.check_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.delete_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.drag_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.onSave));
                 break;
             case Constants.CHOOSER:
-                setDialogMessage(getString(R.string.choose_today_workout));
+                setDialogMessage(getString(R.string.choose_workout));
                 break;
             case Constants.HOME:
-                setDialogMessage(getString(R.string.home_today_info) + Constants.NEWLINE
-                        + Constants.NEWLINE + getString(R.string.home_create_edit_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_assign_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_view_info));
+                setDialogMessage(getString(R.string.home_view_info) + Constants.NEWLINE
+                        + Constants.NEWLINE + getString(R.string.home_today_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_create_edit_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.home_assign_info));
                 break;
             case Constants.LIBS:
                 setTitle(LIBS_TITLE);

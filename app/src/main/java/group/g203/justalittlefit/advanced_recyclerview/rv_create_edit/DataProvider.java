@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view;
+package group.g203.justalittlefit.advanced_recyclerview.rv_create_edit;
 
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 

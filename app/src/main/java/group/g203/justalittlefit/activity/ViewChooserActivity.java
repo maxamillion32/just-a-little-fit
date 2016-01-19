@@ -28,12 +28,13 @@ import group.g203.justalittlefit.adapter.WorkoutRvNameAdapter;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
+import group.g203.justalittlefit.util.Utils;
 
 /**
  * The activity that displays when there are multiple
- * {@link group.g203.justalittlefit.model.Workout} objects assigned to Today's date.
+ * {@link group.g203.justalittlefit.model.Workout} objects assigned.
  */
-public class TodayChooserActivity extends BaseNaviDrawerActivity {
+public class ViewChooserActivity extends BaseNaviDrawerActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
 
@@ -110,7 +111,7 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.CHOOSER);
-        dialog.show(fm, getString(R.string.infoDialogTagTodayChooser));
+        dialog.show(fm, getString(R.string.infoDialogTagViewChooser));
     }
 
     private void setupRecyclerView() {
@@ -128,11 +129,21 @@ public class TodayChooserActivity extends BaseNaviDrawerActivity {
         showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_today_chooser, null, false);
+        View contentView = inflater.inflate(R.layout.activity_view_chooser, null, false);
         frameLayout.addView(contentView, 0);
         ButterKnife.bind(this, frameLayout);
         workouts = getWorkouts();
-        setTitle(R.string.today_title_string);
+
+        if (!Utils.collectionIsNullOrEmpty(workouts)) {
+            if (Utils.isToday(workouts.get(0).getWorkoutDate())) {
+                setTitle(R.string.today_title_string);
+            } else {
+                setTitle(R.string.view_title_string);
+            }
+        } else {
+          setTitle(Constants.EMPTY_STRING);
+        }
+
         setDisplayDate();
         setupRecyclerView();
         hideProgressDialog();

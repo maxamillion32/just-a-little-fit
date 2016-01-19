@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.TodayActivity;
-import group.g203.justalittlefit.activity.TodayChooserActivity;
 import group.g203.justalittlefit.activity.ViewActivity;
+import group.g203.justalittlefit.activity.ViewChooserActivity;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -34,7 +33,6 @@ import group.g203.justalittlefit.util.Utils;
 public class PeekLauncher extends Fragment {
     private final String LOG_TAG = getClass().getSimpleName();
     private ProgressDialog progressDialog = null;
-    static boolean isTodayLauncher;
     boolean busRegistered;
     DateTime dateTime;
 
@@ -53,82 +51,50 @@ public class PeekLauncher extends Fragment {
         registerBus();
         progressDialog = Utils.showProgressDialog(getActivity());
         dateTime = (DateTime) getArguments().getSerializable(Constants.DATE_TIME);
-        if (dateTime == null) {
-            isTodayLauncher = true;
-            getTodaysWorkouts();
-        } else {
-            isTodayLauncher = false;
-            getViewWorkouts(dateTime);
-        }
+        getWorkouts(dateTime);
     }
 
-    private void getTodaysWorkouts() {
-        DbFunctionObject getTodaysWorkouts = new DbFunctionObject(null, DbConstants.GET_WORKOUTS_BY_DATE);
+    private void getWorkouts(DateTime dateTime) {
+        DbFunctionObject getWorkouts = new DbFunctionObject(dateTime, DbConstants.GET_WORKOUTS_BY_DATE);
         new DbAsyncTask(Constants.PEEK_LAUNCHER)
-                .execute(getTodaysWorkouts);
-    }
-
-    private void getViewWorkouts(DateTime dateTime) {
-        DbFunctionObject getViewWorkouts = new DbFunctionObject(dateTime, DbConstants.GET_WORKOUTS_BY_DATE);
-        new DbAsyncTask(Constants.PEEK_LAUNCHER)
-                .execute(getViewWorkouts);
+                .execute(getWorkouts);
     }
 
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         dismissProgressDialog();
-        if (isTodayLauncher) {
-            if (event == null || event.getResult() == null) {
-                displayTodayWorkoutsError();
-            } else if (event.getResult() instanceof List) {
-                ArrayList<Workout> workouts = new ArrayList<>((List<Workout>) event.getResult());
-                if (workouts.isEmpty()) {
-                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
-                } else if (workouts.size() == Constants.INT_ONE) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
-
-                    Intent intent = new Intent(getActivity(), TodayActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtras(bundle);
-                    getActivity().startActivity(intent);
-                } else if (workouts.size() > Constants.INT_ONE) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
-
-                    Intent intent = new Intent(getActivity(), TodayChooserActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtras(bundle);
-                    getActivity().startActivity(intent);
-                }
-            }
-        } else {
-            if (event == null || event.getResult() == null) {
-                displayViewWorkoutsError();
-            } else if (event.getResult() instanceof List) {
-                ArrayList<Workout> workouts = new ArrayList<>((List<Workout>) event.getResult());
-                if (workouts.isEmpty()) {
-                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_to_view));
+        if (event == null || event.getResult() == null) {
+            displayWorkoutsError();
+        } else if (event.getResult() instanceof List) {
+            ArrayList<Workout> workouts = new ArrayList<>((List<Workout>) event.getResult());
+            if (workouts.isEmpty()) {
+                if (dateTime != null) {
+                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_date));
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constants.DATE, dateTime);
-                    Intent intent = new Intent(getActivity(), ViewActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtras(bundle);
-                    getActivity().startActivity(intent);
+                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
                 }
+            } else if (workouts.size() == Constants.INT_ONE) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
+
+                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtras(bundle);
+                getActivity().startActivity(intent);
+            } else if (workouts.size() > Constants.INT_ONE) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
+
+                Intent intent = new Intent(getActivity(), ViewChooserActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtras(bundle);
+                getActivity().startActivity(intent);
             }
         }
     }
 
-    void displayTodayWorkoutsError() {
-        String errorMsg = getString(R.string.today_workouts_error);
-        Log.e(LOG_TAG, errorMsg);
-        Utils.displayLongToast(getActivity(), errorMsg);
-    }
-
-    void displayViewWorkoutsError() {
-        String errorMsg = getString(R.string.workout_view_error);
+    void displayWorkoutsError() {
+        String errorMsg = getString(R.string.workouts_error);
         Log.e(LOG_TAG, errorMsg);
         Utils.displayLongToast(getActivity(), errorMsg);
     }

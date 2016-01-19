@@ -25,11 +25,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
-import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProvider;
-import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.DataProviderFragment;
-import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.MyDraggableSwipeableItemAdapter;
-import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.RecyclerListViewFragment;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.AbstractDataProvider;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.DataProvider;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.DataProviderFragment;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.MyDraggableSwipeableItemAdapter;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.RecyclerListViewFragment;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -494,7 +494,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
             set.setExerciseTypeCode(exerciseCd);
         }
 
-        String errMsg = Utils.returnTodayEditSetErrorString(set);
+        String errMsg = Utils.returnEditSetErrorString(set);
 
         if (Utils.isEmptyString(errMsg)) {
             dialog.dismiss();

@@ -13,12 +13,13 @@ import android.widget.TextView;
 import java.util.List;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.TodayActivity;
+import group.g203.justalittlefit.activity.ViewActivity;
+import group.g203.justalittlefit.activity.ViewChooserActivity;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
 
 /**
- * RecyclerView adapter for {@link group.g203.justalittlefit.activity.TodayChooserActivity}.
+ * RecyclerView adapter for {@link ViewChooserActivity}.
  */
 public class WorkoutRvNameAdapter extends RecyclerView.Adapter<WorkoutRvNameAdapter.ViewHolder> {
 
@@ -41,7 +42,7 @@ public class WorkoutRvNameAdapter extends RecyclerView.Adapter<WorkoutRvNameAdap
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.WORKOUT, workoutObj);
 
-                Intent intent = new Intent(context, TodayActivity.class);
+                Intent intent = new Intent(context, ViewActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 intent.putExtras(bundle);
                 context.startActivity(intent);

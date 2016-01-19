@@ -45,8 +45,8 @@ import group.g203.justalittlefit.activity.Assign;
 import group.g203.justalittlefit.activity.ChooseWorkoutDate;
 import group.g203.justalittlefit.activity.CreateEditWorkout;
 import group.g203.justalittlefit.activity.Home;
-import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view.AbstractDataProvider;
-import group.g203.justalittlefit.advanced_recyclerview.rv_today.AbstractExpandableDataProvider;
+import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.AbstractDataProvider;
+import group.g203.justalittlefit.advanced_recyclerview.rv_view.AbstractExpandableDataProvider;
 import group.g203.justalittlefit.fragment.PeekLauncher;
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;
@@ -228,14 +228,18 @@ public class Utils {
     }
 
     public static boolean isToday(DateTime dateTime) {
-        LocalDate today = LocalDate.now();
-        LocalDate tomorrow = today.plusDays(1);
+        if (dateTime != null) {
+            LocalDate today = LocalDate.now();
+            LocalDate tomorrow = today.plusDays(1);
 
-        DateTime startOfToday = today.toDateTimeAtStartOfDay();
-        DateTime startOfTomorrow = tomorrow.toDateTimeAtStartOfDay();
+            DateTime startOfToday = today.toDateTimeAtStartOfDay();
+            DateTime startOfTomorrow = tomorrow.toDateTimeAtStartOfDay();
 
-        Interval todayInterval = new Interval(startOfToday, startOfTomorrow);
-        return todayInterval.contains(dateTime);
+            Interval todayInterval = new Interval(startOfToday, startOfTomorrow);
+            return todayInterval.contains(dateTime);
+        } else {
+            return false;
+        }
     }
 
     public static Integer returnExerciseSetCount(Exercise exercise, int currentCount, int addend) {
@@ -376,7 +380,7 @@ public class Utils {
         }
     }
 
-    public static String returnTodayEditSetErrorString(Set set) {
+    public static String returnEditSetErrorString(Set set) {
         String exerciseTypeCode = ensureValidString(set.getExerciseTypeCode());
         String errMsg = Constants.EMPTY_STRING;
         if (exerciseTypeCode.equals(Constants.WEIGHTS)) {

@@ -23,15 +23,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.dialog.InformationDialog;
-import group.g203.justalittlefit.dialog.SelectViewOrTodayDialog;
-import group.g203.justalittlefit.listener.SelectViewOrTodayDialogListener;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
  * Activity that displays calendar to choose date to view a {@link group.g203.justalittlefit.model.Workout}
  */
-public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectViewOrTodayDialogListener {
+public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
@@ -106,13 +104,8 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
             public void onDateSelected(Date date) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constants.DATE, date);
-
                 chosenDateTime = new DateTime(date);
-                if (Utils.isToday(chosenDateTime)) {
-                    displaySelectViewOrTodayDialog();
-                } else {
-                    Utils.launchViewActivity(activity, chosenDateTime);
-                }
+                Utils.launchViewActivity(activity, chosenDateTime);
             }
 
             @Override
@@ -126,12 +119,6 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
         FragmentManager fm = getSupportFragmentManager();
         InformationDialog dialog = InformationDialog.newInstance(Constants.CHOOSE);
         dialog.show(fm, getString(R.string.infoDialogTagChooseWorkoutDate));
-    }
-
-    private void displaySelectViewOrTodayDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        SelectViewOrTodayDialog dialog = new SelectViewOrTodayDialog();
-        dialog.show(fm, getString(R.string.selectViewOrTodayDialogTag));
     }
 
     private void resetCalendarView() {
@@ -170,15 +157,5 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity implements SelectV
         super.onPause();
         hideProgressDialog();
         frameLayout.removeAllViews();
-    }
-
-    @Override
-    public void onSelectViewDialog(SelectViewOrTodayDialog dialog) {
-        Utils.launchViewActivity(this, chosenDateTime);
-    }
-
-    @Override
-    public void onSelectTodayDialog(SelectViewOrTodayDialog dialog) {
-        Utils.launchTodayActivity(this);
     }
 }

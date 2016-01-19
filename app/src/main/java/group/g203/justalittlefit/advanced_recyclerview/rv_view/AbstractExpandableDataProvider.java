@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_today;
+package group.g203.justalittlefit.advanced_recyclerview.rv_view;
 
 import group.g203.justalittlefit.model.Exercise;
 import group.g203.justalittlefit.model.Set;

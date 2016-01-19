@@ -6,43 +6,26 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
+import group.g203.justalittlefit.listener.ConfirmDeleteViewWorkoutListener;
 import group.g203.justalittlefit.util.Constants;
 
 /**
  * Dialog that confirms if the user wants to delete the {@link group.g203.justalittlefit.model.Workout}
- * associated to today's date.
+ * associated to a date.
  */
-public class ConfirmDeleteTodayWorkoutDialog extends AppBaseDialog {
-    private static final String DELETE_TODAY_WORKOUT_TITLE = "Delete This Workout for today?";
+public class ConfirmDeleteViewWorkoutDialog extends AppBaseDialog {
     private static final String DELETE_WORKOUT_TITLE = "Delete This Workout?";
-    private static final String TITLE = "Title";
-    ConfirmDeleteTodayWorkoutListener listener;
-
-    public static ConfirmDeleteTodayWorkoutDialog newDeleteFromViewInstance() {
-        ConfirmDeleteTodayWorkoutDialog dialog = new ConfirmDeleteTodayWorkoutDialog();
-
-        Bundle args = new Bundle();
-        args.putString(TITLE, DELETE_WORKOUT_TITLE);
-        dialog.setArguments(args);
-
-        return dialog;
-    }
+    ConfirmDeleteViewWorkoutListener listener;
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null && args.containsKey(TITLE)) {
-            setTitle(args.getString(TITLE));
-        } else {
-            setTitle(DELETE_TODAY_WORKOUT_TITLE);
-        }
-
-        setPositiveButton(getString(R.string.deleteTodayWorkout), new DialogInterface.OnClickListener() {
+        setTitle(DELETE_WORKOUT_TITLE);
+        setPositiveButton(getString(R.string.deleteViewWorkout), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listener.onDeleteTodayWorkoutClick(ConfirmDeleteTodayWorkoutDialog.this);
+                listener.onDeleteViewWorkoutClick(ConfirmDeleteViewWorkoutDialog.this);
             }
         });
         setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -58,10 +41,10 @@ public class ConfirmDeleteTodayWorkoutDialog extends AppBaseDialog {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            listener = (ConfirmDeleteTodayWorkoutListener) activity;
+            listener = (ConfirmDeleteViewWorkoutListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + Constants.SPACE +
-                    getString(R.string.noImplementsConfirmDeleteTodayWorkoutListener));
+                    getString(R.string.noImplementsConfirmDeleteViewWorkoutListener));
         }
     }
 }

@@ -1,4 +1,4 @@
-package group.g203.justalittlefit.advanced_recyclerview.rv_create_edit_view;
+package group.g203.justalittlefit.advanced_recyclerview.rv_create_edit;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -19,6 +19,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import group.g203.justalittlefit.R;
+import group.g203.justalittlefit.activity.ViewActivity;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -32,7 +33,7 @@ import group.g203.justalittlefit.util.Constants;
 /**
  * Dialog that allows users to select an {@link group.g203.justalittlefit.model.Exercise} when
  * adding a {@link group.g203.justalittlefit.model.Set} to a workout from the
- * {@link group.g203.justalittlefit.activity.TodayActivity}.
+ * {@link ViewActivity}.
  */
 public class SelectExerciseDialog extends AppBaseDialog {
 

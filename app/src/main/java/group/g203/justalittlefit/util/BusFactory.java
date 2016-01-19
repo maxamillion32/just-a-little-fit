@@ -14,7 +14,6 @@ public class BusFactory {
     private static final Bus CREATE_EDIT_WORKOUT_BUS = new Bus();
     private static final Bus PEEK_LAUNCHER_BUS = new Bus();
     private static final Bus SELECT_DIALOG_BUS = new Bus();
-    private static final Bus TODAY_BUS = new Bus();
     private static final Bus VIEW_BUS = new Bus();
 
     public static Bus getAssignBus() {
@@ -43,10 +42,6 @@ public class BusFactory {
 
     public static Bus getSelectDialogBus() {
         return SELECT_DIALOG_BUS;
-    }
-
-    public static Bus getTodayBus() {
-        return TODAY_BUS;
     }
 
     public static Bus getViewBus() {
