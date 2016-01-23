@@ -18,6 +18,7 @@ import java.util.List;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.ViewActivity;
 import group.g203.justalittlefit.activity.ViewChooserActivity;
+import group.g203.justalittlefit.activity.ViewPastWorkout;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -72,18 +73,30 @@ public class PeekLauncher extends Fragment {
             if (workouts.isEmpty()) {
                 displayAssignChoiceDialog();
             } else if (workouts.size() == Constants.INT_ONE) {
+                Intent intent;
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
 
-                Intent intent = new Intent(getActivity(), ViewActivity.class);
+                if (Utils.isPriorToToday(dateTime)) {
+                    intent = new Intent(getActivity(), ViewPastWorkout.class);
+                    bundle.putSerializable(Constants.DATE, dateTime);
+                } else {
+                    bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
+                    intent = new Intent(getActivity(), ViewActivity.class);
+                }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 intent.putExtras(bundle);
                 getActivity().startActivity(intent);
             } else if (workouts.size() > Constants.INT_ONE) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
+                Intent intent;
 
-                Intent intent = new Intent(getActivity(), ViewChooserActivity.class);
+                if (Utils.isPriorToToday(dateTime)) {
+                    intent = new Intent(getActivity(), ViewPastWorkout.class);
+                    bundle.putSerializable(Constants.DATE, dateTime);
+                } else {
+                    intent = new Intent(getActivity(), ViewChooserActivity.class);
+                    bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
+                }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 intent.putExtras(bundle);
                 getActivity().startActivity(intent);
@@ -98,7 +111,7 @@ public class PeekLauncher extends Fragment {
     }
 
     private void displayAssignChoiceDialog() {
-        if (getActivity() != null) {
+        if (getActivity() != null && !Utils.isPriorToToday(dateTime)) {
             DateTime dialogDateTime = (dateTime == null) ? new DateTime() : dateTime;
             FragmentManager fm = getActivity().getSupportFragmentManager();
             AssignWorkoutDateWhenNoneDialog dialog = AssignWorkoutDateWhenNoneDialog.newInstance(dialogDateTime);

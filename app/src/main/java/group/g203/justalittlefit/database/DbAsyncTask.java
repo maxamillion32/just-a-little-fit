@@ -167,6 +167,20 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
+            case Constants.PAST_VIEW_TEXT:
+                for (DbFunctionObject dfo : params) {
+                    try {
+                        switch (dfo.getFunctionInt()) {
+                            case DbConstants.GET_WORKOUTS_BY_DATE:
+                                return QueryExecutor.getWorkoutsByDate((DateTime) dfo.getDbObject());
+                            case DbConstants.DELETE_WORKOUTS:
+                                return QueryExecutor.deleteViewWorkouts((List<Workout>) dfo.getDbObject());
+                        }
+                    } catch (SQLException e) {
+                        return null;
+                    }
+                }
+                break;
         }
         return null;
     }
@@ -196,6 +210,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
             case Constants.SELECT_DIALOG:
                 BusFactory.getSelectDialogBus().post(new DbTaskResult(result));
                 break;
+            case Constants.PAST_VIEW_TEXT:
+                BusFactory.getPastViewBus().post(new DbTaskResult(result));
         }
     }
 }

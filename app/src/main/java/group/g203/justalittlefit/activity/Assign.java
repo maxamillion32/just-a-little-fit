@@ -134,7 +134,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                 if (assignCalendar.getSelectedDates().isEmpty() && dateTimes.isEmpty()) {
                     Utils.displayLongSimpleSnackbar(view, getString(R.string.enforceDatesForAssignment));
                 } else {
-                    if (dateTimes.isEmpty()) {
+                    if (dateTimes == null || dateTimes.isEmpty()) {
                         setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
                     }
                     FragmentManager fm = activity.getSupportFragmentManager();

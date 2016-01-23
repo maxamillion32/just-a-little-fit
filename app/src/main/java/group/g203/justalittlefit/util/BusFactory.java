@@ -15,6 +15,7 @@ public class BusFactory {
     private static final Bus PEEK_LAUNCHER_BUS = new Bus();
     private static final Bus SELECT_DIALOG_BUS = new Bus();
     private static final Bus VIEW_BUS = new Bus();
+    private static final Bus PAST_VIEW_BUS = new Bus();
 
     public static Bus getAssignBus() {
         return ASSIGN_BUS;
@@ -46,5 +47,9 @@ public class BusFactory {
 
     public static Bus getViewBus() {
         return VIEW_BUS;
+    }
+
+    public static Bus getPastViewBus() {
+        return PAST_VIEW_BUS;
     }
 }

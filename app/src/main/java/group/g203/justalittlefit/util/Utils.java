@@ -242,6 +242,14 @@ public class Utils {
         }
     }
 
+    public static boolean isPriorToToday(DateTime dateTime) {
+        if (dateTime != null) {
+            return dateTime.isBefore(new DateTime());
+        } else {
+            return false;
+        }
+    }
+
     public static Integer returnExerciseSetCount(Exercise exercise, int currentCount, int addend) {
         int maxCount = exercise.getSets().size();
         int currentPlusAddend = currentCount + addend;

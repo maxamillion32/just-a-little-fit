@@ -170,6 +170,11 @@
     <string name="enforceWorkoutsForAssignment">You must select at least one Workout</string>
     <string name="noImplementsAssignWorkoutDialogListener">doesn\'t implement AssignWorkoutDialogListener.</string>
 
+    <!-- ConfirmDeleteTodayWorkoutDialog Strings -->
+    <string name="deleteTodayWorkout">Yes, delete this workout</string>
+    <string name="noImplementsConfirmDeleteTodayWorkoutListener">doesn\'t implement ConfirmDeleteTodayWorkoutListener.</string>
+    <string name="confirmDeleteTodayWorkoutDialogTag">Confirm Delete Today Workout Dialog Tag</string>
+
     <!-- DeleteWorkoutsFromViewDialog Strings -->
     <string name="deleteWorkoutsFromViewDialogTitle">Choose Workout(s) To Delete:</string>
     <string name="deleteWorkoutsFromViewDialogTag">Delete Workouts From View Dialog Tag</string>
@@ -228,6 +233,7 @@
     <string name="exercise_removal_undone">Exercise restored</string>
     <string name="set_removal_undone">Set restored</string>
     <string name="view_workout_info">- View this workout and update your progress as you go.</string>
+    <string name="past_view_workout_info">- View this date\'s workout(s). The workout(s) can be deleted but otherwise can\'t be edited here.</string>
     <string name="choose_workout">- Choose from one of the workout\'s scheduled for today to view and update your progress on the workout.</string>
     <string name="view_multiple_workout_info">- You can swipe left or right to see different workouts
         (if there are multiple workouts set to this date there will be page indicators on display near the bottom
@@ -266,7 +272,7 @@
     <string name="home_today_info">- Click the \"Today\" option (the calendar icon) to bring up any workouts you may have scheduled for
         today. This option is a shortcut to today\'s date via the \"View\" option.</string>
     <string name="home_view_info">- Click the \"View\" option (the magnifying glass icon) to bring up a calendar to select any workouts you may have scheduled for
-        the date you select. You will be able to edit them on the go.</string>
+        the date you select. You will be able to edit them on the go if they are a future date or today\'s date.</string>
     <string name="home_create_edit_info">- Click the \"Create/Edit\" option (the dumbbell icon) to create workouts.</string>
     <string name="home_assign_info">- Click the \"Assign\" option (the calendar and pencil icon) to assign workouts you created inside the app to specific dates.</string>
 

@@ -30,7 +30,9 @@ public class Constants {
 
     public static final String CHOOSER = "Chooser";
 
-    public static final String VIEW_TEXT = "View";
+    public static final String PAST_VIEW_TEXT = "View";
+
+    public static final String VIEW_TEXT = "PastView";
 
     public static final String CREATE_EDIT_WORKOUT = "CreateEditWorkout";
 

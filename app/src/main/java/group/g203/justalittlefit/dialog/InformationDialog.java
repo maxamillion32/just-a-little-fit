@@ -100,6 +100,11 @@ public class InformationDialog extends AppBaseDialog {
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.picasso)
                         + Constants.NEWLINE + getString(R.string.picasso_info));
                 break;
+            case Constants.PAST_VIEW_TEXT:
+                setDialogMessage(getString(R.string.past_view_workout_info) + Constants.NEWLINE
+                        + Constants.NEWLINE + getString(R.string.view_multiple_workout_info)
+                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.view_workout_strikethrough));
+                break;
         }
         setPositiveButton(dialogBtnTxt, new DialogInterface.OnClickListener() {
             @Override
