@@ -70,6 +70,14 @@
     <string name="addWorkout_success">Workout successfully added</string>
     <string name="noImplementsAddWorkoutDialogListener">doesn\'t implement AddWorkoutDialogListener.</string>
 
+    <!-- AssignWorkoutDateWhenNoneDialog Strings -->
+    <string name="assignWorkoutDateWhenNoneDialog_Title">Assign Workout(s) For This Date?</string>
+    <string name="assignWorkoutDateWhenNoneDialog_assign">Yes, Assign Workout(s)</string>
+    <string name="assignWorkoutDateWhenNoneDialog_no">No Thanks</string>
+    <string name="assignWorkoutDateWhenNoneDialog_msg">(You can choose not to display this dialog from the Home screen options menu)</string>
+    <string name="assignWorkoutDateWhenNoneDialogTag">Assign Workout Date When None Dialog Tag</string>
+    <string name="noImplementsassignWorkoutDateWhenNoneDialogListener">doesn\'t implement AssignWorkoutDateWhenNoneDialog.</string>
+
     <!-- AddExeriseDialog Strings -->
     <string name="addExerciseDialog_Title">Exercise Name:</string>
     <string name="addExerciseDialog_add">Add Exercise</string>

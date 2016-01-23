@@ -110,5 +110,6 @@ public class Constants {
 
     public static final String COLLAPSE_ICON = "[ - ]";
 
+    public static final String ASSIGN_DATE = "assignDate";
 }
 

@@ -20,6 +20,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     CoordinatorLayout clFab;
     private List<DateTime> dateTimes;
     boolean busRegistered;
+    boolean fabIsReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,16 +131,19 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (assignCalendar.getSelectedDates().isEmpty()) {
+                if (assignCalendar.getSelectedDates().isEmpty() && dateTimes.isEmpty()) {
                     Utils.displayLongSimpleSnackbar(view, getString(R.string.enforceDatesForAssignment));
                 } else {
-                    setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
+                    if (dateTimes.isEmpty()) {
+                        setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
+                    }
                     FragmentManager fm = activity.getSupportFragmentManager();
                     AssignWorkoutDialog dialog = new AssignWorkoutDialog();
                     dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
                 }
             }
         });
+        fabIsReady = true;
     }
 
     public void setDateTimes(List<DateTime> dateTimes) {
@@ -220,6 +225,22 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         hideProgressDialog();
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
         selectedItem.setChecked(true);
+        handleDialogResponse();
+    }
+
+    private void handleDialogResponse() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(Constants.ASSIGN_DATE)) {
+            dateTimes = new ArrayList<>(1);
+            dateTimes.add((DateTime) extras.getSerializable(Constants.ASSIGN_DATE));
+            do {
+                if (fabIsReady) {
+                    fab.performClick();
+                }
+            } while (!fabIsReady);
+        } else {
+            // do nothing
+        }
     }
 
     private void registerBus() {

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.squareup.otto.Subscribe;
@@ -21,6 +22,7 @@ import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
 import group.g203.justalittlefit.database.DbTaskResult;
+import group.g203.justalittlefit.dialog.AssignWorkoutDateWhenNoneDialog;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
@@ -68,11 +70,7 @@ public class PeekLauncher extends Fragment {
         } else if (event.getResult() instanceof List) {
             ArrayList<Workout> workouts = new ArrayList<>((List<Workout>) event.getResult());
             if (workouts.isEmpty()) {
-                if (dateTime != null) {
-                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_date));
-                } else {
-                    Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
-                }
+                displayAssignChoiceDialog();
             } else if (workouts.size() == Constants.INT_ONE) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
@@ -97,6 +95,21 @@ public class PeekLauncher extends Fragment {
         String errorMsg = getString(R.string.workouts_error);
         Log.e(LOG_TAG, errorMsg);
         Utils.displayLongToast(getActivity(), errorMsg);
+    }
+
+    private void displayAssignChoiceDialog() {
+        if (getActivity() != null) {
+            DateTime dialogDateTime = (dateTime == null) ? new DateTime() : dateTime;
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            AssignWorkoutDateWhenNoneDialog dialog = AssignWorkoutDateWhenNoneDialog.newInstance(dialogDateTime);
+            dialog.show(fm, getString(R.string.assignWorkoutDateWhenNoneDialogTag));
+        } else {
+            if (dateTime != null) {
+                Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_date));
+            } else {
+                Utils.displayLongToast(getActivity(), getString(R.string.no_workouts_for_today));
+            }
+        }
     }
 
     @Override
