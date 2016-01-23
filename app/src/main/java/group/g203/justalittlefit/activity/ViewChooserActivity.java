@@ -90,6 +90,13 @@ public class ViewChooserActivity extends BaseNaviDrawerActivity {
         super.onPause();
         hideProgressDialog();
         frameLayout.removeAllViews();
+        this.finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.finish();
     }
 
     private List<Workout> getWorkouts() {
