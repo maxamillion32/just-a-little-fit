@@ -32,6 +32,7 @@
     <string name="delete_workout_alt">Delete Workout(s)</string>
     <string name="delete_all">Delete All</string>
     <string name="information">Information</string>
+    <string name="display_opts">Display Options</string>
     <string name="renameWorkout">Rename Workout</string>
     <string name="lib_credits">Library Credits</string>
     <string name="add_workout">Add Workout</string>
@@ -50,6 +51,7 @@
     <string name="no">No</string>
     <string name="ok">Ok</string>
     <string name="got_it">Got It</string>
+    <string name="save">Save</string>
 
     <!--RenameDialog Strings-->
     <string name="renameDialog_ExerciseTitle">Rename Exercise:</string>
@@ -59,6 +61,12 @@
     <string name="renameDialog_ExerciseSuccess">Exercise successfully renamed</string>
     <string name="renameDialog_WorkoutSuccess">Workout successfully renamed</string>
     <string name="noImplementsRenameDialogListener">doesn\'t implement RenameDialogListener.</string>
+
+
+    <!--DisplayOptsDilaog Strings-->
+    <string name="dialog_show_text">Prompt Assign Dialog:</string>
+    <string name="tooltip_show_text">Display Tooltips:</string>
+    <string name="displayOptsDialogTag">Display Opts Dialog Tag</string>
 
     <!-- AddWorkoutDialog Strings -->
     <string name="addWorkoutDialog_Title">Workout Name:</string>
@@ -74,7 +82,7 @@
     <string name="assignWorkoutDateWhenNoneDialog_Title">Assign Workout(s) For This Date?</string>
     <string name="assignWorkoutDateWhenNoneDialog_assign">Yes, Assign Workout(s)</string>
     <string name="assignWorkoutDateWhenNoneDialog_no">No Thanks</string>
-    <string name="assignWorkoutDateWhenNoneDialog_msg">(You can choose not to display this dialog from the Home screen options menu)</string>
+    <string name="assignWorkoutDateWhenNoneDialog_msg">- You can choose not to display this dialog via the \"Display Options\" from the Home Screen options menu</string>
     <string name="assignWorkoutDateWhenNoneDialogTag">Assign Workout Date When None Dialog Tag</string>
     <string name="noImplementsassignWorkoutDateWhenNoneDialogListener">doesn\'t implement AssignWorkoutDateWhenNoneDialog.</string>
 
@@ -266,7 +274,9 @@
     <string name="title_activity_create_edit_set">CreateEditSet</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="title_activity_view_chooser">ViewChooserActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="assignDialogPref">assignDialogPref</string>
+    <string name="toolTipShowPref">toolTipDialogPref</string>
+    <string name="jalfPref">jalfPref</string>
 
    <!--Home Info Dialog messages-->
     <string name="home_today_info">- Click the \"Today\" option (the calendar icon) to bring up any workouts you may have scheduled for

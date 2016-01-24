@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
@@ -75,11 +75,15 @@ public class Utils {
     }
 
     public static void displayLongToast(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
     }
 
     public static void displayShortToast(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static ArrayList<DateTime> dateListToDateTimeList(List<Date> dates) {
@@ -448,9 +452,39 @@ public class Utils {
         }
     }
 
-    public static void clearState(Drawable drawable) {
-        if (drawable != null) {
-            drawable.setState(EMPTY_STATE);
+    public static boolean getAssignDialogPref(Activity activity) {
+        if (activity != null) {
+            SharedPreferences settings = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE);
+            boolean assignDialogPref = settings.getBoolean(activity.getString(R.string.assignDialogPref), true);
+            return assignDialogPref;
+        } else {
+            return false;
+        }
+    }
+
+    public static void setAssignDialogPref(Activity activity, boolean bool) {
+        if (activity != null) {
+            SharedPreferences.Editor edit = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE).edit();
+            edit.putBoolean(activity.getString(R.string.assignDialogPref), bool);
+            edit.apply();
+        }
+    }
+
+    public static boolean getTooltipShowPref(Activity activity) {
+        if (activity != null) {
+            SharedPreferences settings = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE);
+            boolean toolTipShowPref = settings.getBoolean(activity.getString(R.string.toolTipShowPref), true);
+            return toolTipShowPref;
+        } else {
+            return false;
+        }
+    }
+
+    public static void setTooltipShowPref(Activity activity, boolean bool) {
+        if (activity != null) {
+            SharedPreferences.Editor edit = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE).edit();
+            edit.putBoolean(activity.getString(R.string.toolTipShowPref), bool);
+            edit.apply();
         }
     }
 }
