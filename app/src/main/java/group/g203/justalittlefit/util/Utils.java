@@ -17,6 +17,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -470,7 +472,7 @@ public class Utils {
         }
     }
 
-    public static boolean getTooltipShowPref(Activity activity) {
+    public static boolean getFabNotiShowPref(Activity activity) {
         if (activity != null) {
             SharedPreferences settings = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE);
             boolean toolTipShowPref = settings.getBoolean(activity.getString(R.string.toolTipShowPref), true);
@@ -480,11 +482,37 @@ public class Utils {
         }
     }
 
-    public static void setTooltipShowPref(Activity activity, boolean bool) {
+    public static void setFabNotiShowPref(Activity activity, boolean bool) {
         if (activity != null) {
             SharedPreferences.Editor edit = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE).edit();
             edit.putBoolean(activity.getString(R.string.toolTipShowPref), bool);
             edit.apply();
         }
+    }
+
+    public static void displayFabNotification(final TextView tv, String notiText) {
+        tv.setText(notiText);
+
+        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+        anim.setDuration(10000);
+        anim.setRepeatCount(0);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // do nothing
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tv.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // do nothing
+            }
+        });
+        tv.startAnimation(anim);
     }
 }

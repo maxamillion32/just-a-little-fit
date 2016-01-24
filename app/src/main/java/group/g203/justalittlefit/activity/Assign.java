@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 import com.squareup.timessquare.CalendarPickerView;
@@ -143,6 +144,13 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                 }
             }
         });
+
+        if (Utils.getFabNotiShowPref(this)) {
+            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
+            tvFabNoti.setVisibility(View.VISIBLE);
+            Utils.displayFabNotification(tvFabNoti, getString(R.string.assignFabNotiMsg));
+        }
+
         fabIsReady = true;
     }
 

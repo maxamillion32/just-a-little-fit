@@ -50,6 +50,17 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
+        <TextView
+            android:id="@+id/tvFabNoti"
+            android:visibility="gone"
+            android:background="@drawable/fab_noti_view"
+            android:layout_width="wrap_content"
+            android:textColor="@color/app_blue_gray"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginRight="80dp"
+            android:layout_marginBottom="25dp"/>
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"

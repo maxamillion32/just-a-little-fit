@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager;
 import com.squareup.otto.Subscribe;
@@ -155,6 +156,11 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
                 displayAddExerciseOrSetDialog();
             }
         });
+        if (Utils.getFabNotiShowPref(this)) {
+            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
+            tvFabNoti.setVisibility(View.VISIBLE);
+            Utils.displayFabNotification(tvFabNoti, getString(R.string.viewFabNotiMsg));
+        }
     }
 
     @Subscribe

@@ -21,10 +21,10 @@ public class DisplayOptsDialog extends AppBaseDialog {
     RadioButton rbDialogYes;
     @Bind(R.id.rbDialog_no)
     RadioButton rbDialogNo;
-    @Bind(R.id.rbTooltip_yes)
-    RadioButton rbTooltipYes;
-    @Bind(R.id.rbTooltip_no)
-    RadioButton rbTooltipNo;
+    @Bind(R.id.rbFabNoti_yes)
+    RadioButton rbFabNotiYes;
+    @Bind(R.id.rbFabNoti_no)
+    RadioButton rbFabNotiNo;
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
@@ -52,12 +52,12 @@ public class DisplayOptsDialog extends AppBaseDialog {
                     rbDialogNo.setChecked(true);
                 }
 
-                if (Utils.getTooltipShowPref(getActivity())) {
-                    rbTooltipYes.setChecked(true);
-                    rbTooltipNo.setChecked(false);
+                if (Utils.getFabNotiShowPref(getActivity())) {
+                    rbFabNotiYes.setChecked(true);
+                    rbFabNotiNo.setChecked(false);
                 } else {
-                    rbTooltipYes.setChecked(false);
-                    rbTooltipNo.setChecked(true);
+                    rbFabNotiYes.setChecked(false);
+                    rbFabNotiNo.setChecked(true);
                 }
             }
         });
@@ -74,13 +74,13 @@ public class DisplayOptsDialog extends AppBaseDialog {
         Utils.setAssignDialogPref(getActivity(), false);
     }
 
-    @OnClick(R.id.rbTooltip_yes)
+    @OnClick(R.id.rbFabNoti_yes)
     void onShowTooltipYes(View view) {
-        Utils.setTooltipShowPref(getActivity(), true);
+        Utils.setFabNotiShowPref(getActivity(), true);
     }
 
-    @OnClick(R.id.rbTooltip_no)
+    @OnClick(R.id.rbFabNoti_no)
     void onShowTooltipNo(View view) {
-        Utils.setTooltipShowPref(getActivity(), false);
+        Utils.setFabNotiShowPref(getActivity(), false);
     }
 }

@@ -62,10 +62,16 @@
     <string name="renameDialog_WorkoutSuccess">Workout successfully renamed</string>
     <string name="noImplementsRenameDialogListener">doesn\'t implement RenameDialogListener.</string>
 
+    <!--Fab Noti Strings-->
+    <string name="assignFabNotiMsg">Choose date(s) then click here</string>
+    <string name="workoutFabNotiMsg">Add Workout(s)</string>
+    <string name="exerciseFabNotiMsg">Add Exercise(s)</string>
+    <string name="setFabNotiMsg">Add Set(s)</string>
+    <string name="viewFabNotiMsg">Add Exercise(s) / Set(s)</string>
 
     <!--DisplayOptsDilaog Strings-->
     <string name="dialog_show_text">Prompt Assign Dialog:</string>
-    <string name="tooltip_show_text">Display Tooltips:</string>
+    <string name="fab_noti_show_text">Display Button Notifications:</string>
     <string name="displayOptsDialogTag">Display Opts Dialog Tag</string>
 
     <!-- AddWorkoutDialog Strings -->

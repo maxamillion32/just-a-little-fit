@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.squareup.otto.Subscribe;
@@ -113,6 +114,11 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 displayAddWorkoutDialog();
             }
         });
+        if (Utils.getFabNotiShowPref(this)) {
+            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
+            tvFabNoti.setVisibility(View.VISIBLE);
+            Utils.displayFabNotification(tvFabNoti, getString(R.string.workoutFabNotiMsg));
+        }
     }
 
     public AbstractDataProvider getDataProvider() {
