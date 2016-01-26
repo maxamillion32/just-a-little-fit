@@ -240,6 +240,7 @@
     <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
     <string name="no_workouts_to_view">No workouts were scheduled for this date.</string>
     <string name="workout_deleted">Workout deleted</string>
+    <string name="workout_s_deleted">Workout(s) deleted</string>
     <string name="exercise_deleted">Exercise deleted</string>
     <string name="set_deleted">Set deleted</string>
     <string name="removed_assigned_workouts_successfully">Workout(s) assignment successfully undone</string>

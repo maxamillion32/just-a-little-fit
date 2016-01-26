@@ -249,7 +249,7 @@ public class Utils {
     }
 
     public static boolean isPriorToToday(DateTime dateTime) {
-        if (dateTime != null) {
+        if (dateTime != null && !isToday(dateTime)) {
             return dateTime.isBefore(new DateTime());
         } else {
             return false;

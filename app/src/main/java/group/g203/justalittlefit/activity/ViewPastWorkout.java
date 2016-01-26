@@ -92,12 +92,12 @@ public class ViewPastWorkout extends BaseNaviDrawerActivity implements ConfirmDe
             }
         } else if (event.getResult() instanceof Integer) {
             if (event.getResult() == workouts.size()) {
-                Utils.displayLongToast(this, getString(R.string.workout_deleted));
+                Utils.displayLongToast(this, getString(R.string.workout_s_deleted));
                 Intent intent = new Intent(this, Home.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             } else {
-                Utils.displayLongToast(this, getString(R.string.workout_deleted));
+                Utils.displayLongToast(this, getString(R.string.workout_s_deleted));
                 Intent intent = getIntent();
                 finish();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
