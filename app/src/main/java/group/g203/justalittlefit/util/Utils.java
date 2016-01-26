@@ -307,18 +307,20 @@ public class Utils {
 
     public static Integer removeWorkouts(CloseableIterator<Workout> iterator, HashSet<Workout> workouts) {
         Integer removedWorkout = 0;
-        try {
-            while (iterator.hasNext()) {
-                Workout workout = iterator.next();
-                if (workouts.contains(workout)) {
-                    iterator.remove();
-                }
-            }
-        } finally {
+        if (iterator != null) {
             try {
-                iterator.close();
-            } catch (SQLException e) {
-                removedWorkout = Constants.INT_NEG_ONE;
+                while (iterator.hasNext()) {
+                    Workout workout = iterator.next();
+                    if (workouts.contains(workout)) {
+                        iterator.remove();
+                    }
+                }
+            } finally {
+                try {
+                    iterator.close();
+                } catch (SQLException e) {
+                    removedWorkout = Constants.INT_NEG_ONE;
+                }
             }
         }
         return removedWorkout;
