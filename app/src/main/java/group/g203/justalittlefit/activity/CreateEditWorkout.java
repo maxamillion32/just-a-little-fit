@@ -181,6 +181,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
             if (reorderTriggeredByAddWorkout) {
                 // Call method to add workout to view
                 addWorkoutToUI();
+                reorderTriggeredByAddWorkout = false;
             } else {
                 // onPause result returned and data order saved, reset boolean trigger
                 reorderTriggeredByAddWorkout = false;
