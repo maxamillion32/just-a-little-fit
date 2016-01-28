@@ -12,7 +12,7 @@
         android:layout_marginTop="20dp"
         android:checkedButton="@+id/rbWeightType"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <RadioButton
             android:id="@+id/rbWeightType"
@@ -23,19 +23,19 @@
             android:textSize="12dp"/>
 
         <RadioButton
-            android:id="@+id/rbNonWeightType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/non_weighted_reps"
-            android:textSize="12dp"/>
-
-        <RadioButton
             android:id="@+id/rbLoggedTimeType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
             android:text="@string/timed_reps"
+            android:textSize="12dp"/>
+
+        <RadioButton
+            android:id="@+id/rbNonWeightType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/non_weighted_reps"
             android:textSize="12dp"/>
 
     </RadioGroup>
