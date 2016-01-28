@@ -66,7 +66,7 @@ public class ViewPastWorkout extends BaseNaviDrawerActivity implements ConfirmDe
 
     private void displayWorkoutViews() {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.DATE)) {
+        if (Utils.isInBundleAndValid(extras, Constants.DATE)) {
             dateTime = new DateTime(extras.getSerializable(Constants.DATE));
             DbFunctionObject getDatesWorkouts = new DbFunctionObject(dateTime, DbConstants.GET_WORKOUTS_BY_DATE);
             new DbAsyncTask(Constants.PAST_VIEW_TEXT)

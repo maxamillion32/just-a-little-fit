@@ -238,7 +238,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     private void handleDialogResponse() {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.ASSIGN_DATE)) {
+        if (Utils.isInBundleAndValid(extras, Constants.ASSIGN_DATE)) {
             dateTimes = new ArrayList<>(1);
             dateTimes.add((DateTime) extras.getSerializable(Constants.ASSIGN_DATE));
             do {

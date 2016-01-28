@@ -82,7 +82,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     @Override
     protected void onNewIntent(Intent intent) {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+        if (Utils.isInBundleAndValid(extras, Constants.SAVED_BUNDLE)) {
             savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
         }
         super.onNewIntent(intent);
@@ -288,7 +288,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
 
     private Workout getParentWorkout() {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.WORKOUT)) {
+        if (Utils.isInBundleAndValid(extras, Constants.WORKOUT)) {
            return extras.getParcelable(Constants.WORKOUT);
         } else {
             return null;

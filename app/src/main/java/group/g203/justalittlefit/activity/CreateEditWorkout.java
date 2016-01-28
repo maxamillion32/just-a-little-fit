@@ -82,7 +82,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     protected void onNewIntent(Intent intent) {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+        if (Utils.isInBundleAndValid(extras, Constants.SAVED_BUNDLE)) {
             savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
         }
         super.onNewIntent(intent);

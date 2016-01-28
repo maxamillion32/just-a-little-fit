@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
@@ -516,5 +517,13 @@ public class Utils {
             }
         });
         tv.startAnimation(anim);
+    }
+
+    public static boolean isInBundleAndValid(Bundle bundle, String bundleVal) {
+        if (bundle != null && bundle.containsKey(bundleVal) && bundle.get(bundleVal) != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

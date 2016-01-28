@@ -101,7 +101,7 @@ public class ViewChooserActivity extends BaseNaviDrawerActivity {
 
     private List<Workout> getWorkouts() {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.WORKOUTS)) {
+        if (Utils.isInBundleAndValid(extras, Constants.WORKOUTS)) {
             return extras.getParcelableArrayList(Constants.WORKOUTS);
         } else {
             return null;

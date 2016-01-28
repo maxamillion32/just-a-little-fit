@@ -81,7 +81,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
     @Override
     protected void onNewIntent(Intent intent) {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.SAVED_BUNDLE)) {
+        if (Utils.isInBundleAndValid(extras, Constants.SAVED_BUNDLE)) {
             savedBundle = extras.getBundle(Constants.SAVED_BUNDLE);
         }
         super.onNewIntent(intent);
@@ -260,7 +260,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
 
     private Exercise getParentExercise() {
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(Constants.EXERCISE)) {
+        if (Utils.isInBundleAndValid(extras, Constants.EXERCISE)) {
             return extras.getParcelable(Constants.EXERCISE);
         } else {
             return null;
