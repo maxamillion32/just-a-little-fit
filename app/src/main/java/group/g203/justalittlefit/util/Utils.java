@@ -478,8 +478,8 @@ public class Utils {
     public static boolean getFabNotiShowPref(Activity activity) {
         if (activity != null) {
             SharedPreferences settings = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE);
-            boolean toolTipShowPref = settings.getBoolean(activity.getString(R.string.toolTipShowPref), true);
-            return toolTipShowPref;
+            boolean fabNotiShowPref = settings.getBoolean(activity.getString(R.string.toolTipShowPref), true);
+            return fabNotiShowPref;
         } else {
             return false;
         }

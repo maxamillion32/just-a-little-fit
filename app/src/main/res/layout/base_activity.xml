@@ -58,8 +58,10 @@
             android:textColor="@color/app_blue_gray"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_marginRight="80dp"
-            android:layout_marginBottom="25dp"/>
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="85dp"
+            android:layout_marginLeft="16dp"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

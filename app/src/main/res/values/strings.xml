@@ -71,7 +71,7 @@
 
     <!--DisplayOptsDilaog Strings-->
     <string name="dialog_show_text">Prompt Assign Dialog:</string>
-    <string name="fab_noti_show_text">Display Button Notifications:</string>
+    <string name="fab_noti_show_text">Display Button Helper Text:</string>
     <string name="displayOptsDialogTag">Display Opts Dialog Tag</string>
 
     <!-- AddWorkoutDialog Strings -->
