@@ -25,6 +25,8 @@ public class DisplayOptsDialog extends AppBaseDialog {
     RadioButton rbFabNotiYes;
     @Bind(R.id.rbFabNoti_no)
     RadioButton rbFabNotiNo;
+    boolean originalDialogOpt;
+    boolean originalFabNotiOpt;
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
@@ -40,25 +42,25 @@ public class DisplayOptsDialog extends AppBaseDialog {
                 // Will exit dialog
             }
         });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Utils.setAssignDialogPref(getActivity(), originalDialogOpt);
+                Utils.setFabNotiShowPref(getActivity(), originalFabNotiOpt);
+            }
+        });
         final AlertDialog displayOptsDialog = builder.create();
         displayOptsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                if (Utils.getAssignDialogPref(getActivity())) {
-                    rbDialogYes.setChecked(true);
-                    rbDialogNo.setChecked(false);
-                } else {
-                    rbDialogYes.setChecked(false);
-                    rbDialogNo.setChecked(true);
-                }
+                originalDialogOpt = Utils.getAssignDialogPref(getActivity());
+                originalFabNotiOpt = Utils.getFabNotiShowPref(getActivity());
 
-                if (Utils.getFabNotiShowPref(getActivity())) {
-                    rbFabNotiYes.setChecked(true);
-                    rbFabNotiNo.setChecked(false);
-                } else {
-                    rbFabNotiYes.setChecked(false);
-                    rbFabNotiNo.setChecked(true);
-                }
+                rbDialogYes.setChecked(originalDialogOpt);
+                rbDialogNo.setChecked(!originalDialogOpt);
+
+                rbFabNotiYes.setChecked(originalFabNotiOpt);
+                rbFabNotiNo.setChecked(!originalFabNotiOpt);
             }
         });
         return displayOptsDialog;
