@@ -319,7 +319,7 @@ public class Utils {
             } finally {
                 try {
                     iterator.close();
-                } catch (SQLException e) {
+                } catch (SQLException | IllegalStateException e) {
                     removedWorkout = Constants.INT_NEG_ONE;
                 }
             }
@@ -342,7 +342,7 @@ public class Utils {
         } finally {
             try {
                 iterator.close();
-            } catch (SQLException e) {
+            } catch (SQLException | IllegalStateException e) {
                 removedExercise = Constants.INT_NEG_ONE;
             }
         }
@@ -363,7 +363,7 @@ public class Utils {
         } finally {
             try {
                 iterator.close();
-            } catch (SQLException e) {
+            } catch (SQLException | IllegalStateException e) {
                 removedSets = Constants.INT_NEG_ONE;
             }
         }
