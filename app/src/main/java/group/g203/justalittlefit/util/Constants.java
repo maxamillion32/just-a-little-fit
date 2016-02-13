@@ -48,6 +48,8 @@ public class Constants {
 
     public static final String SPACE = " ";
 
+    public static final String DASH = "-";
+
     public static final String CUSTOM_FONT_TTF = "ICBMSS20.ttf";
 
     public static final String UNDO = "Undo";
@@ -89,6 +91,8 @@ public class Constants {
     public static final String PEEK_LAUNCHER = "peekLauncher";
 
     public static final String DATE_TIME = "dateTime";
+
+    public static final String DATE_TIMES = "dateTimes";
 
     public static final String WORKOUTS = "workouts";
 

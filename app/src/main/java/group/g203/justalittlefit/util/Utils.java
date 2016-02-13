@@ -90,11 +90,15 @@ public class Utils {
     }
 
     public static ArrayList<DateTime> dateListToDateTimeList(List<Date> dates) {
-        ArrayList<DateTime> dateTimes = new ArrayList<>();
-        for (Date date : dates) {
-            dateTimes.add(new DateTime(date));
+        if (!collectionIsNullOrEmpty(dates)) {
+            ArrayList<DateTime> dateTimes = new ArrayList<>();
+            for (Date date : dates) {
+                dateTimes.add(new DateTime(date));
+            }
+            return dateTimes;
+        } else {
+            return null;
         }
-        return dateTimes;
     }
 
     public static void displayLongSimpleSnackbar(View view, String msg) {
@@ -526,4 +530,6 @@ public class Utils {
             return false;
         }
     }
+
+
 }

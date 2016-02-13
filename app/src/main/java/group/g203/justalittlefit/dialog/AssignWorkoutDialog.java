@@ -16,7 +16,11 @@ import android.widget.TableRow;
 
 import com.squareup.otto.Subscribe;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.Bind;
@@ -40,7 +44,18 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
     private List<String> selectedWorkoutNames;
     @Bind(R.id.workoutContainer)
     LinearLayout workoutContainer;
+    ArrayList<DateTime> dateTimes;
+    HashSet<Workout> workoutCollection;
+    HashMap<String, String> workoutNameMap;
     boolean busRegistered;
+
+    public static AssignWorkoutDialog newInstance(ArrayList<DateTime> dateTimes) {
+        AssignWorkoutDialog dialog = new AssignWorkoutDialog();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.DATE_TIMES, dateTimes);
+        dialog.setArguments(bundle);
+        return dialog;
+    }
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
@@ -49,9 +64,18 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
         ButterKnife.bind(this, view);
         selectedWorkoutNames = new ArrayList<>();
+        workoutNameMap = new HashMap<>();
         registerBus();
-        DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
-        new DbAsyncTask(Constants.ASSIGN_DIALOG).execute(getAllWorkoutDfo);
+
+        Bundle extras = getArguments();
+
+        if (Utils.isInBundleAndValid(extras, Constants.DATE_TIMES)) {
+            dateTimes = (ArrayList<DateTime>) extras.getSerializable(Constants.DATE_TIMES);
+            DbFunctionObject getWorkoutsByDatesDfo = new DbFunctionObject(dateTimes, DbConstants.GET_WORKOUTS_BY_DATE);
+            new DbAsyncTask(Constants.ASSIGN_DIALOG).execute(getWorkoutsByDatesDfo);
+        } else {
+            callUnassignedWorkouts();
+        }
         builder.setTitle(getString(R.string.assignWorkoutDialogHeaderMsg));
         builder.setView(view);
         builder.setPositiveButton(getString(R.string.assignWorkoutDialog_assign), new DialogInterface.OnClickListener() {
@@ -90,12 +114,20 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         return assignWorkoutDialog;
     }
 
+    void callUnassignedWorkouts() {
+        DbFunctionObject getAllWorkoutDfo = new DbFunctionObject(null, DbConstants.GET_ALL_UNASSIGNED_WORKOUTS);
+        new DbAsyncTask(Constants.ASSIGN_DIALOG).execute(getAllWorkoutDfo);
+    }
+
     @Subscribe
     public void onAsyncTaskResult(DbTaskResult event) {
         if (event == null || event.getResult() == null) {
             Snackbar.make(getActivity().findViewById(R.id.fab),
                     getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
                     .show();
+        } else if (event.getResult() instanceof HashSet) {
+            workoutCollection = (HashSet<Workout>) event.getResult();
+            callUnassignedWorkouts();
         } else {
             List<Workout> workouts = (List<Workout>) event.getResult();
             if (workouts == null) {
@@ -106,7 +138,33 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
                 displayJumpToCreateEditDialog();
                 dismiss();
             } else {
+                populateMap(workoutCollection, workouts);
                 createWorkoutCheckBoxes(workouts);
+            }
+        }
+    }
+
+    void populateMap(HashSet<Workout> set, List<Workout> list) {
+
+        if (!Utils.collectionIsNullOrEmpty(list)) {
+            for (Workout workout : list) {
+                String keyValue = Utils.ensureValidString(workout.getName());
+                workoutNameMap.put(keyValue, keyValue);
+            }
+        }
+
+        if (!Utils.collectionIsNullOrEmpty(set)) {
+            for (Workout workout : set) {
+                if (workout.getWorkoutDate() != null) {
+                    String key = Utils.ensureValidString(workout.getName());
+                    String dateString;
+                    if (workoutNameMap.containsKey(key)) {
+                        dateString = Utils.ensureValidString(workoutNameMap.get(key));
+                        dateString += Constants.SPACE + Constants.DASH + Constants.SPACE +
+                                Utils.returnStandardDateString(workout.getWorkoutDate());
+                        workoutNameMap.put(key, dateString);
+                    }
+                }
             }
         }
     }
@@ -176,7 +234,7 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
             row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
             CheckBox checkBox = new CheckBox(getActivity());
             checkBox.setId(workout.getWorkoutId());
-            checkBox.setText(workout.getName());
+            checkBox.setText(Utils.ensureValidString(workoutNameMap.get(workout.getName())));
             checkBox.setOnCheckedChangeListener(this);
             row.addView(checkBox);
             workoutContainer.addView(row);

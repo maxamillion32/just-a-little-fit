@@ -53,7 +53,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     CalendarPickerView assignCalendar;
     FloatingActionButton fab;
     CoordinatorLayout clFab;
-    private List<DateTime> dateTimes;
+    private ArrayList<DateTime> dateTimes;
     boolean busRegistered;
     boolean fabIsReady = false;
 
@@ -132,14 +132,12 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (assignCalendar.getSelectedDates().isEmpty() && dateTimes.isEmpty()) {
+                if (assignCalendar.getSelectedDates().isEmpty() && Utils.collectionIsNullOrEmpty(dateTimes)) {
                     Utils.displayLongSimpleSnackbar(view, getString(R.string.enforceDatesForAssignment));
                 } else {
-                    if (dateTimes == null || dateTimes.isEmpty()) {
-                        setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
-                    }
+                    setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
                     FragmentManager fm = activity.getSupportFragmentManager();
-                    AssignWorkoutDialog dialog = new AssignWorkoutDialog();
+                    AssignWorkoutDialog dialog = AssignWorkoutDialog.newInstance(dateTimes);
                     dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
                 }
             }
@@ -154,7 +152,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         fabIsReady = true;
     }
 
-    public void setDateTimes(List<DateTime> dateTimes) {
+    public void setDateTimes(ArrayList<DateTime> dateTimes) {
         this.dateTimes = dateTimes;
     }
 

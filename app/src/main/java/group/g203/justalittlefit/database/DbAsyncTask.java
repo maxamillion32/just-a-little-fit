@@ -94,6 +94,8 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.GET_ALL_UNASSIGNED_WORKOUTS:
                                 return QueryExecutor.getUnassignedWorkouts();
+                            case DbConstants.GET_WORKOUTS_BY_DATE:
+                                return QueryExecutor.getWorkoutsByDate((List<DateTime>) dfo.getDbObject());
                         }
                     } catch (SQLException e) {
                         return null;

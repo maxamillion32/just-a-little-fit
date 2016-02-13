@@ -521,6 +521,23 @@ public class QueryExecutor {
         return workouts;
     }
 
+    public static HashSet<Workout> getWorkoutsByDate(final List<DateTime> dateTimes) throws SQLException {
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        final HashSet<Workout> workouts = new HashSet<>();
+        try {
+            dao.callBatchTasks(new Callable<Void>() {
+                public Void call() throws SQLException {
+                    for (DateTime dateTime : dateTimes) {
+                        workouts.addAll(getWorkoutsByDate(dateTime));
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            return null;
+        }
+        return workouts;
+    }
 
     public static List<Workout> addExercisesToWorkouts(List<Workout> workouts) throws SQLException {
         List<Workout> workoutsWithExercises = new ArrayList<>(workouts.size());
