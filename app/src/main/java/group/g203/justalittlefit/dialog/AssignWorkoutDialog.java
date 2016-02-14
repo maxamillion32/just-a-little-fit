@@ -1,31 +1,40 @@
 package group.g203.justalittlefit.dialog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import group.g203.justalittlefit.R;
+import group.g203.justalittlefit.activity.ViewActivity;
 import group.g203.justalittlefit.database.DbAsyncTask;
 import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
@@ -40,21 +49,31 @@ import group.g203.justalittlefit.util.Utils;
  * Dialog to display when assigning a {@link group.g203.justalittlefit.model.Workout}.
  */
 public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton.OnCheckedChangeListener {
+    private static AssignWorkoutDialog instance;
     private AssignWorkoutDialogListener listener;
     private List<String> selectedWorkoutNames;
     @Bind(R.id.workoutContainer)
     LinearLayout workoutContainer;
+    @Bind(R.id.rgAssignWorkoutOpts)
+    RadioGroup rgOpts;
     ArrayList<DateTime> dateTimes;
     HashSet<Workout> workoutCollection;
-    HashMap<String, String> workoutNameMap;
+    List<Workout> unAssignedWorkouts;
     boolean busRegistered;
+    AlertDialog thisDialog;
 
     public static AssignWorkoutDialog newInstance(ArrayList<DateTime> dateTimes) {
-        AssignWorkoutDialog dialog = new AssignWorkoutDialog();
+        if (instance == null) {
+            instance = new AssignWorkoutDialog();
+        }
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constants.DATE_TIMES, dateTimes);
-        dialog.setArguments(bundle);
-        return dialog;
+        instance.setArguments(bundle);
+        return instance;
+    }
+
+    public static AssignWorkoutDialog getInstance() {
+        return instance;
     }
 
     @Override
@@ -64,7 +83,6 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         View view = inflater.inflate(R.layout.assign_workout_dialog_view, null);
         ButterKnife.bind(this, view);
         selectedWorkoutNames = new ArrayList<>();
-        workoutNameMap = new HashMap<>();
         registerBus();
 
         Bundle extras = getArguments();
@@ -93,6 +111,7 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         });
 
         final AlertDialog assignWorkoutDialog = builder.create();
+        thisDialog = assignWorkoutDialog;
         assignWorkoutDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -129,43 +148,43 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
             workoutCollection = (HashSet<Workout>) event.getResult();
             callUnassignedWorkouts();
         } else {
-            List<Workout> workouts = (List<Workout>) event.getResult();
-            if (workouts == null) {
+            unAssignedWorkouts  = (List<Workout>) event.getResult();
+            if (unAssignedWorkouts == null) {
                 Snackbar.make(getActivity().findViewById(R.id.fab),
                         getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
                         .show();
-            } else if (workouts.isEmpty()) {
+            } else if (unAssignedWorkouts.isEmpty()) {
                 displayJumpToCreateEditDialog();
                 dismiss();
             } else {
-                populateMap(workoutCollection, workouts);
-                createWorkoutCheckBoxes(workouts);
+                displayDialogUi();
             }
         }
     }
 
-    void populateMap(HashSet<Workout> set, List<Workout> list) {
-
-        if (!Utils.collectionIsNullOrEmpty(list)) {
-            for (Workout workout : list) {
-                String keyValue = Utils.ensureValidString(workout.getName());
-                workoutNameMap.put(keyValue, keyValue);
-            }
+    void displayOpts() {
+        if (!Utils.collectionIsNullOrEmpty(workoutCollection)) {
+            rgOpts.setVisibility(View.VISIBLE);
         }
+    }
 
-        if (!Utils.collectionIsNullOrEmpty(set)) {
-            for (Workout workout : set) {
-                if (workout.getWorkoutDate() != null) {
-                    String key = Utils.ensureValidString(workout.getName());
-                    String dateString;
-                    if (workoutNameMap.containsKey(key)) {
-                        dateString = Utils.ensureValidString(workoutNameMap.get(key));
-                        dateString += Constants.SPACE + Constants.DASH + Constants.SPACE +
-                                Utils.returnStandardDateString(workout.getWorkoutDate());
-                        workoutNameMap.put(key, dateString);
-                    }
+    @OnClick({R.id.rbExistingWorkouts, R.id.rbWorkoutsToAssign})
+    void onRbClick(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch (view.getId()) {
+            case R.id.rbWorkoutsToAssign:
+                if (checked) {
+                    displayUnassignedWorkouts(unAssignedWorkouts);
+                    break;
                 }
-            }
+            case R.id.rbExistingWorkouts:
+                if (checked) {
+                    displayExistingWorkouts(workoutCollection);
+                    break;
+                }
         }
     }
 
@@ -224,7 +243,17 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         }
     }
 
-    private void createWorkoutCheckBoxes(List<Workout> workouts) {
+    private void displayDialogUi(){
+        displayOpts();
+        displayUnassignedWorkouts(unAssignedWorkouts);
+    }
+
+    private void displayUnassignedWorkouts(List<Workout> workouts) {
+        thisDialog.setTitle(getString(R.string.assignWorkoutDialogHeaderMsg));
+        thisDialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+        thisDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.VISIBLE);
+
+        workoutContainer.removeAllViews();
         int count = 0;
         for (Workout workout : workouts)
         {
@@ -234,10 +263,45 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
             row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
             CheckBox checkBox = new CheckBox(getActivity());
             checkBox.setId(workout.getWorkoutId());
-            checkBox.setText(Utils.ensureValidString(workoutNameMap.get(workout.getName())));
+            checkBox.setText(Utils.ensureValidString(workout.getName()));
             checkBox.setOnCheckedChangeListener(this);
             row.addView(checkBox);
             workoutContainer.addView(row);
+        }
+    }
+
+    private void displayExistingWorkouts(HashSet<Workout> workouts) {
+        thisDialog.setTitle(getString(R.string.assignChooseWorkoutDialogHeaderMsg));
+        workoutContainer.removeAllViews();
+        thisDialog.getButton(DialogInterface.BUTTON_POSITIVE).setVisibility(View.GONE);
+        thisDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
+
+        for (final Workout workout : workouts)
+        {
+            if (workout.getWorkoutDate() != null) {
+                TextView tv = new TextView(getActivity());
+                tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                tv.setPadding(0, Utils.getDp(30, getActivity()), 0, 0);
+                tv.setText(Utils.ensureValidString(workout.getName()) + Constants.SPACE + Constants.DASH +
+                        Constants.SPACE + Utils.returnStandardDateString(workout.getWorkoutDate()));
+                tv.setTextColor(getResources().getColor(R.color.app_blue_gray));
+                tv.setTypeface(null, Typeface.BOLD);
+                Utils.underlineText(tv);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = getActivity();
+                        Intent intent = new Intent(context, ViewActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(Constants.WORKOUT, workout);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                });
+                tv.setGravity(Gravity.CENTER);
+                workoutContainer.addView(tv);
+            }
         }
     }
 

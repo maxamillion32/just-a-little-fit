@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -236,6 +238,10 @@ public class Utils {
 
     public static void clearStrikeThroughText(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+    }
+
+    public static void underlineText(TextView tv) {
+        tv.setPaintFlags(tv.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
     }
 
     public static boolean isToday(DateTime dateTime) {
@@ -531,5 +537,11 @@ public class Utils {
         }
     }
 
+    public static int getDp(float px, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return Math.round(dp);
+    }
 
 }

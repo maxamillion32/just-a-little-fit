@@ -232,6 +232,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
         selectedItem.setChecked(true);
         handleDialogResponse();
+        handleAssignWorkoutDialogDisplay();
     }
 
     private void handleDialogResponse() {
@@ -246,6 +247,18 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
             } while (!fabIsReady);
         } else {
             // do nothing
+        }
+    }
+
+    private void handleAssignWorkoutDialogDisplay() {
+        FragmentManager fm = this.getSupportFragmentManager();
+        if (fm.findFragmentByTag(getString(R.string.assignWorkoutDialogTag)) != null) {
+            AssignWorkoutDialog.getInstance().dismiss();
+            if (dateTimes != null) {
+                dateTimes.clear();
+            } else {
+                dateTimes = new ArrayList<>();
+            }
         }
     }
 
