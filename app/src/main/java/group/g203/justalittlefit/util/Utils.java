@@ -467,42 +467,6 @@ public class Utils {
         }
     }
 
-    public static boolean getAssignDialogPref(Activity activity) {
-        if (activity != null) {
-            SharedPreferences settings = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE);
-            boolean assignDialogPref = settings.getBoolean(activity.getString(R.string.assignDialogPref), true);
-            return assignDialogPref;
-        } else {
-            return false;
-        }
-    }
-
-    public static void setAssignDialogPref(Activity activity, boolean bool) {
-        if (activity != null) {
-            SharedPreferences.Editor edit = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE).edit();
-            edit.putBoolean(activity.getString(R.string.assignDialogPref), bool);
-            edit.apply();
-        }
-    }
-
-    public static boolean getFabNotiShowPref(Activity activity) {
-        if (activity != null) {
-            SharedPreferences settings = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE);
-            boolean fabNotiShowPref = settings.getBoolean(activity.getString(R.string.toolTipShowPref), true);
-            return fabNotiShowPref;
-        } else {
-            return false;
-        }
-    }
-
-    public static void setFabNotiShowPref(Activity activity, boolean bool) {
-        if (activity != null) {
-            SharedPreferences.Editor edit = activity.getSharedPreferences(activity.getString(R.string.jalfPref), Context.MODE_PRIVATE).edit();
-            edit.putBoolean(activity.getString(R.string.toolTipShowPref), bool);
-            edit.apply();
-        }
-    }
-
     public static void displayFabNotification(final TextView tv, String notiText) {
         tv.setText(notiText);
 

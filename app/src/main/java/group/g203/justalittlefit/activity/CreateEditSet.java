@@ -117,11 +117,6 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
                 displayAddSetDialog();
             }
         });
-        if (Utils.getFabNotiShowPref(this)) {
-            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
-            tvFabNoti.setVisibility(View.VISIBLE);
-            Utils.displayFabNotification(tvFabNoti, getString(R.string.setFabNotiMsg));
-        }
     }
 
     @Subscribe

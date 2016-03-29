@@ -32,7 +32,6 @@
     <string name="delete_workout_alt">Delete Workout(s)</string>
     <string name="delete_all">Delete All</string>
     <string name="information">Information</string>
-    <string name="display_opts">Display Options</string>
     <string name="renameWorkout">Rename Workout</string>
     <string name="lib_credits">Library Credits</string>
     <string name="add_workout">Add Workout</string>
@@ -88,7 +87,6 @@
     <string name="assignWorkoutDateWhenNoneDialog_Title">Assign Workout(s) For This Date?</string>
     <string name="assignWorkoutDateWhenNoneDialog_assign">Yes, Assign Workout(s)</string>
     <string name="assignWorkoutDateWhenNoneDialog_no">No Thanks</string>
-    <string name="assignWorkoutDateWhenNoneDialog_msg">- You can choose not to display this dialog via the \"Display Options\" from the Home Screen options menu</string>
     <string name="assignWorkoutDateWhenNoneDialogTag">Assign Workout Date When None Dialog Tag</string>
     <string name="noImplementsassignWorkoutDateWhenNoneDialogListener">doesn\'t implement AssignWorkoutDateWhenNoneDialog.</string>
 
@@ -284,8 +282,6 @@
     <string name="title_activity_create_edit_set">CreateEditSet</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="title_activity_view_chooser">ViewChooserActivity</string>
-    <string name="assignDialogPref">assignDialogPref</string>
-    <string name="toolTipShowPref">toolTipDialogPref</string>
     <string name="jalfPref">jalfPref</string>
 
    <!--Home Info Dialog messages-->

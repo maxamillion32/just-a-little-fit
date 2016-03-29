@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DatabaseHelper;
-import group.g203.justalittlefit.dialog.DisplayOptsDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.dialog.LibraryCreditsDialog;
 import group.g203.justalittlefit.util.Constants;
@@ -60,9 +59,6 @@ public class Home extends BaseNaviDrawerActivity {
                 return true;
             case R.id.action_info:
                 displayInfoDialog();
-                break;
-            case R.id.action_opts:
-                displayOptsDialog();
                 break;
             case R.id.action_libs:
                 displayLibsDialog();
@@ -173,11 +169,5 @@ public class Home extends BaseNaviDrawerActivity {
         FragmentManager fm = getSupportFragmentManager();
         LibraryCreditsDialog dialog = LibraryCreditsDialog.newInstance();
         dialog.show(fm, getString(R.string.libCredDialogTag));
-    }
-
-    private void displayOptsDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        DisplayOptsDialog dialog = new DisplayOptsDialog();
-        dialog.show(fm, getString(R.string.displayOptsDialogTag));
     }
 }

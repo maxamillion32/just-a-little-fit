@@ -114,11 +114,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
                 displayAddWorkoutDialog();
             }
         });
-        if (Utils.getFabNotiShowPref(this)) {
-            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
-            tvFabNoti.setVisibility(View.VISIBLE);
-            Utils.displayFabNotification(tvFabNoti, getString(R.string.workoutFabNotiMsg));
-        }
     }
 
     public AbstractDataProvider getDataProvider() {

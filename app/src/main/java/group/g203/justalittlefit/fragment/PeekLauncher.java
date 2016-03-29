@@ -113,7 +113,7 @@ public class PeekLauncher extends Fragment {
 
     private void handleDisplayOptions() {
         FragmentActivity activity = getActivity();
-        if (activity != null && !Utils.isPriorToToday(dateTime) && Utils.getAssignDialogPref(activity)) {
+        if (activity != null && !Utils.isPriorToToday(dateTime)) {
             DateTime dialogDateTime = (dateTime == null) ? new DateTime() : dateTime;
             FragmentManager fm = activity.getSupportFragmentManager();
             AssignWorkoutDateWhenNoneDialog dialog = AssignWorkoutDateWhenNoneDialog.newInstance(dialogDateTime);

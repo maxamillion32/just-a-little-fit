@@ -142,13 +142,6 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
                 }
             }
         });
-
-        if (Utils.getFabNotiShowPref(this)) {
-            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
-            tvFabNoti.setVisibility(View.VISIBLE);
-            Utils.displayFabNotification(tvFabNoti, getString(R.string.assignFabNotiMsg));
-        }
-
         fabIsReady = true;
     }
 

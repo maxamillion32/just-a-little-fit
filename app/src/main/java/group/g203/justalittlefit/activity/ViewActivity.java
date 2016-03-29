@@ -156,11 +156,6 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
                 displayAddExerciseOrSetDialog();
             }
         });
-        if (Utils.getFabNotiShowPref(this)) {
-            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
-            tvFabNoti.setVisibility(View.VISIBLE);
-            Utils.displayFabNotification(tvFabNoti, getString(R.string.viewFabNotiMsg));
-        }
     }
 
     @Subscribe

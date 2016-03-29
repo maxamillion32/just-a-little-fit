@@ -175,11 +175,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
                 displayAddExerciseDialog();
             }
         });
-        if (Utils.getFabNotiShowPref(this)) {
-            TextView tvFabNoti = (TextView) findViewById(R.id.tvFabNoti);
-            tvFabNoti.setVisibility(View.VISIBLE);
-            Utils.displayFabNotification(tvFabNoti, getString(R.string.exerciseFabNotiMsg));
-        }
     }
 
     @Override

@@ -13,11 +13,6 @@
                 app:showAsAction="never"
                 android:title="@string/information"/>
             <item
-                android:id="@+id/action_opts"
-                android:icon="@drawable/ic_options"
-                app:showAsAction="never"
-                android:title="@string/display_opts"/>
-            <item
                 android:id="@+id/action_libs"
                 android:icon="@drawable/ic_library_books"
                 app:showAsAction="never"
