@@ -3,9 +3,7 @@ package group.g203.justalittlefit.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,9 +57,6 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_info:
                 displayInfoDialog();
                 break;
@@ -69,14 +64,6 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
     }
 
     private void initCalendarPicker(final BaseNaviDrawerActivity activity) {
@@ -148,8 +135,8 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         setTitle(R.string.view_title_string);
         hideProgressDialog();
         resetCalendarView();
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
-        selectedItem.setChecked(true);
+        handleBottomNaviDisplay(true);
+        handleNaviSelectionColor(Constants.VIEW);
     }
 
     @Override

@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 import com.squareup.timessquare.CalendarPickerView;
@@ -77,9 +74,6 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_info:
                 displayInfoDialog();
                 break;
@@ -88,15 +82,6 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
-    }
-
 
     private void displayInfoDialog() {
         FragmentManager fm = getSupportFragmentManager();
@@ -126,7 +111,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
 
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -222,10 +207,9 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         setTitle(R.string.assign_title_string);
         registerBus();
         hideProgressDialog();
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_assign);
-        selectedItem.setChecked(true);
         handleDialogResponse();
         handleAssignWorkoutDialogDisplay();
+        handleNaviSelectionColor(Constants.ASSIGN);
     }
 
     private void handleDialogResponse() {

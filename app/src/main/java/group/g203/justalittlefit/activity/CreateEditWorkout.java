@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.squareup.otto.Subscribe;
@@ -95,17 +92,9 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
     }
 
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
-    }
-
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -258,9 +247,6 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_delete_all:
                 displayConfirmDeleteAllWorkoutsDialog();
                 break;
@@ -300,8 +286,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
 
         setupFloatingActionButton(this);
         setTitle(R.string.create_edit_title_string);
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
-        selectedItem.setChecked(true);
+        handleNaviSelectionColor(Constants.CREATE_EDIT);
     }
 
     private void reorderWorkouts() {

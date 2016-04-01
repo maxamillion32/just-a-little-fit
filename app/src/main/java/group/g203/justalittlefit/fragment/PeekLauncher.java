@@ -77,11 +77,14 @@ public class PeekLauncher extends Fragment {
                 Intent intent;
                 Bundle bundle = new Bundle();
 
-                if (Utils.isPriorToToday(dateTime)) {
+                if ( Utils.isPriorToToday(dateTime)) {
                     intent = new Intent(getActivity(), ViewPastWorkout.class);
                     bundle.putSerializable(Constants.DATE, dateTime);
                 } else {
                     bundle.putParcelable(Constants.WORKOUT, workouts.get(0));
+                    if (dateTime == null || Utils.isToday(dateTime)) {
+                        bundle.putString(Constants.TODAY_HIGHLIGHT_KEY, Constants.TODAY);
+                    }
                     intent = new Intent(getActivity(), ViewActivity.class);
                 }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -96,6 +99,9 @@ public class PeekLauncher extends Fragment {
                     bundle.putSerializable(Constants.DATE, dateTime);
                 } else {
                     intent = new Intent(getActivity(), ViewChooserActivity.class);
+                    if (dateTime == null || Utils.isToday(dateTime)) {
+                        bundle.putString(Constants.TODAY_HIGHLIGHT_KEY, Constants.TODAY);
+                    }
                     bundle.putParcelableArrayList(Constants.WORKOUTS, workouts);
                 }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

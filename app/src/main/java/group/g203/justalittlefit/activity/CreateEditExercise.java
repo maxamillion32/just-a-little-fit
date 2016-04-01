@@ -6,10 +6,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -156,17 +154,9 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         hideProgressDialog();
     }
 
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
-    }
-
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -186,9 +176,6 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_delete_all:
                 displayConfirmDeleteAllExercisesDialog();
                 break;
@@ -332,8 +319,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
             displayExerciseList();
         }
         formatAndSetWorkoutHeaderTexts();
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_createEdit);
-        selectedItem.setChecked(true);
+        handleNaviSelectionColor(Constants.CREATE_EDIT);
     }
 
     @Override

@@ -44,6 +44,12 @@ public class Constants {
 
     public static final String SELECT_DIALOG = "SelectDialog";
 
+    public static final String CREATE_EDIT = "CreateEdit";
+
+    public static final String VIEW = "View";
+
+    public static final String TODAY = "Today";
+
     public static final String EMPTY_STRING = "";
 
     public static final String SPACE = " ";
@@ -117,5 +123,7 @@ public class Constants {
     public static final String COLLAPSE_ICON = "[ - ]";
 
     public static final String ASSIGN_DATE = "assignDate";
+
+    public static final String TODAY_HIGHLIGHT_KEY = "TODAY_HIGHLIGHT_KEY";
 }
 

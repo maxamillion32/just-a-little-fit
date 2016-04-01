@@ -3,10 +3,8 @@ package group.g203.justalittlefit.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,14 +135,6 @@ public class ViewPastWorkout extends BaseNaviDrawerActivity implements ConfirmDe
     }
 
     @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_view_info_delete_single, menu);
         return true;
@@ -153,9 +143,6 @@ public class ViewPastWorkout extends BaseNaviDrawerActivity implements ConfirmDe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_info:
                 displayInfoDialog();
                 break;
@@ -221,8 +208,8 @@ public class ViewPastWorkout extends BaseNaviDrawerActivity implements ConfirmDe
         setTitle(R.string.view_title_string);
         displayWorkoutViews();
         registerBus();
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_view);
-        selectedItem.setChecked(true);
+        handleBottomNaviDisplay(true);
+        handleNaviSelectionColor(Constants.VIEW);
     }
 
     @Override

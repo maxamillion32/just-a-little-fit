@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,13 +15,11 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.database.DatabaseHelper;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.dialog.LibraryCreditsDialog;
 import group.g203.justalittlefit.util.Constants;
-import group.g203.justalittlefit.util.Utils;
 
 /**
  * Home screen activity.
@@ -54,9 +50,6 @@ public class Home extends BaseNaviDrawerActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_info:
                 displayInfoDialog();
                 break;
@@ -91,21 +84,12 @@ public class Home extends BaseNaviDrawerActivity {
         setTitle(Constants.EMPTY_STRING);
         getHelper();
         this.formatHomeTextView();
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
-        selectedItem.setChecked(true);
+        handleBottomNaviDisplay(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_home);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
     }
 
     /**
@@ -131,32 +115,6 @@ public class Home extends BaseNaviDrawerActivity {
     private void formatHomeTextView() {
             Typeface face=Typeface.createFromAsset(getAssets(), Constants.CUSTOM_FONT_TTF);
             homeTextView.setTypeface(face);
-    }
-
-    @OnClick(R.id.todayHomeOption)
-    void startTodayActivity() {
-        Utils.launchTodayActivity(this);
-    }
-
-    @OnClick(R.id.createEditHomeOption)
-    void startCreateEditActivity() {
-        Intent intent = new Intent(this, CreateEditWorkout.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-    }
-
-    @OnClick(R.id.assignHomeOption)
-    void startAssignActivity() {
-        Intent intent = new Intent(this, Assign.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-    }
-
-    @OnClick(R.id.viewHomeOption)
-    void startViewWorkoutActivity() {
-        Intent intent = new Intent(this, ChooseWorkoutDate.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
     }
 
     private void displayInfoDialog() {

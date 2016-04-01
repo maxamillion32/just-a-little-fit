@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager;
 import com.squareup.otto.Subscribe;
@@ -119,9 +116,6 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_delete:
                 displayConfirmDeleteWorkoutDialog();
                 break;
@@ -137,17 +131,9 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
-    }
-
     private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        clFab = (CoordinatorLayout) findViewById(R.id.clFab);
+        clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.drawable.ic_plus_white);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -421,8 +407,14 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
         if (savedBundle == null) {
             displayWorkoutOfDate();
         }
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
-        selectedItem.setChecked(true);
+        handleNaviSelectionColor(Constants.VIEW);
+        Bundle extras = getIntent().getExtras();
+        String highlightKey = null;
+        if (Utils.isInBundleAndValid(extras, Constants.TODAY_HIGHLIGHT_KEY)) {
+            highlightKey = extras.getString(Constants.TODAY_HIGHLIGHT_KEY);
+        }
+        String naviCaseValue = (highlightKey == null) ? Constants.VIEW : highlightKey;
+        handleNaviSelectionColor(naviCaseValue);
     }
 
     @Override

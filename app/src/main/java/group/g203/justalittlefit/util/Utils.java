@@ -3,25 +3,15 @@ package group.g203.justalittlefit.util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,10 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.Assign;
-import group.g203.justalittlefit.activity.ChooseWorkoutDate;
-import group.g203.justalittlefit.activity.CreateEditWorkout;
-import group.g203.justalittlefit.activity.Home;
 import group.g203.justalittlefit.advanced_recyclerview.rv_create_edit.AbstractDataProvider;
 import group.g203.justalittlefit.advanced_recyclerview.rv_view.AbstractExpandableDataProvider;
 import group.g203.justalittlefit.fragment.PeekLauncher;
@@ -133,59 +119,6 @@ public class Utils {
         } else {
             return Integer.parseInt(text.toString());
         }
-    }
-
-    public static void setupDrawerContent(final AppCompatActivity activity, final DrawerLayout drawerLayout, NavigationView navigationView) {
-        TextView headerView = new TextView(activity);
-        headerView.setGravity(Gravity.CENTER);
-        headerView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 60);
-        Typeface face=Typeface.createFromAsset(activity.getAssets(), Constants.CUSTOM_FONT_TTF);
-        headerView.setText(activity.getString(R.string.title_name));
-        headerView.setTypeface(face);
-        headerView.setPadding(0, 80, 0, 0);
-        navigationView.addHeaderView(headerView);
-
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        String activityTitle = activity.getTitle().toString().trim();
-                        String selectedTitle = menuItem.getTitle().toString().trim();
-
-                        if (selectedTitle.equals(activityTitle)) {
-                             /* do nothing, menu item will be checked and close out drawer after
-                             the completion of this if-else logic */
-                        } else if (selectedTitle.equals(activity.getString(R.string.today_string).trim())) {
-                            launchTodayActivity(activity);
-                        } else if (selectedTitle.equals(activity.getString(R.string.create_edit_string).trim())) {
-                            Intent createEditWorkoutIntent =
-                                    new Intent(activity, CreateEditWorkout.class);
-                            createEditWorkoutIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(createEditWorkoutIntent);
-                        } else if (selectedTitle.equals(activity.getString(R.string.assign_string).trim())) {
-                            Intent assignIntent =
-                                    new Intent(activity, Assign.class);
-                            assignIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(assignIntent);
-                        } else if (selectedTitle.equals(activity.getString(R.string.view_string).trim())) {
-                            Intent chooseWorkoutDateIntent =
-                                    new Intent(activity, ChooseWorkoutDate.class);
-                            chooseWorkoutDateIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(chooseWorkoutDateIntent);
-                        } else if (selectedTitle.equals(activity.getString(R.string.home_string).trim())) {
-                            Intent homeIntent =
-                                    new Intent(activity, Home.class);
-                            homeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            activity.startActivity(homeIntent);
-                        } else {
-                            /* Shouldn't reach this but if so, doing nothing here
-                            is harmless as the drawer will close */
-                        }
-                        drawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
     }
 
     public static void launchTodayActivity(AppCompatActivity activity) {
@@ -463,34 +396,9 @@ public class Utils {
     public static void exitActivityOnError(Activity activity) {
         if (activity != null) {
             displayLongToast(activity, activity.getString(R.string.general_error));
+            displayLongToast(activity, activity.getString(R.string.general_error));
             activity.finish();
         }
-    }
-
-    public static void displayFabNotification(final TextView tv, String notiText) {
-        tv.setText(notiText);
-
-        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
-        anim.setDuration(10000);
-        anim.setRepeatCount(0);
-        anim.setRepeatMode(Animation.REVERSE);
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // do nothing
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                tv.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // do nothing
-            }
-        });
-        tv.startAnimation(anim);
     }
 
     public static boolean isInBundleAndValid(Bundle bundle, String bundleVal) {

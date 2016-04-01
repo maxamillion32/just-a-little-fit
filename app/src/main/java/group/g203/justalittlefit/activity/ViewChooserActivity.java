@@ -3,9 +3,7 @@ package group.g203.justalittlefit.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,9 +63,6 @@ public class ViewChooserActivity extends BaseNaviDrawerActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.action_info:
                 displayInfoDialog();
                 break;
@@ -75,14 +70,6 @@ public class ViewChooserActivity extends BaseNaviDrawerActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    void setupDrawerContent(NavigationView navigationView) {
-        // Check menu item of currently displayed activity
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
-        selectedItem.setChecked(true);
-        super.setupDrawerContent(navigationView);
     }
 
     @Override
@@ -154,7 +141,13 @@ public class ViewChooserActivity extends BaseNaviDrawerActivity {
         setDisplayDate();
         setupRecyclerView();
         hideProgressDialog();
-        MenuItem selectedItem = navigationView.getMenu().findItem(R.id.navi_today);
-        selectedItem.setChecked(true);
+        handleBottomNaviDisplay(true);
+        Bundle extras = getIntent().getExtras();
+        String highlightKey = null;
+        if (Utils.isInBundleAndValid(extras, Constants.TODAY_HIGHLIGHT_KEY)) {
+            highlightKey = extras.getString(Constants.TODAY_HIGHLIGHT_KEY);
+        }
+        String naviCaseValue = (highlightKey == null) ? Constants.VIEW : highlightKey;
+        handleNaviSelectionColor(naviCaseValue);
     }
 }

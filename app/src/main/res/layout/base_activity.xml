@@ -45,27 +45,143 @@
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/clFab"
+        android:id="@+id/clBase"
         android:visibility="invisible"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            app:layout_behavior="group.g203.justalittlefit.util.SlideUpBehavior">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
+            android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             app:borderWidth="0dp" />
 
-    </android.support.design.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/llOfClBase"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/fallback_gray"
+            android:layout_below="@+id/fab"
+            android:gravity="bottom"
+            android:layout_gravity="end|bottom"
+            android:orientation="horizontal">
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/navi_drawer_menu"/>
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/todayBottomOption"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="startTodayActivity"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/todayBottomIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_today" />
+
+                <TextView
+                    android:id="@+id/todayBottomText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/today_string"
+                    android:textColor="@color/app_gray"/>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/viewBottomOption"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="startViewWorkoutActivity"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/viewBottomIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_view" />
+
+                <TextView
+                    android:id="@+id/viewBottomText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_string"
+                    android:textColor="@color/app_gray"/>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/assignBottomOption"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="startAssignActivity"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/assignBottomIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_assign" />
+
+                <TextView
+                    android:id="@+id/assignBottomText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assign_string"
+                    android:textColor="@color/app_gray"/>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/createEditBottomOption"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="startCreateEditActivity"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/createEditBottomIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_create_edit" />
+
+                <TextView
+                    android:id="@+id/createEditBottomText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_edit_string"
+                    android:textColor="@color/app_gray"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </android.support.v4.widget.DrawerLayout>
