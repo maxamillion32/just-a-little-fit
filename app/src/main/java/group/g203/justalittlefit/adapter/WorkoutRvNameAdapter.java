@@ -17,6 +17,7 @@ import group.g203.justalittlefit.activity.ViewActivity;
 import group.g203.justalittlefit.activity.ViewChooserActivity;
 import group.g203.justalittlefit.model.Workout;
 import group.g203.justalittlefit.util.Constants;
+import group.g203.justalittlefit.util.Utils;
 
 /**
  * RecyclerView adapter for {@link ViewChooserActivity}.
@@ -41,6 +42,10 @@ public class WorkoutRvNameAdapter extends RecyclerView.Adapter<WorkoutRvNameAdap
             public void onRvRowClick(View caller, Workout workoutObj) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.WORKOUT, workoutObj);
+
+                if (workoutObj.getWorkoutDate() != null && Utils.isToday(workoutObj.getWorkoutDate())) {
+                    bundle.putString(Constants.TODAY_HIGHLIGHT_KEY, Constants.TODAY);
+                }
 
                 Intent intent = new Intent(context, ViewActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
