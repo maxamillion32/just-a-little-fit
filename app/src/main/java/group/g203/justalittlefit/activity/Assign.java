@@ -41,7 +41,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Assigns {@link group.g203.justalittlefit.model.Workout} objects to dates.
  */
-public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialogListener {
+public class Assign extends BaseActivity implements AssignWorkoutDialogListener {
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
     private static final String AND = " and ";
@@ -89,7 +89,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         dialog.show(fm, getString(R.string.infoDialogTagAssign));
     }
 
-    private void initCalendarPicker(final BaseNaviDrawerActivity activity) {
+    private void initCalendarPicker(final BaseActivity activity) {
         DateTime now = new DateTime();
         DateTime maxDate = now.plusYears(1);
 
@@ -109,7 +109,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
         });
     }
 
-    private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
+    private void setupFloatingActionButton(final BaseActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);
@@ -195,7 +195,7 @@ public class Assign extends BaseNaviDrawerActivity implements AssignWorkoutDialo
     @Override
     public void onResume() {
         super.onResume();
-        final BaseNaviDrawerActivity activity = this;
+        final BaseActivity activity = this;
         showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

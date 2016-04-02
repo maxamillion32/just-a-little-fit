@@ -24,7 +24,7 @@ import group.g203.justalittlefit.util.Constants;
 /**
  * Home screen activity.
  */
-public class Home extends BaseNaviDrawerActivity {
+public class Home extends BaseActivity {
     private final String LOG_TAG = getClass().getSimpleName();
     private DatabaseHelper databaseHelper = null;
     @Bind(R.id.homeLogoText)

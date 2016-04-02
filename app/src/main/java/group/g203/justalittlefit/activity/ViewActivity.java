@@ -57,7 +57,7 @@ import group.g203.justalittlefit.util.Utils;
  * Activity that displays a {@link group.g203.justalittlefit.model.Workout} in a
  * view which allows a user to fully edit said {@link group.g203.justalittlefit.model.Workout}.
  */
-public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseDialogListener,
+public class ViewActivity extends BaseActivity implements AddExerciseDialogListener,
         AddSetDialogListener, ConfirmDeleteViewWorkoutListener, RenameDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -131,7 +131,7 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
+    private void setupFloatingActionButton(final BaseActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);

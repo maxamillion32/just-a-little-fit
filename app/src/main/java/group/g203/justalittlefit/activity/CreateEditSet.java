@@ -48,7 +48,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Creates a {@link group.g203.justalittlefit.model.Set} in the app.
  */
-public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSetsDeletionListener, AddSetDialogListener {
+public class CreateEditSet extends BaseActivity implements ConfirmSetsDeletionListener, AddSetDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -105,7 +105,7 @@ public class CreateEditSet extends BaseNaviDrawerActivity implements ConfirmSets
         }
     }
 
-    private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
+    private void setupFloatingActionButton(final BaseActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);

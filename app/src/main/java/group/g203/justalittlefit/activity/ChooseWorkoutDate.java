@@ -27,7 +27,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Activity that displays calendar to choose date to view a {@link group.g203.justalittlefit.model.Workout}
  */
-public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
+public class ChooseWorkoutDate extends BaseActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
@@ -66,7 +66,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initCalendarPicker(final BaseNaviDrawerActivity activity) {
+    private void initCalendarPicker(final BaseActivity activity) {
         DateTime now = new DateTime();
         DateTime minDate = now.minusYears(5);
         DateTime maxDate = now.plusYears(5);
@@ -124,7 +124,7 @@ public class ChooseWorkoutDate extends BaseNaviDrawerActivity {
     @Override
     public void onResume() {
         super.onResume();
-        final BaseNaviDrawerActivity activity = this;
+        final BaseActivity activity = this;
         showProgressDialog();
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -50,7 +50,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Creates an {@link group.g203.justalittlefit.model.Exercise} in the app.
  */
-public class CreateEditExercise extends BaseNaviDrawerActivity implements ConfirmExercisesDeletionListener,
+public class CreateEditExercise extends BaseActivity implements ConfirmExercisesDeletionListener,
         AddExerciseDialogListener, RenameDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -154,7 +154,7 @@ public class CreateEditExercise extends BaseNaviDrawerActivity implements Confir
         hideProgressDialog();
     }
 
-    private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
+    private void setupFloatingActionButton(final BaseActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);

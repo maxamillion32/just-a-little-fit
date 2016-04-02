@@ -40,7 +40,7 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 import me.relex.circleindicator.CircleIndicator;
 
-public class ViewPastWorkout extends BaseNaviDrawerActivity implements ConfirmDeleteTodayWorkoutListener, DeleteWorkoutsFromViewDialogListener {
+public class ViewPastWorkout extends BaseActivity implements ConfirmDeleteTodayWorkoutListener, DeleteWorkoutsFromViewDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @Bind(R.id.vpWorkouts)

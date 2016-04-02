@@ -32,7 +32,7 @@ import group.g203.justalittlefit.util.Utils;
  * The activity that displays when there are multiple
  * {@link group.g203.justalittlefit.model.Workout} objects assigned.
  */
-public class ViewChooserActivity extends BaseNaviDrawerActivity {
+public class ViewChooserActivity extends BaseActivity {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
 

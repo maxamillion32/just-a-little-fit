@@ -52,7 +52,7 @@ import group.g203.justalittlefit.util.Utils;
 /**
  * Creates a {@link group.g203.justalittlefit.model.Workout} in the app.
  */
-public class CreateEditWorkout extends BaseNaviDrawerActivity implements ConfirmWorkoutsDeletionListener,
+public class CreateEditWorkout extends BaseActivity implements ConfirmWorkoutsDeletionListener,
         AddWorkoutDialogListener, RenameDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -92,7 +92,7 @@ public class CreateEditWorkout extends BaseNaviDrawerActivity implements Confirm
         new DbAsyncTask(Constants.CREATE_EDIT_WORKOUT).execute(getAllWorkoutDfo);
     }
 
-    private void setupFloatingActionButton(final BaseNaviDrawerActivity activity) {
+    private void setupFloatingActionButton(final BaseActivity activity) {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         clFab = (CoordinatorLayout) findViewById(R.id.clBase);
         clFab.setVisibility(View.VISIBLE);
