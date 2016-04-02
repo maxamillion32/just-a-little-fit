@@ -77,7 +77,7 @@ public class PeekLauncher extends Fragment {
                 Intent intent;
                 Bundle bundle = new Bundle();
 
-                if ( Utils.isPriorToToday(dateTime)) {
+                if (Utils.isPriorToToday(dateTime)) {
                     intent = new Intent(getActivity(), ViewPastWorkout.class);
                     bundle.putSerializable(Constants.DATE, dateTime);
                 } else {
