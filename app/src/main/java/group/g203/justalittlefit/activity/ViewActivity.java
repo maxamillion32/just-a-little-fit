@@ -530,7 +530,7 @@ public class ViewActivity extends BaseNaviDrawerActivity implements AddExerciseD
                 } else if (dialog.getRbNonWeightedSet().isChecked()) {
                     int reps = Utils.returnValidNumberFromEditText(dialog.getEtRepCount());
                     String exerciseCd = Constants.NA;
-                    addedSet = new Set(reps, exerciseCd);
+                    addedSet = new Set(parentExercise, reps, exerciseCd, dataProvider.getSetCount(parentExercise));
                 }
             } else {
                 Utils.displayLongSimpleSnackbar(fab, getString(R.string.add_set_error));
