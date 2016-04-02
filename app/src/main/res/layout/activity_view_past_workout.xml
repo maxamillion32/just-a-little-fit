@@ -20,7 +20,6 @@
         app:ci_height="4dp"
         app:ci_margin="6dp"
         android:id="@+id/circleIndicator"
-        android:paddingBottom="60dp"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
