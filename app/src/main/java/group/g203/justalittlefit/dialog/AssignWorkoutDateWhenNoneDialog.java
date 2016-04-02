@@ -35,6 +35,7 @@ public class AssignWorkoutDateWhenNoneDialog extends AppBaseDialog {
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         builder.setTitle(getString(R.string.assignWorkoutDateWhenNoneDialog_Title));
+        builder.setMessage(getString(R.string.assignWorkoutDateWhenNoneDialog_msg));
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(Constants.ASSIGN_DATE)) {

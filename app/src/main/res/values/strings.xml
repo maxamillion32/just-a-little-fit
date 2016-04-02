@@ -85,6 +85,7 @@
 
     <!-- AssignWorkoutDateWhenNoneDialog Strings -->
     <string name="assignWorkoutDateWhenNoneDialog_Title">Assign Workout(s) For This Date?</string>
+    <string name="assignWorkoutDateWhenNoneDialog_msg">Currently there are no workout(s) assigned to this date</string>
     <string name="assignWorkoutDateWhenNoneDialog_assign">Yes, Assign Workout(s)</string>
     <string name="assignWorkoutDateWhenNoneDialog_no">No Thanks</string>
     <string name="assignWorkoutDateWhenNoneDialogTag">Assign Workout Date When None Dialog Tag</string>
