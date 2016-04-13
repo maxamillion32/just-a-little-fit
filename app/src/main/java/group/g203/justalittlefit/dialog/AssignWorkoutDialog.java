@@ -28,7 +28,9 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,7 +60,7 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
     RadioGroup rgOpts;
     ArrayList<DateTime> dateTimes;
     HashSet<Workout> workoutCollection;
-    List<Workout> unAssignedWorkouts;
+    List<Workout> unassignedWorkouts;
     boolean busRegistered;
     AlertDialog thisDialog;
 
@@ -148,12 +150,12 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
             workoutCollection = (HashSet<Workout>) event.getResult();
             callUnassignedWorkouts();
         } else {
-            unAssignedWorkouts  = (List<Workout>) event.getResult();
-            if (unAssignedWorkouts == null) {
+            unassignedWorkouts = (List<Workout>) event.getResult();
+            if (unassignedWorkouts == null) {
                 Snackbar.make(getActivity().findViewById(R.id.fab),
                         getString(R.string.workout_list_error), Snackbar.LENGTH_LONG)
                         .show();
-            } else if (unAssignedWorkouts.isEmpty()) {
+            } else if (unassignedWorkouts.isEmpty()) {
                 displayJumpToCreateEditDialog();
                 dismiss();
             } else {
@@ -177,7 +179,7 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
         switch (view.getId()) {
             case R.id.rbWorkoutsToAssign:
                 if (checked) {
-                    displayUnassignedWorkouts(unAssignedWorkouts);
+                    displayUnassignedWorkouts(unassignedWorkouts);
                     break;
                 }
             case R.id.rbExistingWorkouts:
@@ -245,7 +247,8 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
 
     private void displayDialogUi(){
         displayOpts();
-        displayUnassignedWorkouts(unAssignedWorkouts);
+        filterOutAssignedWorkouts();
+        displayUnassignedWorkouts(unassignedWorkouts);
     }
 
     private void displayUnassignedWorkouts(List<Workout> workouts) {
@@ -255,18 +258,48 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
 
         workoutContainer.removeAllViews();
         int count = 0;
-        for (Workout workout : workouts)
-        {
-            TableRow row = new TableRow(getActivity());
-            row.setId(count);
-            count++;
-            row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-            CheckBox checkBox = new CheckBox(getActivity());
-            checkBox.setId(workout.getWorkoutId());
-            checkBox.setText(Utils.ensureValidString(workout.getName()));
-            checkBox.setOnCheckedChangeListener(this);
-            row.addView(checkBox);
-            workoutContainer.addView(row);
+        if (!Utils.collectionIsNullOrEmpty(workouts)) {
+            for (Workout workout : workouts) {
+                TableRow row = new TableRow(getActivity());
+                row.setId(count);
+                count++;
+                row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                CheckBox checkBox = new CheckBox(getActivity());
+                checkBox.setId(workout.getWorkoutId());
+                checkBox.setText(Utils.ensureValidString(workout.getName()));
+                checkBox.setOnCheckedChangeListener(this);
+                row.addView(checkBox);
+                workoutContainer.addView(row);
+            }
+        } else {
+            TextView noWorkoutsTv = new TextView(getActivity());
+            noWorkoutsTv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            noWorkoutsTv.setText(getActivity().getString(R.string.no_workouts_to_assign));
+            noWorkoutsTv.setTypeface(null, Typeface.BOLD);
+            noWorkoutsTv.setGravity(Gravity.CENTER);
+            workoutContainer.addView(noWorkoutsTv);
+        }
+    }
+
+    private void filterOutAssignedWorkouts() {
+        if (!Utils.collectionIsNullOrEmpty(workoutCollection) &&
+                !Utils.collectionIsNullOrEmpty(unassignedWorkouts) &&
+                (dateTimes != null && dateTimes.size() == Constants.INT_ONE)) {
+            Set<String> assignedWorkoutNames = new HashSet<>(workoutCollection.size());
+
+            for (Workout workout : workoutCollection) {
+                assignedWorkoutNames.add(Utils.ensureValidString(workout.getName()));
+            }
+
+            Iterator<Workout> iterator = unassignedWorkouts.iterator();
+            if (iterator != null) {
+                while (iterator.hasNext()) {
+                    Workout workout = iterator.next();
+                    if (assignedWorkoutNames.contains(Utils.ensureValidString(workout.getName()))) {
+                        iterator.remove();
+                    }
+                }
+            }
         }
     }
 

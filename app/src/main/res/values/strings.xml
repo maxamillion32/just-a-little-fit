@@ -241,6 +241,7 @@
     <string name="workout_list_empty_for_assign">Your Workout list is empty. Please create one to continue.</string>
     <string name="workouts_assigned_successfully">Workout(s) successfully assigned date(s)</string>
     <string name="no_workouts_to_view">No workouts were scheduled for this date.</string>
+    <string name="no_workouts_to_assign">All workouts have been assigned for this date. Please view your \'Existing Workouts\'.</string>
     <string name="workout_deleted">Workout deleted</string>
     <string name="workout_s_deleted">Workout(s) deleted</string>
     <string name="exercise_deleted">Exercise deleted</string>
