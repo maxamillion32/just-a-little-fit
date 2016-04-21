@@ -206,6 +206,11 @@ public class QueryExecutor {
 
             List<Workout> assignedWorkouts = new ArrayList<>();
 
+            if (Utils.collectionIsNullOrEmpty(dateTimes)) {
+                dateTimes = new ArrayList<>();
+                dateTimes.add(new DateTime());
+            }
+
             for (DateTime dateTime : dateTimes) {
                 List<Workout> workoutsByDate = getWorkoutsByDate(dateTime);
                 Map<String, Workout> workoutsByDateMap = Utils.makeNameWorkoutMap(workoutsByDate);
