@@ -1,5 +1,6 @@
 package group.g203.justalittlefit.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -119,15 +120,21 @@ public class Assign extends BaseActivity implements AssignWorkoutDialogListener 
             public void onClick(View view) {
                 if (assignCalendar.getSelectedDates().isEmpty() && Utils.collectionIsNullOrEmpty(dateTimes)) {
                     Utils.displayLongSimpleSnackbar(view, getString(R.string.enforceDatesForAssignment));
+                } else if (assignCalendar.getSelectedDates().isEmpty() && !Utils.collectionIsNullOrEmpty(dateTimes)) {
+                    assignWorkoutDates(activity);
                 } else {
                     setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
-                    FragmentManager fm = activity.getSupportFragmentManager();
-                    AssignWorkoutDialog dialog = AssignWorkoutDialog.newInstance(dateTimes);
-                    dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
+                    assignWorkoutDates(activity);
                 }
             }
         });
         fabIsReady = true;
+    }
+
+    private void assignWorkoutDates(BaseActivity activity) {
+        FragmentManager fm = activity.getSupportFragmentManager();
+        AssignWorkoutDialog dialog = AssignWorkoutDialog.newInstance(dateTimes);
+        dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
     }
 
     public void setDateTimes(ArrayList<DateTime> dateTimes) {
