@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.activity.Assign;
@@ -63,10 +67,12 @@ public class AssignWorkoutDateWhenNoneDialog extends AppBaseDialog {
                     public void onClick(View view) {
                         dialog.dismiss();
                         if (getActivity() != null) {
-                            Intent intent = new Intent(getActivity(), Assign.class);
-                            intent.putExtra(Constants.ASSIGN_DATE, dateTime);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            getActivity().startActivity(intent);
+                            ArrayList<DateTime> dateTimeList = new ArrayList<>();
+                            dateTimeList.add(dateTime);
+
+                            FragmentManager fm = getActivity().getSupportFragmentManager();
+                            AssignWorkoutDialog dialog = AssignWorkoutDialog.newInstance(dateTimeList);
+                            dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
                         }
                     }
                 });

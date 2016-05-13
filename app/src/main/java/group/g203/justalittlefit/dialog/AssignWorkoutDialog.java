@@ -341,4 +341,8 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
     public List<String> getSelectedWorkoutNames() {
         return selectedWorkoutNames;
     }
+
+    public ArrayList<DateTime> getDateTimes() {
+        return dateTimes;
+    }
 }

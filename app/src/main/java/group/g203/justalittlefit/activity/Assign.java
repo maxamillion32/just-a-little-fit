@@ -1,6 +1,5 @@
 package group.g203.justalittlefit.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -120,21 +119,15 @@ public class Assign extends BaseActivity implements AssignWorkoutDialogListener 
             public void onClick(View view) {
                 if (assignCalendar.getSelectedDates().isEmpty() && Utils.collectionIsNullOrEmpty(dateTimes)) {
                     Utils.displayLongSimpleSnackbar(view, getString(R.string.enforceDatesForAssignment));
-                } else if (assignCalendar.getSelectedDates().isEmpty() && !Utils.collectionIsNullOrEmpty(dateTimes)) {
-                    assignWorkoutDates(activity);
                 } else {
                     setDateTimes(Utils.dateListToDateTimeList(assignCalendar.getSelectedDates()));
-                    assignWorkoutDates(activity);
+                    FragmentManager fm = activity.getSupportFragmentManager();
+                    AssignWorkoutDialog dialog = AssignWorkoutDialog.newInstance(dateTimes);
+                    dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
                 }
             }
         });
         fabIsReady = true;
-    }
-
-    private void assignWorkoutDates(BaseActivity activity) {
-        FragmentManager fm = activity.getSupportFragmentManager();
-        AssignWorkoutDialog dialog = AssignWorkoutDialog.newInstance(dateTimes);
-        dialog.show(fm, getString(R.string.assignWorkoutDialogTag));
     }
 
     public void setDateTimes(ArrayList<DateTime> dateTimes) {
@@ -214,24 +207,8 @@ public class Assign extends BaseActivity implements AssignWorkoutDialogListener 
         setTitle(R.string.assign_title_string);
         registerBus();
         hideProgressDialog();
-        handleDialogResponse();
         handleAssignWorkoutDialogDisplay();
         handleNaviSelectionColor(Constants.ASSIGN);
-    }
-
-    private void handleDialogResponse() {
-        Bundle extras = getIntent().getExtras();
-        if (Utils.isInBundleAndValid(extras, Constants.ASSIGN_DATE)) {
-            dateTimes = new ArrayList<>(1);
-            dateTimes.add((DateTime) extras.getSerializable(Constants.ASSIGN_DATE));
-            do {
-                if (fabIsReady) {
-                    fab.performClick();
-                }
-            } while (!fabIsReady);
-        } else {
-            // do nothing
-        }
     }
 
     private void handleAssignWorkoutDialogDisplay() {

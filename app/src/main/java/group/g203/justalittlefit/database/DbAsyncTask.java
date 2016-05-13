@@ -116,6 +116,7 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
+            case Constants.CHOOSE_WORKOUT_DATE:
             case Constants.ASSIGN:
                 for (DbFunctionObject dfo : params) {
                     try {
@@ -214,6 +215,9 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 break;
             case Constants.PAST_VIEW_TEXT:
                 BusFactory.getPastViewBus().post(new DbTaskResult(result));
+                break;
+            case Constants.CHOOSE_WORKOUT_DATE:
+                BusFactory.getChooseWorkoutDateBus().post(new DbTaskResult(result));
         }
     }
 }

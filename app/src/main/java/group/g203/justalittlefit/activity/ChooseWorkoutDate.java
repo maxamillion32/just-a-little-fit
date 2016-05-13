@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
+import com.squareup.otto.Subscribe;
 import com.squareup.timessquare.CalendarPickerView;
 
 import org.joda.time.DateTime;
@@ -16,18 +18,28 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import group.g203.justalittlefit.R;
+import group.g203.justalittlefit.database.DbAsyncTask;
+import group.g203.justalittlefit.database.DbConstants;
+import group.g203.justalittlefit.database.DbFunctionObject;
+import group.g203.justalittlefit.database.DbTaskResult;
+import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
+import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
+import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
 /**
  * Activity that displays calendar to choose date to view a {@link group.g203.justalittlefit.model.Workout}
  */
-public class ChooseWorkoutDate extends BaseActivity {
+public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDialogListener {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
     private static final String DATE_ERROR_PREFIX = "Selected dates must be between ";
@@ -36,6 +48,7 @@ public class ChooseWorkoutDate extends BaseActivity {
     @Bind(R.id.chooseCalendar)
     CalendarPickerView chooseCalendar;
     DateTime chosenDateTime;
+    boolean busRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +146,7 @@ public class ChooseWorkoutDate extends BaseActivity {
         ButterKnife.bind(this, frameLayout);
         initCalendarPicker(activity);
         setTitle(R.string.view_title_string);
+        registerBus();
         hideProgressDialog();
         resetCalendarView();
         handleBottomNaviDisplay(true);
@@ -142,7 +156,65 @@ public class ChooseWorkoutDate extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterBus();
         hideProgressDialog();
         frameLayout.removeAllViews();
+    }
+
+
+    @Override
+    public void onAssignWorkoutClick(AssignWorkoutDialog dialog) {
+        showProgressDialog();
+        LinkedList<Object> dateTimeIdList = new LinkedList<>();
+        dateTimeIdList.add(0, dialog.getDateTimes());
+        dateTimeIdList.add(1, dialog.getSelectedWorkoutNames());
+
+        DbFunctionObject createNewWorkoutDfo = new DbFunctionObject(dateTimeIdList, DbConstants.ASSIGN_WORKOUTS);
+        new DbAsyncTask(Constants.CHOOSE_WORKOUT_DATE).execute(createNewWorkoutDfo);
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(DbTaskResult event) {
+        Object eventResult = null;
+        if (event != null) {
+            eventResult = event.getResult();
+        }
+        if (eventResult != null && eventResult instanceof List) {
+            List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
+            Utils.displayLongActionSnackbar(getBottomNaviView(), getString(R.string.workouts_assigned_successfully),
+                    Constants.UNDO, undoAssignListener(assignedWorkouts),
+                    getResources().getColor(R.color.app_blue_gray));
+            resetCalendarView();
+        } else if (eventResult != null && eventResult instanceof String) {
+            Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.removed_assigned_workouts_successfully));
+            resetCalendarView();
+        } else {
+            Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.assign_workout_error));
+        }
+        hideProgressDialog();
+    }
+
+    private View.OnClickListener undoAssignListener(final List<Workout> workoutsToRemove) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbFunctionObject removeAssignedWorkouts = new DbFunctionObject(workoutsToRemove, DbConstants.DELETE_WORKOUTS);
+                new DbAsyncTask(Constants.CHOOSE_WORKOUT_DATE).execute(removeAssignedWorkouts);
+            }
+        };
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            BusFactory.getChooseWorkoutDateBus().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            BusFactory.getChooseWorkoutDateBus().unregister(this);
+            busRegistered = false;
+        }
     }
 }

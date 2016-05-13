@@ -25,6 +25,7 @@ import group.g203.justalittlefit.util.Utils;
 public class BaseActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     ProgressDialog progressDialog;
+    LinearLayout bottomNaviView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,9 @@ public class BaseActivity extends AppCompatActivity {
         TextView textView = null;
         int blueGrayColor = ContextCompat.getColor(this, R.color.app_blue_gray);
         int grayColor = ContextCompat.getColor(this, R.color.app_gray);
+
+        bottomNaviView = (LinearLayout) findViewById(R.id.llOfClBase);
+
         switch (naviCase) {
             case Constants.TODAY:
                 icon = (ImageView) findViewById(R.id.todayBottomIcon);
@@ -148,6 +152,10 @@ public class BaseActivity extends AppCompatActivity {
         if (textView != null) {
             textView.setTextColor(blueGrayColor);
         }
+    }
+
+    public LinearLayout getBottomNaviView() {
+        return bottomNaviView;
     }
 }
 
