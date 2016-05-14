@@ -17,7 +17,6 @@ import com.squareup.otto.Subscribe;
 
 import org.joda.time.DateTime;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;

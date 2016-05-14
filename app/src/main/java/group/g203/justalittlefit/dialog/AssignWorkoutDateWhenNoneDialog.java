@@ -2,7 +2,6 @@ package group.g203.justalittlefit.dialog;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -12,10 +11,8 @@ import android.widget.Button;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import group.g203.justalittlefit.R;
-import group.g203.justalittlefit.activity.Assign;
 import group.g203.justalittlefit.util.Constants;
 
 /**

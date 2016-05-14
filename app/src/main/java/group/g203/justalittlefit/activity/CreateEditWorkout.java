@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.squareup.otto.Subscribe;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

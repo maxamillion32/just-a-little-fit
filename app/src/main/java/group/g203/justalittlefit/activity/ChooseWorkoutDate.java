@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.squareup.otto.Subscribe;
 import com.squareup.timessquare.CalendarPickerView;
@@ -33,7 +32,6 @@ import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.model.Workout;
-import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
