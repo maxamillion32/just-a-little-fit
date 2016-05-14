@@ -90,6 +90,8 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             clBase.setVisibility(View.VISIBLE);
         }
+
+        bottomNaviView = (LinearLayout) findViewById(R.id.llOfClBase);
     }
 
     public void handleNaviSelectionColor(String naviCase) {

@@ -32,6 +32,7 @@ import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -47,6 +48,7 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
     @Bind(R.id.chooseCalendar)
     CalendarPickerView chooseCalendar;
     DateTime chosenDateTime;
+    boolean busRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,7 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterBus();
     }
 
     @Override
@@ -148,12 +151,14 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
         resetCalendarView();
         handleBottomNaviDisplay(true);
         handleNaviSelectionColor(Constants.VIEW);
+        registerBus();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         hideProgressDialog();
+        unregisterBus();
         frameLayout.removeAllViews();
     }
 
@@ -166,7 +171,7 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
         dateTimeIdList.add(1, dialog.getSelectedWorkoutNames());
 
         DbFunctionObject createNewWorkoutDfo = new DbFunctionObject(dateTimeIdList, DbConstants.ASSIGN_WORKOUTS);
-        new DbAsyncTask(Constants.CHOOSE_WORKOUT_DATE).execute(createNewWorkoutDfo);
+        new DbAsyncTask(Constants.ASSIGN).execute(createNewWorkoutDfo);
     }
 
     @Subscribe
@@ -195,8 +200,22 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
             @Override
             public void onClick(View v) {
                 DbFunctionObject removeAssignedWorkouts = new DbFunctionObject(workoutsToRemove, DbConstants.DELETE_WORKOUTS);
-                new DbAsyncTask(Constants.CHOOSE_WORKOUT_DATE).execute(removeAssignedWorkouts);
+                new DbAsyncTask(Constants.ASSIGN).execute(removeAssignedWorkouts);
             }
         };
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            BusFactory.getBaseAssignBus().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            BusFactory.getBaseAssignBus().unregister(this);
+            busRegistered = false;
+        }
     }
 }

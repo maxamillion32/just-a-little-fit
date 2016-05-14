@@ -34,8 +34,6 @@ public class Constants {
 
     public static final String VIEW_TEXT = "PastView";
 
-    public static final String CHOOSE_WORKOUT_DATE = "ChooseWorkoutDate";
-
     public static final String CREATE_EDIT_WORKOUT = "CreateEditWorkout";
 
     public static final String CREATE_EDIT_EXERCISE = "CreateEditExercise";
