@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +19,10 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -35,10 +39,12 @@ import group.g203.justalittlefit.database.DbFunctionObject;
 import group.g203.justalittlefit.database.DbTaskResult;
 import group.g203.justalittlefit.dialog.AddExerciseDialog;
 import group.g203.justalittlefit.dialog.AppBaseDialog;
+import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.ConfirmDeleteExercisesDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.dialog.RenameDialog;
 import group.g203.justalittlefit.listener.AddExerciseDialogListener;
+import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.listener.ConfirmExercisesDeletionListener;
 import group.g203.justalittlefit.listener.RenameDialogListener;
 import group.g203.justalittlefit.model.Exercise;
@@ -51,7 +57,7 @@ import group.g203.justalittlefit.util.Utils;
  * Creates an {@link group.g203.justalittlefit.model.Exercise} in the app.
  */
 public class CreateEditExercise extends BaseActivity implements ConfirmExercisesDeletionListener,
-        AddExerciseDialogListener, RenameDialogListener {
+        AddExerciseDialogListener, RenameDialogListener, AssignWorkoutDialogListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_LIST_VIEW = "list view";
@@ -148,7 +154,15 @@ public class CreateEditExercise extends BaseActivity implements ConfirmExercises
         } else if (event.getResult() instanceof Exercise) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.renameDialog_ExerciseSuccess));
             displayExerciseList();
-        } else {
+        } else if (event.getResult() instanceof Workout[]) {
+            Workout[] workouts = (Workout[]) event.getResult();
+            List<Workout> assignedWorkouts = new ArrayList<>(Arrays.asList(workouts));
+            Utils.displayLongActionSnackbar(getBottomNaviView(), getString(R.string.workouts_assigned_successfully),
+                    Constants.UNDO, undoAssignListener(assignedWorkouts),
+                    ContextCompat.getColor(this, R.color.app_blue_gray));
+        } else if (event.getResult() instanceof Byte) {
+            Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.removed_assigned_workouts_successfully));
+        }  else {
             displayGeneralExerciseListError();
         }
         hideProgressDialog();
@@ -206,7 +220,7 @@ public class CreateEditExercise extends BaseActivity implements ConfirmExercises
         if (removeResult == Constants.INT_ONE) {
             Utils.displayLongActionSnackbar(fab, getString(R.string.exercise_deleted),
                     Constants.UNDO, undoExerciseDelete(),
-                    getResources().getColor(R.color.app_blue_gray));
+                    ContextCompat.getColor(this, R.color.app_blue_gray));
         } else {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.exercise_modify_error));
             hideProgressDialog();
@@ -438,5 +452,26 @@ public class CreateEditExercise extends BaseActivity implements ConfirmExercises
         exercise.setName(Utils.ensureValidString(dialog.getRenameText().getText().toString()));
         DbFunctionObject updateExercise = new DbFunctionObject(exercise, DbConstants.UPDATE_EXERCISE);
         new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(updateExercise);
+    }
+
+    @Override
+    public void onAssignWorkoutClick(AssignWorkoutDialog dialog) {
+        showProgressDialog();
+        LinkedList<Object> dateTimeIdList = new LinkedList<>();
+        dateTimeIdList.add(0, dialog.getDateTimes());
+        dateTimeIdList.add(1, dialog.getSelectedWorkoutNames());
+
+        DbFunctionObject createNewWorkoutDfo = new DbFunctionObject(dateTimeIdList, DbConstants.ASSIGN_WORKOUTS);
+        new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(createNewWorkoutDfo);
+    }
+
+    private View.OnClickListener undoAssignListener(final List<Workout> workoutsToRemove) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbFunctionObject removeAssignedWorkouts = new DbFunctionObject(workoutsToRemove, DbConstants.REMOVE_WORKOUTS);
+                new DbAsyncTask(Constants.CREATE_EDIT_EXERCISE).execute(removeAssignedWorkouts);
+            }
+        };
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -317,7 +318,7 @@ public class AssignWorkoutDialog extends AppBaseDialog implements CompoundButton
                 tv.setPadding(0, Utils.getDp(30, getActivity()), 0, 0);
                 tv.setText(Utils.ensureValidString(workout.getName()) + Constants.SPACE + Constants.DASH +
                         Constants.SPACE + Utils.returnStandardDateString(workout.getWorkoutDate()));
-                tv.setTextColor(getResources().getColor(R.color.app_blue_gray));
+                tv.setTextColor( ContextCompat.getColor(getActivity(), R.color.app_blue_gray));
                 tv.setTypeface(null, Typeface.BOLD);
                 Utils.underlineText(tv);
                 tv.setOnClickListener(new View.OnClickListener() {

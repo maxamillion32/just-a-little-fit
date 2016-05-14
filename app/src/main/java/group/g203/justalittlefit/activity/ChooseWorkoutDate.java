@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,7 +49,6 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
     @Bind(R.id.chooseCalendar)
     CalendarPickerView chooseCalendar;
     DateTime chosenDateTime;
-    boolean busRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +146,6 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
         ButterKnife.bind(this, frameLayout);
         initCalendarPicker(activity);
         setTitle(R.string.view_title_string);
-        registerBus();
         hideProgressDialog();
         resetCalendarView();
         handleBottomNaviDisplay(true);
@@ -156,7 +155,6 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterBus();
         hideProgressDialog();
         frameLayout.removeAllViews();
     }
@@ -183,7 +181,7 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
             List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
             Utils.displayLongActionSnackbar(getBottomNaviView(), getString(R.string.workouts_assigned_successfully),
                     Constants.UNDO, undoAssignListener(assignedWorkouts),
-                    getResources().getColor(R.color.app_blue_gray));
+                    ContextCompat.getColor(this, R.color.app_blue_gray));
             resetCalendarView();
         } else if (eventResult != null && eventResult instanceof String) {
             Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.removed_assigned_workouts_successfully));
@@ -202,19 +200,5 @@ public class ChooseWorkoutDate extends BaseActivity implements AssignWorkoutDial
                 new DbAsyncTask(Constants.CHOOSE_WORKOUT_DATE).execute(removeAssignedWorkouts);
             }
         };
-    }
-
-    private void registerBus() {
-        if (!busRegistered) {
-            BusFactory.getChooseWorkoutDateBus().register(this);
-            busRegistered = true;
-        }
-    }
-
-    private void unregisterBus() {
-        if (busRegistered) {
-            BusFactory.getChooseWorkoutDateBus().unregister(this);
-            busRegistered = false;
-        }
     }
 }

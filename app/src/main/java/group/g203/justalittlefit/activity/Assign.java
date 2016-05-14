@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -165,7 +166,7 @@ public class Assign extends BaseActivity implements AssignWorkoutDialogListener 
             List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
             Utils.displayLongActionSnackbar(fab, getString(R.string.workouts_assigned_successfully),
                     Constants.UNDO, undoAssignListener(assignedWorkouts),
-                    getResources().getColor(R.color.app_blue_gray));
+                    ContextCompat.getColor(this, R.color.app_blue_gray));
             resetCalendarView();
         } else if (eventResult != null && eventResult instanceof String) {
             Utils.displayLongSimpleSnackbar(fab, getString(R.string.removed_assigned_workouts_successfully));
@@ -225,14 +226,14 @@ public class Assign extends BaseActivity implements AssignWorkoutDialogListener 
 
     private void registerBus() {
         if (!busRegistered) {
-            BusFactory.getAssignBus().register(this);
+            BusFactory.getBaseAssignBus().register(this);
             busRegistered = true;
         }
     }
 
     private void unregisterBus() {
         if (busRegistered) {
-            BusFactory.getAssignBus().unregister(this);
+            BusFactory.getBaseAssignBus().unregister(this);
             busRegistered = false;
         }
     }

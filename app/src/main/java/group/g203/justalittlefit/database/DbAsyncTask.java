@@ -50,6 +50,18 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.updateWorkouts((List<Workout>) dfo.getDbObject());
                         case DbConstants.UPDATE_WORKOUT:
                             return QueryExecutor.updateWorkout((Workout) dfo.getDbObject());
+                        case DbConstants.REMOVE_WORKOUTS:
+                            if (dfo.getDbObject() instanceof List) {
+                                return QueryExecutor.undoAddedWorkouts((List<Workout>) dfo.getDbObject());
+                            }
+                        case DbConstants.ASSIGN_WORKOUTS:
+                            if (dfo.getDbObject() instanceof LinkedList) {
+                                try {
+                                    return QueryExecutor.assignWorkouts((LinkedList<Object>) dfo.getDbObject());
+                                } catch (SQLException e) {
+                                    return null;
+                                }
+                            }
                     }
                 }
                 break;
@@ -68,6 +80,18 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.deleteExercises((List<Exercise>) dfo.getDbObject());
                         case DbConstants.UPDATE_EXERCISE:
                             return QueryExecutor.updateExercise((Exercise) dfo.getDbObject());
+                        case DbConstants.REMOVE_WORKOUTS:
+                            if (dfo.getDbObject() instanceof List) {
+                                return QueryExecutor.undoAddedWorkouts((List<Workout>) dfo.getDbObject());
+                            }
+                        case DbConstants.ASSIGN_WORKOUTS:
+                            if (dfo.getDbObject() instanceof LinkedList) {
+                                try {
+                                    return QueryExecutor.assignWorkouts((LinkedList<Object>) dfo.getDbObject());
+                                } catch (SQLException e) {
+                                    return null;
+                                }
+                            }
                     }
                 }
                 break;
@@ -86,6 +110,18 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.createSet((Set) dfo.getDbObject());
                         case DbConstants.UPDATE_SET:
                             return QueryExecutor.updateSet((Set) dfo.getDbObject());
+                        case DbConstants.REMOVE_WORKOUTS:
+                            if (dfo.getDbObject() instanceof List) {
+                                return QueryExecutor.undoAddedWorkouts((List<Workout>) dfo.getDbObject());
+                            }
+                        case DbConstants.ASSIGN_WORKOUTS:
+                            if (dfo.getDbObject() instanceof LinkedList) {
+                                try {
+                                    return QueryExecutor.assignWorkouts((LinkedList<Object>) dfo.getDbObject());
+                                } catch (SQLException e) {
+                                    return null;
+                                }
+                            }
                     }
                 }
             case Constants.ASSIGN_DIALOG:
@@ -116,7 +152,6 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                     }
                 }
                 break;
-            case Constants.CHOOSE_WORKOUT_DATE:
             case Constants.ASSIGN:
                 for (DbFunctionObject dfo : params) {
                     try {
@@ -130,6 +165,7 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                                 if (dfo.getDbObject() instanceof List) {
                                     return QueryExecutor.deleteWorkouts((List<Workout>) dfo.getDbObject());
                                 }
+                                break;
                         }
                     } catch (SQLException e) {
                         return null;
@@ -158,6 +194,18 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                             return QueryExecutor.updateWorkoutForADate((Workout) dfo.getDbObject());
                         case DbConstants.UPDATE_EXERCISE:
                             return QueryExecutor.updateExerciseForADate((Exercise) dfo.getDbObject());
+                        case DbConstants.REMOVE_WORKOUTS:
+                            if (dfo.getDbObject() instanceof List) {
+                                return QueryExecutor.undoAddedWorkouts((List<Workout>) dfo.getDbObject());
+                            }
+                        case DbConstants.ASSIGN_WORKOUTS:
+                            if (dfo.getDbObject() instanceof LinkedList) {
+                                try {
+                                    return QueryExecutor.assignWorkouts((LinkedList<Object>) dfo.getDbObject());
+                                } catch (SQLException e) {
+                                    return null;
+                                }
+                            }
                     }
                 }
                 break;
@@ -176,8 +224,20 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                         switch (dfo.getFunctionInt()) {
                             case DbConstants.GET_WORKOUTS_BY_DATE:
                                 return QueryExecutor.getWorkoutsByDate((DateTime) dfo.getDbObject());
+                            case DbConstants.REMOVE_WORKOUTS:
+                                if (dfo.getDbObject() instanceof List) {
+                                    return QueryExecutor.undoAddedWorkouts((List<Workout>) dfo.getDbObject());
+                                }
                             case DbConstants.DELETE_WORKOUTS:
                                 return QueryExecutor.deleteViewWorkouts((List<Workout>) dfo.getDbObject());
+                            case DbConstants.ASSIGN_WORKOUTS:
+                                if (dfo.getDbObject() instanceof LinkedList) {
+                                    try {
+                                        return QueryExecutor.assignWorkouts((LinkedList<Object>) dfo.getDbObject());
+                                    } catch (SQLException e) {
+                                        return null;
+                                    }
+                                }
                         }
                     } catch (SQLException e) {
                         return null;
@@ -203,7 +263,7 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
                 BusFactory.getAssignDialogBus().post(new DbTaskResult(result));
                 break;
             case Constants.ASSIGN:
-                BusFactory.getAssignBus().post(new DbTaskResult(result));
+                BusFactory.getBaseAssignBus().post(new DbTaskResult(result));
                 break;
             case Constants.PEEK_LAUNCHER:
                 BusFactory.getPeekLauncherBus().post(new DbTaskResult(result));
@@ -216,8 +276,6 @@ public class DbAsyncTask extends AsyncTask<DbFunctionObject, Void, Object> {
             case Constants.PAST_VIEW_TEXT:
                 BusFactory.getPastViewBus().post(new DbTaskResult(result));
                 break;
-            case Constants.CHOOSE_WORKOUT_DATE:
-                BusFactory.getChooseWorkoutDateBus().post(new DbTaskResult(result));
         }
     }
 }

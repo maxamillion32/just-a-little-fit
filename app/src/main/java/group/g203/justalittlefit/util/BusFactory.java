@@ -7,7 +7,7 @@ import com.squareup.otto.Bus;
  */
 public class BusFactory {
 
-    private static final Bus ASSIGN_BUS = new Bus();
+    private static final Bus BASE_ASSIGN_BUS = new Bus();
     private static final Bus ASSIGN_DIALOG_BUS = new Bus();
     private static final Bus CREATE_EDIT_EXERCISE_BUS = new Bus();
     private static final Bus CREATE_EDIT_SET_BUS = new Bus();
@@ -16,10 +16,9 @@ public class BusFactory {
     private static final Bus SELECT_DIALOG_BUS = new Bus();
     private static final Bus VIEW_BUS = new Bus();
     private static final Bus PAST_VIEW_BUS = new Bus();
-    private static final Bus CHOOSE_WORKOUT_DATE_BUS = new Bus();
 
-    public static Bus getAssignBus() {
-        return ASSIGN_BUS;
+    public static Bus getBaseAssignBus() {
+        return BASE_ASSIGN_BUS;
     }
 
     public static Bus getAssignDialogBus() {
@@ -52,9 +51,5 @@ public class BusFactory {
 
     public static Bus getPastViewBus() {
         return PAST_VIEW_BUS;
-    }
-
-    public static Bus getChooseWorkoutDateBus() {
-        return CHOOSE_WORKOUT_DATE_BUS;
     }
 }

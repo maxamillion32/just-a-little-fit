@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,18 +14,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.squareup.otto.Subscribe;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.adapter.WorkoutRvNameAdapter;
+import group.g203.justalittlefit.database.DbAsyncTask;
+import group.g203.justalittlefit.database.DbConstants;
+import group.g203.justalittlefit.database.DbFunctionObject;
+import group.g203.justalittlefit.database.DbTaskResult;
+import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
+import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.model.Workout;
+import group.g203.justalittlefit.util.BusFactory;
 import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 
@@ -32,7 +43,7 @@ import group.g203.justalittlefit.util.Utils;
  * The activity that displays when there are multiple
  * {@link group.g203.justalittlefit.model.Workout} objects assigned.
  */
-public class ViewChooserActivity extends BaseActivity {
+public class ViewChooserActivity extends BaseActivity implements AssignWorkoutDialogListener {
 
     private static final String DATE_FORMAT = "MMMM d, yyyy";
 
@@ -42,6 +53,7 @@ public class ViewChooserActivity extends BaseActivity {
     RecyclerView rvWorkoutName;
     WorkoutRvNameAdapter workoutRvNameAdapter;
     List<Workout> workouts;
+    boolean busRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +89,14 @@ public class ViewChooserActivity extends BaseActivity {
         super.onPause();
         hideProgressDialog();
         frameLayout.removeAllViews();
+        unregisterBus();
         this.finish();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterBus();
         this.finish();
     }
 
@@ -149,5 +163,60 @@ public class ViewChooserActivity extends BaseActivity {
         }
         String naviCaseValue = (highlightKey == null) ? Constants.VIEW : highlightKey;
         handleNaviSelectionColor(naviCaseValue);
+        registerBus();
+    }
+
+    @Override
+    public void onAssignWorkoutClick(AssignWorkoutDialog dialog) {
+        showProgressDialog();
+        LinkedList<Object> dateTimeIdList = new LinkedList<>();
+        dateTimeIdList.add(0, dialog.getDateTimes());
+        dateTimeIdList.add(1, dialog.getSelectedWorkoutNames());
+
+        DbFunctionObject createNewWorkoutDfo = new DbFunctionObject(dateTimeIdList, DbConstants.ASSIGN_WORKOUTS);
+        new DbAsyncTask(Constants.ASSIGN).execute(createNewWorkoutDfo);
+    }
+
+    @Subscribe
+    public void onAsyncTaskResult(DbTaskResult event) {
+        Object eventResult = null;
+        if (event != null) {
+            eventResult = event.getResult();
+        }
+        if (eventResult != null && eventResult instanceof List) {
+            List<Workout> assignedWorkouts = (List<Workout>) event.getResult();
+            Utils.displayLongActionSnackbar(getBottomNaviView(), getString(R.string.workouts_assigned_successfully),
+                    Constants.UNDO, undoAssignListener(assignedWorkouts),
+                    ContextCompat.getColor(this, R.color.app_blue_gray));
+        } else if (eventResult != null && eventResult instanceof String) {
+            Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.removed_assigned_workouts_successfully));
+        } else {
+            Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.assign_workout_error));
+        }
+        hideProgressDialog();
+    }
+
+    private View.OnClickListener undoAssignListener(final List<Workout> workoutsToRemove) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbFunctionObject removeAssignedWorkouts = new DbFunctionObject(workoutsToRemove, DbConstants.DELETE_WORKOUTS);
+                new DbAsyncTask(Constants.ASSIGN).execute(removeAssignedWorkouts);
+            }
+        };
+    }
+
+    private void registerBus() {
+        if (!busRegistered) {
+            BusFactory.getBaseAssignBus().register(this);
+            busRegistered = true;
+        }
+    }
+
+    private void unregisterBus() {
+        if (busRegistered) {
+            BusFactory.getBaseAssignBus().unregister(this);
+            busRegistered = false;
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,10 @@ import com.squareup.otto.Subscribe;
 
 import org.joda.time.DateTime;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -28,10 +32,12 @@ import group.g203.justalittlefit.database.DbConstants;
 import group.g203.justalittlefit.database.DbFunctionObject;
 import group.g203.justalittlefit.database.DbTaskResult;
 import group.g203.justalittlefit.dialog.AppBaseDialog;
+import group.g203.justalittlefit.dialog.AssignWorkoutDialog;
 import group.g203.justalittlefit.dialog.ConfirmDeleteTodayWorkoutDialog;
 import group.g203.justalittlefit.dialog.DeleteWorkoutsFromViewDialog;
 import group.g203.justalittlefit.dialog.InformationDialog;
 import group.g203.justalittlefit.fragment.ViewWorkoutFragment;
+import group.g203.justalittlefit.listener.AssignWorkoutDialogListener;
 import group.g203.justalittlefit.listener.ConfirmDeleteTodayWorkoutListener;
 import group.g203.justalittlefit.listener.DeleteWorkoutsFromViewDialogListener;
 import group.g203.justalittlefit.model.Workout;
@@ -40,7 +46,8 @@ import group.g203.justalittlefit.util.Constants;
 import group.g203.justalittlefit.util.Utils;
 import me.relex.circleindicator.CircleIndicator;
 
-public class ViewPastWorkout extends BaseActivity implements ConfirmDeleteTodayWorkoutListener, DeleteWorkoutsFromViewDialogListener {
+public class ViewPastWorkout extends BaseActivity implements ConfirmDeleteTodayWorkoutListener,
+        DeleteWorkoutsFromViewDialogListener, AssignWorkoutDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @Bind(R.id.vpWorkouts)
@@ -102,6 +109,14 @@ public class ViewPastWorkout extends BaseActivity implements ConfirmDeleteTodayW
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
+        } else if (event.getResult() instanceof Workout[]) {
+            Workout[] workouts = (Workout[]) event.getResult();
+            List<Workout> assignedWorkouts = new ArrayList<>(Arrays.asList(workouts));
+            Utils.displayLongActionSnackbar(getBottomNaviView(), getString(R.string.workouts_assigned_successfully),
+                    Constants.UNDO, undoAssignListener(assignedWorkouts),
+                    ContextCompat.getColor(this, R.color.app_blue_gray));
+        } else if (event.getResult() instanceof Byte) {
+            Utils.displayLongSimpleSnackbar(getBottomNaviView(), getString(R.string.removed_assigned_workouts_successfully));
         } else {
             displayError();
         }
@@ -232,5 +247,26 @@ public class ViewPastWorkout extends BaseActivity implements ConfirmDeleteTodayW
     void handleDeleteViewWorkouts(List<Workout> workouts) {
         DbFunctionObject deleteWorkoutsDfo = new DbFunctionObject(workouts, DbConstants.DELETE_WORKOUTS);
         new DbAsyncTask(Constants.PAST_VIEW_TEXT).execute(deleteWorkoutsDfo);
+    }
+
+    @Override
+    public void onAssignWorkoutClick(AssignWorkoutDialog dialog) {
+        showProgressDialog();
+        LinkedList<Object> dateTimeIdList = new LinkedList<>();
+        dateTimeIdList.add(0, dialog.getDateTimes());
+        dateTimeIdList.add(1, dialog.getSelectedWorkoutNames());
+
+        DbFunctionObject createNewWorkoutDfo = new DbFunctionObject(dateTimeIdList, DbConstants.ASSIGN_WORKOUTS);
+        new DbAsyncTask(Constants.PAST_VIEW_TEXT).execute(createNewWorkoutDfo);
+    }
+
+    private View.OnClickListener undoAssignListener(final List<Workout> workoutsToRemove) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbFunctionObject removeAssignedWorkouts = new DbFunctionObject(workoutsToRemove, DbConstants.REMOVE_WORKOUTS);
+                new DbAsyncTask(Constants.PAST_VIEW_TEXT).execute(removeAssignedWorkouts);
+            }
+        };
     }
 }

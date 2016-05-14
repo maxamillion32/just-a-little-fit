@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -75,12 +76,23 @@ public class QueryExecutor {
 
     public static String deleteWorkouts(List<Workout> workouts) {
         Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        workouts.removeAll(Collections.singleton(null));
         try {
             dao.delete(workouts);
         } catch (SQLException e) {
             return null;
         }
         return Boolean.TRUE.toString();
+    }
+
+    public static Byte undoAddedWorkouts(List<Workout> workouts) {
+        Dao<Workout, Integer> dao = DaoHelper.getInstance().getWorkoutDao();
+        workouts.removeAll(Collections.singleton(null));
+        try {
+            return (byte) dao.delete(workouts);
+        } catch (SQLException e) {
+            return 0;
+        }
     }
 
     public static Integer deleteViewWorkouts(List<Workout> workouts) {
@@ -259,6 +271,10 @@ public class QueryExecutor {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public static Workout[] assignWorkouts(LinkedList<Object> list) throws SQLException {
+        return assignDatesToWorkouts(list).toArray(new Workout[list.size()]);
     }
 
     public static Workout getWorkoutByName(String name) {
