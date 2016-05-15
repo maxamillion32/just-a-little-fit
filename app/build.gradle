@@ -23,8 +23,8 @@ android {
         applicationId "group.g203.justalittlefit"
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.7.3"
     }
     buildTypes {
         release {
@@ -47,7 +47,6 @@ dependencies {
     compile 'joda-time:joda-time:2.9.1'
     compile 'com.j256.ormlite:ormlite-android:4.45'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup:otto:1.3.8'
     compile 'com.squareup:android-times-square:1.6.4@aar'
     compile 'me.relex:circleindicator:1.1.5@aar'

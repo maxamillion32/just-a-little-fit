@@ -3,7 +3,6 @@ package group.g203.justalittlefit.dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
 
 import group.g203.justalittlefit.R;
 import group.g203.justalittlefit.util.Constants;
@@ -83,8 +82,7 @@ public class InformationDialog extends AppBaseDialog {
             case Constants.LIBS:
                 setTitle(LIBS_TITLE);
                 dialogBtnTxt = getString(R.string.ok);
-                setDialogMessage(Html.fromHtml(getString(R.string.picasso)) + Constants.NEWLINE + getString(R.string.picasso_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.adv_rv)
+                setDialogMessage(getString(R.string.adv_rv)
                         + Constants.NEWLINE + getString(R.string.adv_rv_info)  + Constants.NEWLINE
                         + getString(R.string.butter_knife) + Constants.NEWLINE + getString(R.string.butter_knife_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.otto)
@@ -96,9 +94,7 @@ public class InformationDialog extends AppBaseDialog {
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.android_times_square)
                         + Constants.NEWLINE + getString(R.string.android_times_square_info)
                         + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.orm_lite)
-                        + Constants.NEWLINE + getString(R.string.orm_lite_info)
-                        + Constants.NEWLINE + Constants.NEWLINE + getString(R.string.picasso)
-                        + Constants.NEWLINE + getString(R.string.picasso_info));
+                        + Constants.NEWLINE + getString(R.string.orm_lite_info));
                 break;
             case Constants.PAST_VIEW_TEXT:
                 setDialogMessage(getString(R.string.past_view_workout_info) + Constants.NEWLINE
